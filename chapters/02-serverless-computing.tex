@@ -1,0 +1,95 @@
+\chapter{Serverless computing}
+
+\section*{Origins}
+
+- next generation of services utilizing cloud computing in pay as you go model
+- IaaS - outsourcing infrastructure management, PaaS - outsourcing application management, ...
+- 2014 AWS Lambda
+
+\section*{Definition of serverless computing}
+
+Already used and adopted by cloud providers since a few years, but there's no concise and clear definition of what serverless is
+
+characteristics:
+
+- do not require infrastructure management
+- scaled, billed based on usage
+- deployment granularity - starting from single function
+
+2 components:
+
+- FaaS - single, stateless function running in ephemeral container, triggered by some event, leveraging scaling of demand
+- BaaS - 3rd party service used as building blocks for most frequently incorporated features in apps development - database, authentication and authorization, queue and pub/sub mechanisms or even hosting, notifications, deployments and monitoring
+
+Building apps in serverless architecture is combination of the 2 components mentioned above - programmers write "glue code"
+
+\section*{BaaS}
+
+- web app and mobile app domination
+- similar set of features - need to store data, files, authentication, authorization
+- cloud providers growth
+
+Based on that various services emerged. When properly integrated, they provide common functionalities need when building web application + brings the benefits of cloud processing - autoscaling, cost efficiency etc.
+
+Services provided by vendors are pretty similar to their standard equivalents, but we're outsourcing processing, storage, responsibility for management to provider.
+
+\subsection*{BaaS in web applications}
+
+- database
+- storage
+- authentication and authorization
+- etc.
+
+\section*{FaaS}
+
+- responsible for processing - building block of business logic
+- new appriach in terms of processing and code structure
+
+FaaS:
+
+- set of small, stateless functions
+- restricted execution duration
+- invoked in response to an event - http gateway, db operation, message from queue
+- running in ephemeral container
+- executed in parallel - provider handles scaling
+
+\subsection*{Execution and lifecycle}
+
+- warm start and cold start
+- scheduling
+- how the process of executing lambda works
+- stateless - containers are ephemeral, we can't rely on the data preserved inside function container, usage of external services for persistance - BaaS, that makes functions efectivaly stateless
+- container - created upon start of execution, removed when execution finishes, share no state between execution - can be assumed that 1 container = 1 function execution, but container can be reused. Automatically scaled, provisioning contaienrs - vital for scaling, instantioation = startup latency, managind resources in multi-tenant environment - resources can be exhausted, how to preserve security - more in benefits and challenges
+- event driven function invocation. Guarantees - can be invoked 1 or more, can invoke 1 or more functions, versioning, many event sources. Types of events - Endpoint (HHTP Gateway), messaging event (queue, pub/sub), storage, scheduled (cron), etc.
+
+\section*{Benefits and challenges}
+
+\subsection*{Benefits}
+
+- reduced operational cost
+- reduced scaling cost and automating autoscaling
+- reduced time to market
+- development opportunities
+- greener computing
+
+\subsection*{Challenges}
+
+- vendor dependence - downtime on provide's side
+- security
+- vendor lock-in
+- multi tenancy problems
+- testing
+- performance
+- complexity of development
+- complexity od deployment
+
+\section*{Characteristics of serverless architecture}
+
+features:
+
+- no resource management
+- auto-scaling
+- pay per usage
+- event driven architecture
+
+\section*{[?] Implication of serverless architecture on building web apps}

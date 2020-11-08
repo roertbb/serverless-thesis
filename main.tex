@@ -6,39 +6,42 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-% Szkielet dla pracy licencjackiej pisanej w języku polskim.
-
-\documentclass[polish,bachelor,a4paper,oneside]{ppfcmthesis}
-
+\documentclass[11pt,a4paper,english,thesis]{dcsbook}
 
 \usepackage[utf8]{inputenc}
-\usepackage[OT4]{fontenc}
+\usepackage{babel}
+\usepackage{listings}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+   colorlinks=false,
+   %  colorlinks,
+   %  citecolor=black,
+   %  filecolor=black,
+   %  linkcolor=black,
+   %  urlcolor=black,
+}
+
+\captionsetup{justification=centering}
+
+\begin{document}
 
 %--------------------------------------
 % Strona tytułowa
 %--------------------------------------
 
-% Autorzy pracy, jeśli jest ich więcej niż jeden
-% wstaw między nimi separator \and
-\author{%
-   Pierwszy autor pracy \album{nr-indeksu} \and 
-   Drugi autor pracy \album{nr-indeksu}}
-\authortitle{}                                % Do not change.
-
+\author{Pierwszy autor pracy}
 \title{Temat pracy dyplomowej}
+\supervisor{prof.~dr hab.~inż.~Imię Nazwisko}
+\date{2020}
+\maketitle
+\frontmatter
 
-% Your supervisor comes here.
-\ppsupervisor{prof.~dr hab.~inż.~Imię Nazwisko} 
-
-% Year of final submission (not graduation!)
-\ppyear{2020}                                 
-
-
-\begin{document}
-
-% Front matter starts here
-\frontmatter\pagestyle{empty}%
-\maketitle\cleardoublepage%
+% debug
+% \cleardoublepage % Zaczynamy od nieparzystej strony
 
 %--------------------------------------
 % Miejsce na kartę pracy dyplomowej
@@ -52,39 +55,43 @@
 % Spis treści
 %--------------------------------------
 
-\pagenumbering{Roman}\pagestyle{ppfcmthesis}%
-\tableofcontents* 
-\cleardoublepage % Zaczynamy od nieparzystej strony
+\tableofcontents{}
+\mainmatter
+
+% debug
+% \cleardoublepage % Zaczynamy od nieparzystej strony
 
 %--------------------------------------
 % Rozdziały
 %--------------------------------------
 
-%Najwygodniej jeśli każdy rozdział znajduje się w oddzielnym pliku
-\mainmatter%
-\input{chapters/01-wstep.tex}
-\input{chapters/02-teoria.tex}
-\input{chapters/03-praca-wlasna.tex}
-\input{chapters/04-zakonczenie.tex}
+\input{chapters/01-intro.tex}
+\input{chapters/02-serverless-computing.tex}
+\input{chapters/03-cloud-providers.tex}
+\input{chapters/04-serverless-for-web-apps.tex}
+\input{chapters/05-summary.tex}
+\input{chapters/00-notes.tex}
 
 %--------------------------------------
 % Literatura
 %--------------------------------------
 
-\bibliographystyle{plain}{\raggedright\sloppy\small\bibliography{bibliografia}}
+\backmatter
+
+\bibliographystyle{plalpha}{\raggedright\sloppy\small\bibliography{bibliography}}
 
 %--------------------------------------
 % Dodatki
 %--------------------------------------
 
-\cleardoublepage\appendix%
-\newpage
-\input{chapters/zalacznik.tex}
+% \cleardoublepage\appendix%
+% \newpage
+% \input{chapters/zalacznik.tex}
 
 %--------------------------------------
 % Informacja o prawach autorskich
 %--------------------------------------
 
-\ppcolophon
+% \ppcolophon
 
 \end{document}
