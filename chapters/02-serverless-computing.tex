@@ -1,95 +1,289 @@
 \chapter{Serverless computing}
 
+\begin{itemize}
+    \item Martin Fowler - https://martinfowler.com/articles/serverless.html
+    \item Mike Roberts (same author as above) - https://www.symphonia.io/what-is-serverless.pdf
+    \item Cloud Native Computing Foundation - https://github.com/cncf/wg-serverless/tree/master/whitepapers/serverless-overview 
+    \item Serverless Inc - https://serverless.github.io/guide/
+    \item Cloud Programming Simplified: A Berkeley View on Serverless Computing - https://arxiv.org/pdf/1902.03383.pdf
+    \item Serverless Computing: A Survey of Opportunities, Challenges and Applications - https://arxiv.org/pdf/1911.01296.pdf
+    \item Serverless architecture with AWS Lambda - https://d1.awsstatic.com/whitepapers/serverless-architectures-with-aws-lambda.pdf
+    \item Examples - AWS Serverless Applications Lens - https://docs.aws.amazon.com/wellarchitected/latest/serverless-applications-lens/wellarchitected-serverless-applications-lens.pdf
+    \item Examples - https://www.youtube.com/playlist?list=PLhr1KZpdzukdeX8mQ2qO73bg6UKQHYsHb
+\end{itemize}
+
 \section*{Origins}
 
-- next generation of services utilizing cloud computing in pay as you go model
-- IaaS - outsourcing infrastructure management, PaaS - outsourcing application management, ...
-- 2014 AWS Lambda
+Around 15 years ago companies were entirely responsible for managing servers for their server-side applications \cite{RobertsChapin2017}. In 2006 Amazon announced the launch of Elastic Compute Cloud (EC2) that changed the way of thinking about that and enabled people to outsource overhead of initializing, managing and provisioning machines to cloud vendors. EC2 was one of the first IaaS services that allowed companies to rent compute power per hours and was accessible within minutes. Such an infrastructural outsourcing brings additional benefits such as reducing cost related to perform infrastructure work, increase flexibility of scaling based on demand and reduced lead time from concept to production availability. Such a movement has been embraced by other companies providing similar services and open-source tools for own data centers such as Open Stack. The next step in ecloud evolution was PaaS as another layer on top of IaaS. Providers like Heroku ot open-source variant Cloud Foundary outsourced the need of managing operating system on the platform and enabled to deploy the application with less overhead. Together with the developemnt of software enginering architecture patterns from monoliths to microservices, containers as another abstraction on top of virtual machines became more popular. Docker allowed to define more clearly all required components to run an application on underlying system. Cloud based services responsible for hosting and managing containers offered as CaaS became next step in cloud development. Most popular are Google's Container Engine and self-hosted - Kubernetes and Mesos. 
+Each step of that evolution raised the level of abstraction and hand off more technology to be outsourced by the cloud vendor.
 
-\section*{Definition of serverless computing}
+Serverless can be considered the next era in cloud architecture growth. (Term serverless is confusing, cause there are still both server hardware and server processes, but as developers we don't need to think about them. Cloud provider is responsible for allocating, provisioning and maintaining them. Serverless is kind of outsourcing infrastructure management and provisioning, allows developers to focus sollely on developing business logic and features desired by customers.)
 
-Already used and adopted by cloud providers since a few years, but there's no concise and clear definition of what serverless is
+...
 
-characteristics:
+One of first usage in the article written by Ken Fromm
+% http://readwrite.com/2012/10/15/why-the-future-of-software-and-apps-is-serverless/
 
-- do not require infrastructure management
-- scaled, billed based on usage
-- deployment granularity - starting from single function
+Serverless becoming more and more popular after AWS Lambda launch in 2014 and Api Gateway in 2015. By mid 2016 other vendors started to embracing the term and offer their services for developing serverless applications.
 
-2 components:
+\section*{Defining serverless}
 
-- FaaS - single, stateless function running in ephemeral container, triggered by some event, leveraging scaling of demand
-- BaaS - 3rd party service used as building blocks for most frequently incorporated features in apps development - database, authentication and authorization, queue and pub/sub mechanisms or even hosting, notifications, deployments and monitoring
+There's no definition or clear view of what Serverless is.
 
-Building apps in serverless architecture is combination of the 2 components mentioned above - programmers write "glue code"
+% Definitions
+
+% CNCF definition
+
+Cloud Native Computing Foundation defines serverless in "CNCF Serverless Whitepaper" \cite{CNCF} as:
+
+Serverless computing refers to the concept of building and running applications that do not require server management. It describes a finer-grained deployment model where applications, bundled as one or more functions, are uploaded to a platform and then executed, scaled, and billed in response to the exact demand needed at the moment. \newline
+
+
+% Serverless Inc guide
+
+% https://serverless.github.io/guide/source/#what-is-serverless
+
+According to Serverless Guide supervised by Serverless, Inc
+
+Serverless is a new way to approach cloud computing and AWS Lambda trailblazed the path with its serverless compute platform. It provided an event-driven, functions based, pay-per-execution, auto-scaling serverless computing platform. It is liberating the developers from constantly thinking about infrastructure and the means to manage them. It is set to bring the focus back on building and shipping products in an agile and iterative manner.
+
+4 tenets:
+
+\begin{itemize}
+    \item zero administration
+    \item pay-per-execution
+    \item function as unit of deployment
+    \item event-driven
+\end{itemize}
+
+% features from ebook
+
+Mike Roberts and John Chapin in "What is serverless?" defines key defining criteria of serverless technology \cite{RobertsChapin2017}.
+
+A serverless service:
+\begin{itemize}
+    \item Does not require managing a long-lived host or application instance
+    \item Self auto-scales and auto-provisions, dependent on load
+    \item Has costs that are based on precise usage, up from and down to zero usage
+    \item Has performance capabilities defined in terms other than host size/count
+    \item Has implicit high availability
+\end{itemize}
+
+% Common features
+
+---
+
+Common features based on 3 definitions
+
+---
+
+% introduce new side - cloud provider
+
+% 2 components - BaaS and FaaS
+
+Serverless refers to range of techniques and technologies. Two different, but overlaping areas can be distinguished if it comes to serverless architecture \cite{MartinFowler}:
+
+\begin{itemize}
+    \item Function as a Service - smallest and simplest entity of computation, where server-side logic created by application developers can be executed in stateless and ephemeral computation containers, triggered based on some event.
+    \item Backend as a Service - third-party components and services hosted by cloud providers, that allows to manage server-side logic and state.    
+\end{itemize}
+
+\noindent Both of the areas are commonly used together and have common operational attributes - require no resource management, that is handled by cloud provider
 
 \section*{BaaS}
 
-- web app and mobile app domination
-- similar set of features - need to store data, files, authentication, authorization
-- cloud providers growth
+BaaS services are domain-generic remote components that can be incorporated into our product communicating via API \cite{RobertsChapin2017}. It allows to replace server side components that were previously created by developers and/or managed by ourselves - outsourcing business processes. When breaking application into smaller pieces, some of them can be replaced entirely with some external service.
 
-Based on that various services emerged. When properly integrated, they provide common functionalities need when building web application + brings the benefits of cloud processing - autoscaling, cost efficiency etc.
+Some of services allow developers to rely on application logic that has been implemented by someone else. Authentication and user management can be a good example - most frequently the logic for handling these operations doesn't change most often when comparing different products. It can be extracted from within the app and served as independent service that exposes some API for integration with developing products (Auth0).
 
-Services provided by vendors are pretty similar to their standard equivalents, but we're outsourcing processing, storage, responsibility for management to provider.
+Some of the existing self-hosted components has been incorporated in portfolio of cloud vendors and most often these are characterized by better integration and performance with other vendor's services.
 
-\subsection*{BaaS in web applications}
+Examples:
 
-- database
-- storage
-- authentication and authorization
-- etc.
+\begin{itemize}
+    \item MySQL on EC2 - Amazon RDS
+    \item self-managed Kafka - Amazon Kinesis
+    \item file storage - S3
+\end{itemize}
+
+\subsection*{BaaS in context of web applications - mobile BaaS}
+
+BaaS has become more popular with teams developing single page apps or mobile apps. 3rd party services could replace the essential components on the server-side, while business logic could be encapsulated inside the application.
+
+One of the most popular service allowing that is Google's Firebase. Enables to access database fully managed by a vendor directly from application. 
+
+Firebase example - storage, user management, cloud functions
 
 \section*{FaaS}
 
-- responsible for processing - building block of business logic
-- new appriach in terms of processing and code structure
+Based on AWS Lambda definition \cite{MartinFowler}:
 
-FaaS:
+\begin{itemize}
+    \item allow to run code without managing server systems or long-lived server processes
+    \item can run any type of application code
+    \item granular deployment model - deploy only code and provider will take care about everything required to run function
+    \item horizontal scaling is automatically handled - provider takes care of allocating and provisioniig resources for function triggered by certain event. Functions are executed in ephemeral container created based on workload need and destroyed shortly after
+    \item triggered by event from other serverless services or user via http request for example
+\end{itemize}
 
-- set of small, stateless functions
-- restricted execution duration
-- invoked in response to an event - http gateway, db operation, message from queue
-- running in ephemeral container
-- executed in parallel - provider handles scaling
+\cite{RobertsChapin2017}
 
-\subsection*{Execution and lifecycle}
+Faas is another form of Compute as a Service. It's a new way of building and deploying software in a more granular way - oriented around feployind individual functions. Cloud vendor takes care of the host instance and application process, we need to focus on individual function containing our application logic. Functions are not constantly active in a server process. FaaS platform is configured to listen for specific events (event-driven model). Based on that platform instantiates the lambda function and calls it with the triggered event. Upon function execution it can be teared down, but it's saved for some time as an optimization and can be called when another event is triggered, skipping the initialization part. It's integrated and can be triggered with various event sources - synchronous (API Gateway) and asynchronous (hosted message bus, scheduled event - cron)
 
-- warm start and cold start
-- scheduling
-- how the process of executing lambda works
-- stateless - containers are ephemeral, we can't rely on the data preserved inside function container, usage of external services for persistance - BaaS, that makes functions efectivaly stateless
-- container - created upon start of execution, removed when execution finishes, share no state between execution - can be assumed that 1 container = 1 function execution, but container can be reused. Automatically scaled, provisioning contaienrs - vital for scaling, instantioation = startup latency, managind resources in multi-tenant environment - resources can be exhausted, how to preserve security - more in benefits and challenges
-- event driven function invocation. Guarantees - can be invoked 1 or more, can invoke 1 or more functions, versioning, many event sources. Types of events - Endpoint (HHTP Gateway), messaging event (queue, pub/sub), storage, scheduled (cron), etc.
+% https://github.com/cncf/wg-serverless/tree/master/whitepapers/serverless-overview#detail-view-serverless-processing-model
 
-\section*{Benefits and challenges}
+\subsection*{Function lifecycle - Container, State, Invocation (event sources)}
 
-\subsection*{Benefits}
+\begin{itemize}
+    \item function lifecycle - cold / warm start (reusing initialized container), how scheduler works, 
+    \item event sources
+    \item function requirement and environment - ephemeral container, triggered by event = event driven
+    \item function invocation types
+\end{itemize}    
 
-- reduced operational cost
-- reduced scaling cost and automating autoscaling
-- reduced time to market
-- development opportunities
-- greener computing
+---
 
-\subsection*{Challenges}
+\noindent state
 
-- vendor dependence - downtime on provide's side
-- security
-- vendor lock-in
-- multi tenancy problems
-- testing
-- performance
-- complexity of development
-- complexity od deployment
+\begin{itemize}
+    \item Functions as most of the serverless components are designed to be effectively stateless. In order to store some data, these needs to interact with some other statefull components to persist the data beyond immediate lifespan of ephemeral containers, the functions are executed in.
+    \item While being stateless is a fundamental rule and by that allows easy horizontal scaling of functions, some of vendor do preserve some state between invocations. This can be perceived purely as an optimization in order to reuse already initailized environment instead of bootstraping it once again. There's no guarantee that the state will be preserved between subsequent invocation
+\end{itemize}
 
-\section*{Characteristics of serverless architecture}
+\noindent execution duration
 
-features:
+\begin{itemize}
+    \item limited - 5 minutes on AWS and similar for other cloud providers
+    \item certain types of certain types of workloads are not suitable for FaaS or they may require rearchitecturing to fit the limitations for FaaS execution
+\end{itemize}
 
-- no resource management
-- auto-scaling
-- pay per usage
-- event driven architecture
+\noindent initial execution and startup latency
+% https://blog.symphonia.io/posts/2017-11-14_learning-lambda-part-8
 
-\section*{[?] Implication of serverless architecture on building web apps}
+\begin{itemize}
+    \item warm start - when reusing and instance of lambda that has been executed recently
+    \item cold start - requires provider to get the lambda code, create a new container instance, start function process, ...
+    \item optimization - Amazon retires inactive Lambda instances in a few minutes, so if request comes in a short period of time, the container can be reused
+    \item workarounds - pinging container from time to time to prevent from being stopped
+
+\end{itemize}
+
+\section*{Benefits}
+
+Based on \cite{MartinFowler} \cite{RobertsChapin2017}
+
+\subsubsection*{Reduced operational cost}
+ 
+Outsourcing solution resulting in less operational work - cloud provider handles managing, operating systems, databases and other componnets. Patches and updates are also handled by vendor. Deployment and provisioning services is outsourced as well. There's no need to configure software such as Puppet/Chef od Docker to manage running server processes. Monitoring is also simplified and can be limited to  to mroe application-oriented metrics and statistics interesting for our customers, instead of verifying free disk space or CPU usage.
+
+\subsubsection*{Reduced development cost}
+
+Cloud vendor provides services with common functionalities that can be integrated with application. There's less code to define, develop and test that saves engineering time and cost.
+\begin{itemize}
+    \item Auth0 - entire authentication flow, no need to develop that feature on its own
+    \item Firebase - client can communicate directly with server-side database, that removes database administration overhead
+    \item Mailgun - service responsible for processing, sending and receiving emails
+\end{itemize}
+
+\subsubsection*{Horizontal auto-scaling with proportional cost}
+
+\begin{itemize}
+    \item automatic horizontal scaling managed by provider 
+    \item pay-as-you-go model - paying for the compute power used, no paying for idle time, granular cost per 100ms of execution. It's a source of savings for occasional requets, inconsistent traffic (paying extra for spikes, no need to have servers handling max traffic). Moreover it does not matter how many hosts we'll run, the cost will be the same for 100 lambdas running sequentially as for 100 lambdas running in concurrently.
+\end{itemize}
+
+\subsubsection*{Easier operational management}
+
+\begin{itemize}
+    \item with autoscaling on provider side - there's no need to handle manual scaling or spend time on setup and maintanance of autoscaling for non-FaaS solution
+    \item reduced deployment complexity - provider handles autoscaling, no configuration of management tools, executing scripts, deploying containers - a fully serverless solution requires zero system administration
+    \item reducing time to market and allows for continuous experimentation - teams and products becoming increasingly geared towards agile processes and continuous deployment and delivery. New things can be developed and its deployment requires minutes - reduction in lead time
+\end{itemize}
+
+% Typically when operating services on servers we needed to plan how resources (RAM and CPU) we'll need for each of our servers and databases. Once the plan was ready, we needed to obtain the hosts, allocate it's resources and provision and maintain the running services later. There was a risk of over-provisioning, which is having resources capable of handling our peak expected load, that could happen just a few time within the year. 
+
+\subsubsection*{Greener computing}
+
+\begin{itemize}
+    \item investing in cost-effective data centers, handling workloads of many customers allows vendor to manage resources more efficient, reducing impact on environment
+\end{itemize}
+
+\section*{Challenges}
+
+\subsubsection*{Vendor dependence}
+
+By outsourcing management and provisioning of computation, we rely on 3rd party vendor - lack of control, system downtime and outages, unpredictable behaviour during some spans, required forced API upgrades. 
+
+Going serverless involves giving up the full control of execution our software stack to cloud provider. From customer perspective there's not that much we can do to configure the environment where our code is running on. 
+
+Similar as with configuration, there's not much control over performance of our application and underlying serverless platform. Multiple layers of virtualization and abstraction allows to handle running our code on underlying platform, that alters the scheduling priorities and allocates resources in response to demand. Based on benchmarks some execution of lambdas can have drastically different performance characteristics. 
+
+\subsubsection*{Multi-tenancy problem}
+
+Multitenancy - multiple instances for several different tenants (customers) running on the same machines, the same host application. The illusion that the customer is using the resources on it's own, but there are concerns around security (seing data of other customer), robustness (error of 1 customer propagates to other), performance (high-load for one customer allocates most of the resources)
+
+\subsubsection*{Vendor lock-in}
+
+\begin{itemize}
+    \item different operational tools (deployment, monitoring), 
+    \item different FaaS interfaces and parameters, 
+    \item differences in serverless components that are used, 
+\end{itemize}
+
+Despite the fact that vendors offer services that can be generalized, there could be some implementation details that makes difference when comparing similar services between various vendors. On the other hand, there are open source platforms that are not tight to any vendor.
+
+\subsubsection*{Unpredictable startup latency}
+% https://blog.symphonia.io/posts/2017-11-14_learning-lambda-part-8
+
+"Cold starts" are one of the most common performance issues. These can occur when function was invoked for the first time since in a while or when the lambdas configuration has been altered. It requires to download the lambda code, allocate resources for the lambda and initialize environemtn for our code. Once it's done, instantiated container can be reused by subsequent event that need to be processed, which is called a "warm start". That's one of the main sources of inconsistent performance of function execution.
+
+\subsubsection*{Testing and debugging}
+
+\begin{itemize}
+    \item testing - unit testing lambdas is pretty straightforward due to stateless nature. On the other hand integration tests are much more challenging, especially if relied on external 3rd party services, can and should you stub these? VEndors enables developesr to run and test functions locally, but does it properly simulate the cloud environment. Integration tests are especially required due to granularity of lambdas and relying on 3rd arty services.
+    \item debugging - AWS and Azure provides possibility to debug functions locally. Remote debuging on vendor environment supported only by Azure
+\end{itemize}
+
+\subsubsection*{Deployment, monitoring and observability}
+
+\begin{itemize}
+    \item deployment - Tools for deployment interact with underlying serverless platform via API. Most of the application are built from multiple components that need to be orchestrated in some order. Due to these factors deployment of entire serverless application can be more challenging.
+    \item monitoring - As one of the serverless benefits mentioned earlier - there's no need to monitor host related metrics. We can focus on gathering data associated with business functionalities. Cloud platforms include tools for gathering logs and monitoring system behaviour, but most of them are limited and don't provide a log analysis platform. Moreover, distributed monitoring across multipel serverless components is more challenging. 
+    \item observability - 
+\end{itemize}
+
+\subsubsection*{Security concerns}
+
+\begin{itemize}
+    \item Relying solely on vendor - as customers we don't need to take care about that, but all the vulnerabilities of vendor becomes our problem
+    \item using BaaS components directly from mobile clients - losing protective barrier, needs to be coverred properly when designing and developing the application
+    \item configuration of proper security policies for every lambda connected with various services
+\end{itemize}
+
+\section*{Examples of serverless architecture}
+
+\begin{itemize}
+    \item showing the impact of serverless architecture on building the application - example of 3 tier application (client, server, database) + implication of migrating into serverless architecture
+    \item what's not working due to nature of FaaS / serverless components
+    \item production examples - AWS show me your architecture
+\end{itemize}
+
+% \subsection*{UI-driven application}
+
+% Lack of classic 3 tier architecture - Client, Server and Database. 
+
+% Servers side logic has been distributed between multiple components: 3rd party BaaS responsible for Authentication Auth0). Cleint can access subset of database (Google Firebase). Compute intensive operations like search executed based on request (event) from API Gateway. Purchase functionality replaced with another FaaS due to security. There's no central server - choreography of components over orchestration. It gives more flexibility, division of concerns, but on the other hand requires destributed monitoring, there's greater number of moving parts
+
+% \subsection*{Message-driven application}
+
+% Based on message comming to the system (event), many functions can be executed - asynchronous message processing (event-driven). Both message broker and Faas env exposed by provider, multiple functions can be executed in parallel.
+
+\section*{Implications/characteristics of serverless architecture (in context of web applications)}
+
+characteristics/summary based on literature and examples
+
+% Alternatives
+
+% To prevent vendor lock-in - building applications from universal, open source components - not always leveraging full potential of what cloud provider can offer
+
+% Deployable solutions - Hasura on Postgres as replacement for Firebase
