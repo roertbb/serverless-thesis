@@ -94,7 +94,7 @@
   {\textcolor{red}{\texttt{\small Unknown. Use \textbackslash{}supervisor command.}}}
 \newcommand{\supervisor}[1]{\renewcommand{\@supervisorname}{#1}}
 % subtitle
-\newcommand{\@subtitle}{\translate{Praca dyplomowa inżynierska}}
+\newcommand{\@subtitle}{\translate{Master thesis}}
 \newcommand{\subtitle}[1]{\renewcommand{\@subtitle}{#1}}
 % university
 \newcommand{\@university}{\translate{PoznaĹ University of Technology}}
@@ -199,7 +199,8 @@
   \renewcommand{\maketitle}{%
     \begin{titlepage}
     \begin{center}
-    Politechnika Poznańska\\Wydział Informatyki i Telekomunikacji\\Instytut Informatyki
+      Poznan University of Technology\\
+      Faculty of Computing and Telecommunications\\Institute of Computing Science
     % \includegraphics[scale=0.2]{logopp/logopp-sygnet-en}
     \end{center}
 
@@ -214,7 +215,7 @@
     \vfill\vfill
 
     \begin{center}
-    {\large \translate{Promotor}:~ \@supervisorname}\par
+    {\large \translate{Supervisor}:~ \@supervisorname}\par
     {\bigskip\large \@date}
     \end{center}
 

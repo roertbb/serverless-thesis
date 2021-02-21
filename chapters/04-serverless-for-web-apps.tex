@@ -1,0 +1,39 @@
+\chapter{Serverless architecture for web applications}
+
+% różne podejścia do budowy aplikacji webowych - jak to przekłada się na architekturę serverless?
+% czy można wyznaczyć ogólne wytyczne pozwalające na efektywne tworzenie aplikacji webowych w architekturze serverless?
+% ---
+
+reference to previous chapter, how serverless relates to:
+- 1. distributed system - monolith -> microservices -> FaaS as next step
+- 2. database - what are the requirements? consistency vs. availability
+- 3. clients - thin -> thick (-> thin?) -> CDN / Lambda@Edge to render static pages, 3.5. client/server communication - REST / Websocket / GraphQL - GraphQL using AppSync
+
+Serverless should be sufficient for what's needed to develop modern web application 
+
+1. Server
+
+- Serverless - event-driven architecture, require building application compliant with that approach
+
+---
+
+- What if processing is not compliant? - hybrid solution?
+- what with limitations? - interactive clients, low latency / "real-time" 
+
+2. Database
+
+- "Classic" databases are not suitable for serverless architecture - needs redefinition - DynamoDB, Aurora - investigation how these works? how does these affects the application development?
+- functions are stateless - 3rd party components to persist state
+
+3. Clients 
+
+- does not change much or does it?
+- how serverless (cdn, static site rendering using lambda@edge) can be used to make it better?
+- sdk/libraries for building clients
+
+---
+% How to leverage serverless computing for developing web applications?
+% Types of processing not suitable for serverless computing?
+% https://aws.amazon.com/lambda/resources/reference-architectures/
+% https://docs.aws.amazon.com/whitepapers/latest/modern-application-development-on-aws/modern-application-development-on-aws.pdf
+% https://www.thoughtworks.com/insights/blog/traits-serverless-architecture
