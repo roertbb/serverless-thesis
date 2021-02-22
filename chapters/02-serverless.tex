@@ -396,8 +396,6 @@ latency when communicatin with other services
 
 - on one hand "no ops", but on the other - there's still plenty to do from monitoring, architectural scaling, securitym networking point of view - team education to consider operational activities early
 
-
-
 % \subsubsection{Reduced operational cost}
  
 % Outsourcing solution resulting in less operational work - cloud provider handles managing, operating systems, databases and other componnets. Patches and updates are also handled by vendor. Deployment and provisioning services is outsourced as well. There's no need to configure software such as Puppet/Chef od Docker to manage running server processes. Monitoring is also simplified and can be limited to  to mroe application-oriented metrics and statistics interesting for our customers, instead of verifying free disk space or CPU usage.
@@ -492,11 +490,47 @@ latency when communicatin with other services
 % https://www.simform.com/serverless-aws-lambda-examples/
 % https://dashbird.io/blog/companies-using-serverless-in-production/
 % https://dashbird.io/blog/serverless-case-study-coca-cola/, https://aws.amazon.com/solutions/case-studies/coca-cola-freestyle/
-% https://livebook.manning.com/book/serverless-applications-with-node-js/chapter-15/1 -  CodePen, MindMup
+
+% \cite{ServerlessArchitectureOnAWS}
+% - suitable for some types of processing - reference to benefits
+% - serverless is suitable for building whole systems, create isolated components or implement specific and granular tasks - serverless can be applied to small and large tasks
+% - serverless is not only about processing by lambdas, but also 3rd party services, which amke possible to cut down the work
+
+\subsection*{Application backend}
+
 % https://livebook.manning.com/book/serverless-architectures-on-aws/chapter-2/36 - CloudGuru
 
+Serverless technologies are an appropriate solution for building scalable application backends for all kinds of web, mobile and desktop applications. They are favorable for this use-case, because the infrastructure management can be effectively automated ensuring dynamic scaling to meet uneven demand, while ensuring granular and predictable billing. Despite the fact that serverless technologies are a relatively new approach to building services some of the companies already used it to power large applications.
 
-% Other:
+To build the application backend, serverless functions are used to transform the data representing the application logic together with other third party services capable of persisting data or exposing some desired functionalities. The API Gateway provides uniform access to various serverless functions using REST API, ensuring mapping between requests and respective serverless functions and enables integration with other services responsible for authentication and authorisation. Sending a request to the API can lead to execution of one or more serverless functions containing custom business logic and communicating respectively with some other services. It is also possible that the frontend application can communicate directly with external components bypassing the API Gateway. Nevertheless, it is essential to handle the communication in a secure manner for example using the delegation tokens \cite{ServerlessArchitectureOnAWS}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{assets/02-serverless/CloudGuruArchitecture.png}
+    \caption{CloudGuru platform architecture}
+    \label{fig:cloudguru-architecture-diagram}
+\end{figure}
+
+CloudGuru, which is an online educational platform dedicated to people interested in learning numerous cloud related topics, is a good example of such a use-case. Core features of the platform include streaming large selection of video courses, interactive quizzes and practice exams, real-time discussion forum and integrations with third party services enabling users to buy access to the courses.
+
+The architecture of the e-learning platform utilises services of several cloud providers. Frontend of the web application built as a Single Page Application is hosted on Netlify, which acts as a Content Delivery Network (CDN) for the platform client. Auth0 service is responsible for registration and authentication functionalities and provides delegation tokens enabling client application to communicate directly and securely with other services. Firebase is used as a primary database, capable of updating clients in real-time using websockets to push updates to the clients. Questions and answers submitted by users to the forum are persisted in the Firebase, later the data is sent to AWS CloudSearch which is indexing it for further searching, enabling users to find information easier. Instructors can upload videos directly to S3 bucket, which triggers the video transcoding pipeline, which will be discussed in more details in the next section. Users can watch the videos served via CloudFront acting as a CDN if they access the lambda function giving them permission to access the video assets for a limited period of time.
+
+\subsection*{Event-driven data processing and manipulation}
+
+% https://livebook.manning.com/book/serverless-architectures-on-aws/chapter-2/36 - CloudGuru
+
+CloudGuru - transcoding videos
+MindMup - exporting mindmaps
+
+% https://livebook.manning.com/book/serverless-applications-with-node-js/chapter-15/1 -  CodePen, MindMup
+
+\subsection*{Real-time stream processing}
+
+\subsection*{IoT applications}
+
+\subsection*{Webhooks / chat boots / scheduled events}
+
+% Other articles:
 % https://jyx.jyu.fi/bitstream/handle/123456789/64836/URN%3ANBN%3Afi%3Ajyu-201906253422.pdf?sequence=1
 % https://www.doc.ic.ac.uk/~rbc/papers/fse-serverless-17.pdf
 % https://arxiv.org/pdf/1708.08028.pdf
