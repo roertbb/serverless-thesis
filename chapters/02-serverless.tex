@@ -2,7 +2,7 @@
 
 \section{Origins}
 
-The growth of cloud computing significantly influenced how servers management and server application development is perceived. Around fifteen years ago, most of the companies were entirely responsible for managing their software, altogether with the hardware and infrastructure it was running on \cite{RobertsChapin2017}. Around that time, first services capable of outsourcing some part of infrastructure overhead emerged, which started the idea of cloud computing.
+The growth of cloud computing significantly influenced the way how server management and server application development are perceived. Around fifteen years ago, most of the companies were entirely responsible for managing their software, altogether with the hardware and infrastructure it was running on \cite{RobertsChapin2017}. Around that time, first services capable of outsourcing some part of infrastructure overhead emerged, which started the idea of cloud computing.
 
 Amazon Web Services was one of the first service providers that enabled companies to rent computing capacity by announcing the launch of Elastic Compute Cloud (EC2) in August 2006. It was the first Infrastructure as a Service (IaaS) product on the market that allowed companies to run their server applications on Amazon's machines that are billed per usage time and are available within minutes from requesting new resources.
 
@@ -10,16 +10,15 @@ Leveraging such a service model brings a handful of benefits. It reduces the lab
 
 The cost of IaaS solutions is profitable to providers, because of technical improvements done in terms of hardware virtualization and the economy of scale on which they operate. Shortly after other vendors such as Microsoft, Google and DigitalOcean embraced the notion of public cloud by providing services and resources from their own data centers. At the same time, tools like Open Stack enabled companies to use hardware from their own data centers in the same way, forming the idea of private cloud.
 
-The next step in the cloud evolution is Platform as a Service (PaaS). As a layer on top of IaaS, it adds operating system to the outsourced infrastructure stack enabling to deploy the application code directly. In that model, the platform takes responsibility for managing the operating system as well as monitoring and running the application.Google App Engine, AWS Elastic Beanstalk and Heroku platform can be distinguished as most popular PaaS solutions, while one of the most frequently mentioned self-hosted variant is Cloud Foundry.
+The next step in the cloud evolution is Platform as a Service (PaaS). As a layer on top of IaaS, it adds operating system to the outsourced infrastructure stack enabling to deploy the application code directly. In that model, the platform takes responsibility for managing the operating system as well as monitoring and running the application. Google App Engine, AWS Elastic Beanstalk and Heroku platform can be distinguished as most popular PaaS solutions, while one of the most frequently mentioned self-hosted variant is Cloud Foundry.
 
-The growth of containerisation technologies introduced another type of service called Container as a Service. Technologies like Docker allowed developers and system operators to deliberate more clearly on the application requirements and separate it from the operating system. Solutions such as Marathon running on top of Mesos and Kubernetes introduced a possibility to manage and orchestrate containers on self-hosted machines. The services provided by vendors include, for example Google's Compute Engine or Amazon's Elastic Container Service (ECS) or AWS Fargate. With the growing popularity of Kubernetes, dedicated services leveraging that platform such as Amazon Elastic Kubernetes Service (EKS) and Google Kubernetes Engine (GKE) emerged.
+The growth of containerisation technologies introduced another type of service called Container as a Service. Technologies like Docker allowed developers and system administrators to deliberate more clearly on the application requirements and separate it from the operating system. Solutions such as Marathon running on top of Mesos and Kubernetes introduced a possibility to manage and orchestrate containers on self-hosted machines. The services provided by cloud vendors include for example Google's Compute Engine or Amazon's Elastic Container Service (ECS) or AWS Fargate. With the growing popularity of Kubernetes, dedicated services leveraging that platform such as Amazon Elastic Kubernetes Service (EKS) and Google Kubernetes Engine (GKE) emerged.
 
 Each of the described services are next generations of infrastructure outsourcing, which raise the level of abstraction from the development perspective and hand off more and more responsibility related to infrastructure management to the cloud vendor. Despite the fact, for each of the mentioned services the smallest unit of processing is some sort of server application or running application process in the virtual machine or within the container.
 
-Serverless is considered as a next step in the cloud computing progression. 
-The term serverless was one of the first used by Ken Fromm in his paper \cite{KenFromm}. It describes the notion of architecture migration from monolithic applications running on servers into distributed systems that consist of multiple components, processes and data stores with the goal to perform various tasks and process numerous flows. The serverless architecture enables developers to make a mindshift accordingly. Computing resources can be used as services, which makes it possible to shift thinking from the servers level to the tasks level, taking away the complexity of infrastructure management. The servers are still used underneath, but developers don't need to worry about managing them any longer.
+Serverless is considered as a next step in the cloud computing progression. The term serverless was one of the first used by Ken Fromm in his paper \cite{KenFromm}. It describes the notion of architecture migration from monolithic applications running on servers into distributed systems that consist of multiple components, processes and data stores with the goal to perform various tasks and process numerous flows. The serverless architecture enables developers to make a mindshift accordingly. Computing resources can be used as services, which makes it possible to shift thinking from the servers level to the tasks level, taking away the complexity of infrastructure management. The servers are still used underneath, but developers don't need to worry about managing them any longer.
 
-Such an architecture model was leveraged firstly by mobile applications built on top of hosted database solutions Parse (later acquired by Facebook) and Firebase around 2012 (obtained by Google). Nonetheless, the most significant event shaping the serverless architecture was the announcement of AWS Lambda in 2014, altogether with the introduction of API Gateway in 2015. By the middle of 2016, major cloud vendors such as Microsoft and Google embraced the serverless architecture approach and started offering their services for developing serverless applications.
+Such an architecture model was leveraged firstly by mobile applications built on top of hosted database solutions such as Parse (later acquired by Facebook) and Firebase around 2012 (obtained by Google). Nonetheless, the most significant event shaping the serverless architecture was the announcement of AWS Lambda in 2014, altogether with the introduction of API Gateway in 2015. By the middle of 2016, major cloud vendors such as Microsoft and Google embraced the serverless architecture approach and started offering their services for developing serverless applications.
 
 \section{Defining serverless}
 
@@ -78,40 +77,41 @@ Even though presented areas serve different roles, they share common features an
 
 \subsection{Backend as a Service}
 
-Nowadays, more and more products and applications are developed to support their users in various aspects. Despite the diversity of developed software it is possible to distinguish a set of similar backend functionalities used in analyzed products.
+The concept of Backend as a Service (BaaS) gathers various domain-generic, repeatable application components capable of replacing some part of application logic or providing some functionality. They can be accessed and integrated into developed applications through API defined by its provider.
 
-The concept of Backend as a Service (BaaS) addresses aforementioned problems and gathers various domain-generic, repeatable application components capable of replacing some part of application logic or providing some functionality. They can be accessed and integrated into developed applications through API defined by its provider.
-
-Taking into consideration most popular requirements of various applications, the majority of them need to store and manage the data. Depending on the requirements the information should be stored in a structural way in databases or can be stored regardless of their shape in file storage service. For teams developing mobile or web applications it is convenient to rely on some third-party service to store and access the data that can be accessible directly from the application. Services like Google's Firebase meet such requirements and give access to the database entirely managed by a cloud vendor. Depending on the complexity of developed products it may be required to incorporate some more advanced components to process required tasks reflecting the business logic of application. Mechanism serving as notification services, exposing some publish-subscribe capabilities for defined events could be applicable in that case. It is worth it to notice that such components are replacing previously self-hosted components such as databases or other data stores, message-brokers or other services responsible for processing data streams incoming from various sources.
+Taking into consideration most popular requirements of various applications, the majority of them need to store and manage the data. Depending on the requirements the information should be stored in a structural way in databases or can be stored regardless of their shape in file storage service. For teams developing mobile or web applications it is convenient to rely on some third-party service to store and access the data directly from the application. Services like Google's Firebase meet such requirements and give access to the database entirely managed by a cloud vendor. Depending on the complexity of developed product it may be required to incorporate some more advanced components to process required tasks or flows reflecting the business logic of application. Mechanism serving as notification services, exposing some publish-subscribe capabilities for defined events could be applicable in that case. It is essential to notice that such components are replacing previously self-hosted components such as databases or other data stores, message-brokers or other services responsible for processing data streams incoming from various sources.
 
 Looking closer from the application logic point of view, there are also repeatable functionalities implementations that can be extracted and reused across multiple developed applications. Most of the products will require some features enabling users to manage their identity and associated permissions. Most of the time, the capabilities will be not only limited to registering and logging users, but it will also include integrations with other services as identity providers. Managing and sending emails can be considered as another functionality that can be extracted into separate component from the code perspective and reused in other applications. Products such as Auth0 (serving as fully featured authorization and user management service) or Mailgun (capable of managing and processing emails) makes it possible to replace entirely the repeatable part of business logic.
 
-% TODO: update chapter reference
-Specific services and components that can be classified as Backend as a Services will be covered in more details in chapter ... when analysing services provided by leading cloud vendors.
-
-All of the mentioned components are characterized by capabilities of the serverless architecture. They are provided by cloud vendors, who take responsibility for managing, provisioning and scaling them depending on the demand. Moreover, the possibility to replace the repeatable application features by utilising third-party services enables developers to iterate faster and shorten the lead time.
+% TODO:rb update chapter reference
+Specific components and services that can be classified as Backend as a Services will be covered in more details in chapter ... when analysing services provided by leading cloud vendors. All of the mentioned components enable developers to create fully fledged applications and services similar to the solutions built using self-hosted component equivalents. The difference is that mentioned components are characterized by capabilities of the serverless architecture. They are provided by cloud vendors, who take responsibility for managing, provisioning and scaling them depending on the demand. Moreover, the possibility to replace the repeatable application features by utilising third-party services enables developers to iterate faster and shorten the lead time.
 
 \subsection{Function as a Service}
 
-The second area refers to Function as a Service (FaaS) that serves as an environment for executing application code. It introduces a new architectural approach in terms of developing, structuring and deploying the application code, which is oriented towards individual tasks and operations.
+The second area refers to Function as a Service (FaaS) that serves as an environment for executing application code. It introduces a new architectural approach in terms of developing, structuring and deploying the application logic, which is oriented towards individual tasks and operations.
 
-Mike Roberts briefly describes the idea of FaaS \cite{MartinFowlerServerless} based on the definition of AWS Lambda \cite{AWSLambda}, which is currently one of the most commonly used implementation of a Function as a Service platform. Based on his summary several main features of FaaS can be highlighted:
+Mike Roberts briefly described the idea of FaaS \cite{MartinFowlerServerless} based on the definition of AWS Lambda \cite{AWSLambda}, which is currently one of the most commonly used implementation of a Function as a Service platform. Based on his summary several main features of FaaS can be highlighted:
 
 \begin{itemize}
     \item The main idea of FaaS is to run application code without managing servers and application processes. It is a common feature with other approaches like CaaS or PaaS, where the responsibility for managing applications is placed on the cloud vendor. However, the key difference with FaaS is the fact that the function execution time is strictly limited in contrast to long-lived processes existing in aforementioned services.
     \item The functions are invoked and executed on the underlying platform in response to specific events occurring or incoming into the system. Based on that cloud provider handles resource allocation and runs the function code in an ephemeral container, created based on runtime needs. These are destroyed shortly after the event is processed by the application logic in the function. Together with limited execution time it is a significant architectural restriction for the FaaS model.
     \item Given the fine-grained execution model, horizontal scaling can be easily and automatically handled by the cloud provider. When there is an increased traffic in the system, the platform responsible for executing functions allocates resources to create and run more functions, which will be capable of processing the increased traffic. An analogous situation takes place when there is no traffic, therefore there is no need to allocate resources for running functions code.
     \item As a consequence of greater granularity of application code and managing the function execution by cloud provider, the deployment process differs from the traditional system. Each function can be independently packed and uploaded to the FaaS platform, which takes responsibility for executing it.
-    \item Most of the cloud platforms do not require to use predefined framework nor programming languages. Although cloud providers define the list of environments and languages that are supported by the platform, any process that is bundled into the artifact and can be executed from it is capable of processing the incoming event.
+    \item Most of the cloud platforms do not require to use neither predefined framework nor programming languages. Although cloud providers define the list of environments and languages that are supported by the platform, any process that is bundled into the artifact and can be executed from it is capable of processing the incoming event.
 \end{itemize}
 
 Selected aspects of Function as a Service architecture are covered in more details based on ''CNCF Serverless'' whitepaper \cite{CNCFServerless} in the following sections.
 
 \subsubsection*{Function lifecycle}
 
-% TODO: schema - https://github.com/cncf/wg-serverless/blob/master/whitepapers/serverless-overview/image_1.png
-
 Before analyzing the execution model in more details, it is important to examine the deployment process accompanying the development of a function. Alongside with providing the function code, the developer is responsible for specifying one or more events upon which function will be triggered. Additionally, metadata defining for example the function version, environmental variables, execution role and other configuration parameters can be defined. The function and specification prepared in that way is uploaded to the cloud provider and processed by a dedicated builder entity, resulting with a function artifact (depending on the cloud platform and selected runtime it can be a binary file, container image or a package). Next, it is deployed on a cluster managed by a FaaS controller responsible for provisioning, controlling and monitoring function instances based on incoming events.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/02-serverless/ServerlessDeployment.png}
+    \caption{Function deployment and invocation process}
+    \label{fig:cloudguru-architecture-diagram}
+\end{figure}
 
 Furthermore, the serverless platform may provide additional actions related to function management such as executing, publishing, updating and deleting the function or its metadata. Also, a particular version of the function can be labeled or aliased, which can come in handy when operating the serverless system on a larger scale. Logs and statistics are gathered alongside function execution.
 
@@ -119,9 +119,15 @@ The function is executed in an event-driven model and within strictly limited du
 
 The results of computing are sent back to the event dispatcher. Other, newly created events can be dispatched during function execution. The computing duration is limited by the majority of service providers up to a few minutes, after that the computation is completed with timeout. At the end the lightweight container containing the execution environment is destroyed.
 
-% TODO: sequence diagram for cold and warm start
+Most of the providers delay the container deletion for longer than a couple of minutes due to optimisation related with reusing the same container instance when the next event occurs in the system. Reusing an already initialised execution environment is called a ''warm start'' and allows to reduce the startup latency related to resource allocation and runtime preparation. The opposite situation takes place when the new container instance needs to be initialised and the host process needs to be created. Most of the time it requires additional time impacting the request processing duration - it is called ''cold start''.
 
-Most of the providers delay the container deletion for longer than a couple of minutes due to optimisation related to reusing the same container instance when the next event occurs in the system. Reusing an already initialised execution environment is called a ''warm start'' and allows to reduce the startup latency related to resource allocation and runtime preparation. The opposite situation takes place when the new container instance needs to be initialised and the host process needs to be created. Most of the time it requires additional time impacting the request processing duration - it is called ''cold start''.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{assets/02-serverless/ServerlessExecution.png}
+    \caption{Function execution process considering ''cold start'' and ''warm start''}
+    \label{fig:cloudguru-architecture-diagram}
+\end{figure}
+
 
 \subsubsection*{Function environment}
 
@@ -145,8 +151,6 @@ Various data sources can be divided into several categories among which we can d
 \end{itemize}
 
 Based on the use case, several invocation types can be differentiated:
-
-% TODO: schemas for various invocation types - https://github.com/cncf/wg-serverless/blob/master/whitepapers/serverless-overview/image_3.png
 
 \begin{itemize}
     \item Synchronous Request - Includes cases when the client sends a request and waits for the response. It is used most frequently for HTTP requests.
@@ -506,14 +510,14 @@ To build the application backend, serverless functions are used to transform the
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{assets/02-serverless/CloudGuruArchitecture.png}
+    \includegraphics[width=0.8\textwidth]{assets/02-serverless/CloudGuruArchitecture.png}
     \caption{CloudGuru platform architecture}
     \label{fig:cloudguru-architecture-diagram}
 \end{figure}
 
 CloudGuru, which is an online educational platform dedicated to people interested in learning numerous cloud related topics, is a good example of such a use-case. Core features of the platform include streaming large selection of video courses, interactive quizzes and practice exams, real-time discussion forum and integrations with third party services enabling users to buy access to the courses.
 
-The architecture of the e-learning platform utilises services of several cloud providers. Frontend of the web application built as a Single Page Application is hosted on Netlify, which acts as a Content Delivery Network (CDN) for the platform client. Auth0 service is responsible for registration and authentication functionalities and provides delegation tokens enabling client application to communicate directly and securely with other services. Firebase is used as a primary database, capable of updating clients in real-time using websockets to push updates to the clients. Questions and answers submitted by users to the forum are persisted in the Firebase, later the data is sent to AWS CloudSearch which is indexing it for further searching, enabling users to find information easier. Instructors can upload videos directly to S3 bucket, which triggers the video transcoding pipeline, which will be discussed in more details in the next section. Users can watch the videos served via CloudFront acting as a CDN if they access the lambda function giving them permission to access the video assets for a limited period of time.
+The architecture of the e-learning platform utilises services of several cloud providers. Frontend of the web application built as a Single Page Application is hosted on Netlify, which acts as a Content Delivery Network (CDN) for the platform client. Auth0 service is responsible for registration and authentication functionalities and provides delegation tokens enabling client application to communicate directly and securely with other services. Firebase is used as a primary database, capable of updating clients in real-time using websockets to push updates to the clients. Questions and answers submitted by users to the forum are persisted in the Firebase, later the data is sent to AWS CloudSearch which is indexing it for further searching, enabling users to find information easier. Instructors can upload videos directly to S3 bucket, which triggers the video transcoding pipeline, which will be discussed in more details in the next section. Users can watch the videos served via CloudFront acting as a CDN if they call the lambda function beforehand giving them the permission to access the video assets for a limited period of time.
 
 \subsection*{Event-driven data processing and manipulation}
 
