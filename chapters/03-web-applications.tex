@@ -90,6 +90,13 @@ These days web applications became one of the most popular platforms for exchang
 
 It is substantial to ensure a proper level of security based on guidelines and frameworks defined by organisations and authorities working in the field of security, hardening the web application and mitigating the possible attacks to ensure compliance with security standards. Web application design should ensure that users identity and sensitive information are properly secured, giving access to resources only when the user identity is verified along with expecting adequate permissions \cite{ASurveyonWebApplicationSecurity}.
 
+\subsection*{Maintainability}
+
+Although maintainability may not be the obvious requirement for web application, it is an important factor for business executives, developers and people working in operations. Majority of the costs from a product development perspective is not the initial version of application, but it is related to the maintenance taking form of keeping the system operational, fixing bugs and resolving failures \cite{DesignDataIntensiveApplications}.
+
+To maintain the software efficiently, the operational aspects such as monitoring, patching, deployment and maintenance of a stable environment should be easy and mostly automated to make sure the system is running smoothly. From an engineering perspective the system should be simple, by removing unnecessary complexity connected with tight coupled modules, tangled dependencies and inconsistency in terminology or architectural patterns. By reducing the complexity the maintainability of the application will be easier. It will also increase agility and make the evolution of the system easier, which will result in reducing time of introducing new features and reacting to architectural changes required to make the system operate efficiently.
+
+% TODO:rb to be considered - maybe mention in intro would be enough
 \subsection*{User Experience}
 
 Modern web application clients are more frequently becoming more complex, interactive and feature-rich applications including larger parts of business logic. The success of products based on web applications is more frequently connected with the fact how the user perceives it and it is becoming more important to make sure that application interface is aesthetic, while the overall user experience of the application is intuitive. Nevertheless, the user interface is not the only factor impacting how the user perceives the application, the efficiency and performance also plays a significant role, which is correlated with the whole system design.
@@ -98,19 +105,17 @@ The idea of user experience (UX) is quite a broad term on the verge of cognitive
 
 The diversity of users and platforms also plays an important role. One of the consequences of that is the fact that many applications are suitable to use from mobile phones, because more and more people use smartphones on a daily basis. Also accessibility issues are gaining more awareness to make web applications suitable for people with some of disabilities \cite{WhatIsUserExperienceDesign}.
 
-\subsection*{Maintainability}
-
-Although maintainability may not be the obvious requirement for web application, it is an important factor for business executives, developers and people working in operations. Majority of the costs from a product development perspective is not the initial version of application, but it is related to the maintenance taking form of keeping the system operational, fixing bugs and resolving failures \cite{DesignDataIntensiveApplications}.
-
-To maintain the software efficiently, the operational aspects such as monitoring, patching, deployment and maintenance of a stable environment should be easy and mostly automated to make sure the system is running smoothly. From an engineering perspective the system should be simple, by removing unnecessary complexity connected with tight coupled modules, tangled dependencies and inconsistency in terminology or architectural patterns. By reducing the complexity the maintainability of the application will be easier. It will also increase agility and make the evolution of the system easier, which will result in reducing time of introducing new features and reacting to architectural changes required to make the system operate efficiently.
-
 \section{Modern web application architecture}
 
 There are many potential perspectives considering the architecture of modern web applications when taking into account the areas they operate on and specified requirements that they need to fulfill. Below some of the used patterns and techniques used in modern web application architectures are discussed, allowing systems to meet the desired requirement and specification while working efficiently. It is divided into three sections taking into consideration the web application client which is the user interface that the user interacts with, which communicates with the server-side application tier responsible for performing the business logic using the underlying data layer to persist the application state. However, some of the discussed patterns goes beyond such classification, especially when they are referring to the communication between layers boundaries.
 
 \subsection*{Server Application Tier}
 
+% TODO:rb graphics - how conencted, what will be in the chapter
+
 \subsubsection*{Microservice architecture}
+
+% TODO:rb some structure - wall of text
 
 Microservices is one of the trends in modern web application development gaining more interest, especially when taking into consideration various benefits and success stories of the biggest companies using it to run their services in the web. To consider microservices it is useful to compare it with the monolithic architecture, which refers to building server-side applications as a single logical executable unit responsible for handling the HTTP requests, execute the domain logic, retrieve and update data in the database and send back the adequate response. Such architecture can be effectively applied when building simple applications, but when the system grows and evolves over time it is harder to preserve good modularisation and keep changes within the modules they should belong to, expanding unnecessary complexity into other parts of the system. Altogether with the system growth, it may require to be scaled accordingly to the load. It can be achieved by running multiple instances of the server application behind load balancer, but it requires to scale the whole application, rather than particular components that require more resources. Another downside of the larger applications built as a monolith is the fact that every change requires rebuilding and deploying the whole application including the parts of the system, even not affected by changes.
 
@@ -133,6 +138,8 @@ The decentralised data management allows each of the services to persist its sta
 The frequent and independant deployments are a great feature of microservice architecture, but handling the rapidly changing set of components is a great operational challenge. In the case of complex solutions automation is essential to support administration of the system. From the development perspective working on smaller components of the system may seem to be easier, but the real complexity may not be eliminated, but rather split across multiple interconnected services. Designing and working with such a system requires a greater skill and can benefit from using more specified tooling. In that case, embracing DevOps culture can help with greater and tighter collaboration between developers and the operation team working together on the application \cite{FowlerMicroservicesTradeoffs}.
 
 \subsubsection*{Event-Driven Architecture}
+
+% TODO:rb some structure - highlight someapproaches
 
 When designing the system it is a common practice to model the fragment of reality as a set of entities and relations between them, then map them directly to the data model. Commonly there is an application layer within the application utilising a set of service modules containing and performing the application logic, which update the models depending on the result of the processing. The model capabilities are frequently limited to basic create, read, update and delete operations. This approach can be applied successfully in many simpler applications, although when the complexity of business logic grows, it may become more difficult to efficiently manage and develop it \cite{FowlerAnemicModel}.
 
@@ -180,14 +187,14 @@ queue - both store data for some time, but have different access pattern, differ
 - SPA - long initial load - parsing initial response
 - JAMstack - static sites with UX enhanced by using JavaScript - avoiding large initial load time
 
-\subsubsection*{PWA}
+% \subsubsection*{PWA}
 
-- caching content on the client side that make the application work offline
-- more native experience - installing the application, capable of accessing numerous device features which previosuly were achieved only by native applications
+% - caching content on the client side that make the application work offline
+% - more native experience - installing the application, capable of accessing numerous device features which previosuly were achieved only by native applications
 
-\subsubsection*{(1-3) client-server communication - REST / Websocket / GraphQL}
+\subsubsection*{(1-3) client-server communication - REST / Websocket / GraphQL / gRPC}
 
-- websocket - more direct communication between client and server beyond request-resopnse lifecycle
+- websocket - more direct communication between client and server beyond request-resopnse lifecycle, 
 
 % REST API - removing the presentation layer to rich and interactive client
 
