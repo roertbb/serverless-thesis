@@ -17,7 +17,7 @@ The growth of server-side logic and it's complexity influenced the idea of split
 
 Another idea which enabled developers to deal with the complexity of web application was to differentiate between specific layers in web application architectures. Early web applications distinguished presentation layers displayed to the users, which communicated with the business logic layer utilising data layer for persisting data. Other modern frameworks utilised Model-View-Controller (MVC) approach, in which the visual part was represented by the View, Controller based on the request was responsible to interact with the Model containing necessary data and business logic.
 
-Next factor which led to enhancing the interactivity in the browser was the emergence of Ajax (Asynchronous Javascript and XML), allowing to load data dynamically and asynchronously without reloading the whole page. Growth of Javascript popularity enabled developers to build more interactive and dynamic applications detached from the initial markup, called Single-Page Applications. Additionally, more and more business logic started to be implemented on the client side of web applications, which became thicker clients providing better user experience similar to desktop applications.
+Next factor which led to enhancing the interactivity in the browser was the emergence of Ajax (Asynchronous JavaScript and XML), allowing to load data dynamically and asynchronously without reloading the whole page. Growth of JavaScript popularity enabled developers to build more interactive and dynamic applications detached from the initial markup, called Single-Page Applications. Additionally, more and more business logic started to be implemented on the client side of web applications, which became thicker clients providing better user experience similar to desktop applications.
 
 Alongside the technology evolution, the requirements that the web applications need to fulfill are also developing, most often pushing them to the limits, providing better user experience while working on more demanding computation and processing larger amounts of the data than before. To meet such requirements some modern architectures and approaches emerged allowing to achieve desired capabilities, most frequently resulting with some tradeoffs.
 
@@ -109,7 +109,7 @@ The diversity of users and platforms also plays an important role. One of the co
 
 There are many potential perspectives considering the architecture of modern web applications when taking into account the areas they operate on and specified requirements that they need to fulfill. Below some of the used patterns and techniques used in modern web application architectures are discussed, allowing systems to meet the desired requirement and specification while working efficiently. It is divided into three sections taking into consideration the web application client which is the user interface that the user interacts with, which communicates with the server-side application tier responsible for performing the business logic using the underlying data layer to persist the application state. However, some of the discussed patterns goes beyond such classification, especially when they are referring to the communication between layers boundaries.
 
-\subsection*{Server Application Tier}
+\subsection{Server Application Tier}
 
 % TODO:rb graphics - how conencted, what will be in the chapter
 
@@ -152,7 +152,7 @@ Most frequently to react to some events occurring within the system, some specia
 Command query responsibility segregation (CQRS) is a design pattern frequently used together with event sourcing. It distinguished separation into two action types - commands (responsible for modifying the application state) and queries (capable of reading it). Each of the groups uses different models for updates and queries enabling optimisations that increase performance of such a solution. The write model can take the form of events, while the read model can be formed as a more complex domain model, which can be even denormalized to some extent to minimise the number of operations required to get the data and perform queries faster. For each of the types of the operations a different database solution can be selected, which satisfies the requirements of web application and enables independent scaling. Despite the advantages, event sourcing and CQRS comes with a cost. 
 They increase the implementation complexity of a given solution and due to different components responsible for storing data for each of the models, the application state may not be strongly consistent \cite{MicroservicesArchitecture}.
 
-\subsection*{Data Tier}
+\subsection{Data Tier}
 
 ---
 
@@ -180,7 +180,7 @@ queue - both store data for some time, but have different access pattern, differ
 - stream processing - send a message to another process to be handled asynchronously
 - batch processing - periodically crunch a large amount of accumulated data
 
-\subsection*{Client Application Tier}
+\subsection{Client Application Tier}
 
 \subsubsection*{SPA vs. Static site generators / jamstack}
 
