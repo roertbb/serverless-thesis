@@ -110,7 +110,7 @@ Before analyzing the execution model in more details, it is important to examine
     \centering
     \includegraphics[width=0.8\textwidth]{assets/02-serverless/ServerlessDeployment.png}
     \caption{Function deployment and invocation process}
-    \label{fig:cloudguru-architecture-diagram}
+    \label{fig:function-deployment-and-invocation-process}
 \end{figure}
 
 Furthermore, the serverless platform may provide additional actions related to function management such as executing, publishing, updating and deleting the function or its metadata. Also, a particular version of the function can be labeled or aliased, which can come in handy when operating the serverless system on a larger scale. Logs and statistics are gathered alongside function execution.
@@ -125,7 +125,7 @@ Most of the providers delay the container deletion for longer than a couple of m
     \centering
     \includegraphics[width=0.7\textwidth]{assets/02-serverless/ServerlessExecution.png}
     \caption{Function execution process considering ''cold start'' and ''warm start''}
-    \label{fig:cloudguru-architecture-diagram}
+    \label{fig:function-execution-process}
 \end{figure}
 
 
@@ -283,9 +283,8 @@ Most cloud vendors provide some tooling to monitor the system and there are many
 
 \section{Cloud providers}
 
-Since the announcement of AWS Lambda in 2014 other companies followed the foodsteps of Amazon Web Services and started offering their solutions for building serverless applications and services. Currently, several major cloud vendors provide large variety of services and functionalities forming complete serverless platforms. Along with the public cloud expansion, couple of open-source projects and platforms emerged as an alternative, enabling to use FaaS on on-premise software and in a private or hybrid cloud. The variety of cloud vendors offerings is significant, some of them expose the fully-fledged platforms with numerous BaaS components that can be integrated together, others provide the FaaS along with the possibility to host the applications in containers, virtual machines or incorporate serveless processing along the statically hosted websites or cloud-managed database products. When selecting the cloud providers it is essential to consider several factors like industry adoption, maturity and number of services, ease of integration and cost of the services. According to the survey conducted in June 2020 conducted by Cloud Native Computing Foundation's (CNCF) \cite{CNCFServerlessSurvey2020} the market share of FaaS providers is presented in figure ...
+Since the announcement of AWS Lambda in 2014 other companies followed the foodsteps of Amazon Web Services and started offering their solutions for building serverless applications and services. Currently, several major cloud vendors provide large variety of services and functionalities forming complete serverless platforms. Along with the public cloud expansion, couple of open-source projects and platforms emerged as an alternative, enabling to use FaaS on on-premise software and in a private or hybrid cloud. The variety of cloud vendors offerings is significant, some of them expose the fully-fledged platforms with numerous BaaS components that can be integrated together, others provide the FaaS along with the possibility to host the applications in containers, virtual machines or incorporate serveless processing along the statically hosted websites or cloud-managed database products. When selecting the cloud providers it is essential to consider several factors like industry adoption, maturity and number of services, ease of integration and cost of the services. According to the survey conducted in June 2020 conducted by Cloud Native Computing Foundation's (CNCF) \cite{CNCFServerlessSurvey2020} the market share of FaaS platforms is presented in figure \ref{fig:hosted-serverless-platform-share-survey}
 
-% TODO:rb diagram
 % https://github.com/cncf/surveys/tree/master/cloudnative
 % https://www.cncf.io/wp-content/uploads/2020/11/CNCF_Survey_Report_2020.pdf
 
@@ -297,6 +296,46 @@ Since the announcement of AWS Lambda in 2014 other companies followed the foodst
 % IBM Cloud Function - 3%
 % Oracle Function - 2%
 % Netlify Functions - 1%
+
+\begin{figure}[h]
+    \begin{tikzpicture}
+        \begin{axis} [xbar = .05cm,
+            bar width = 12pt,
+            ytick = data,
+            enlarge x limits = {value = .15, upper},
+            symbolic y coords={AWS Lambda,Google Cloud Function,Azure Function,Alibaba Cloud Function,CloudFlare Workers,IBM Cloud Function,Oracle Function,Netlify Functions},
+            xticklabel={\pgfmathprintnumber\tick\%},
+        ]
+        
+        \addplot coordinates { 
+            (55,AWS Lambda) 
+            (27,Google Cloud Function) 
+            (24,Azure Function)
+            (5,Alibaba Cloud Function)
+            (3,CloudFlare Workers)
+            (3,IBM Cloud Function)
+            (2,Oracle Function) 
+            (1,Netlify Functions) 
+        };
+        \addplot[only marks, 
+            nodes near coords,         
+            every node near coord/.append style={xshift=25pt,yshift=0pt,anchor=east,font=\footnotesize},
+            point meta=explicit symbolic,
+            ] coordinates { 
+            (55,AWS Lambda) [$55\%$]
+            (27,Google Cloud Function) [$27\%$]
+            (24,Azure Function) [$24\%$]
+            (5,Alibaba Cloud Function) [$5\%$]
+            (3,CloudFlare Workers) [$3\%$]
+            (3,IBM Cloud Function) [$3\%$]
+            (2,Oracle Function) [$2\%$]
+            (1,Netlify Functions) [$1\%$]
+        };     
+        \end{axis}    
+    \end{tikzpicture}
+    \caption{Hosted serverless platform usage according to the CNCF survey \cite{CNCFServerlessSurvey2020}}
+    \label{fig:hosted-serverless-platform-share-survey}
+\end{figure}
 
 \textbf{Amazon Web Services}, \textbf{Microsoft Azure} and \textbf{Google Cloud Platform} are distinguished as three providers with the biggest market share. Their services are classified into categories and described in more details, altogether with other vendors and companies providing their services in the serverless computing field.
 
@@ -435,7 +474,7 @@ The vendor is looking to cooperate closely with companies trying to scale quickl
 
 The provider gives a better impression to its customers in terms of the ease of setup and user-friendliness of the platform. The pricing model is aimed to be more customer friendly, offering exceptionally flexible contracts appealing to customers interested in using the cloud.
 
-The Google Cloud Platform services are presented based on the available offer \cite{GCPServerlessOffering}.
+Google Cloud Platform services are presented based on the available offer below \cite{GCPServerlessOffering}.
 
 % https://cloud.google.com/serverless
 % https://www.youtube.com/watch?v=4D3X6Xl5c_Y&list=PLIivdWyY5sqKh1gDR0WpP9iIOY00IE0xL&ab_channel=GoogleCloudTech
@@ -531,7 +570,14 @@ Nevertheless, utilising open-source platforms raises questions about maturity of
 
 \subsection{Comparison of serverless providers}
 
-TODO:rb
+% TODO:rb
+TBD?
+
+% - comparable offering, but when diving into internals, the differences may be more visible if it comes to maturity of services
+% - different market share? 
+%     - Azure towards enterprise, hybrid, and private clouds
+%     - AWS towards public cloud
+%     - GCP - ok with startups and smaller companies, open source and ML/AI/BigData
 
 % - available services, 
 % - approaches to develop serverless apps, 
@@ -541,25 +587,24 @@ TODO:rb
 % https://thenewstack.io/serverless-on-public-cloud-the-ultimate-showdown/
 % https://www.datadoghq.com/state-of-serverless/
 
-\section{Use cases}
+\section{Example use cases}
 
 % https://pages.awscloud.com/rs/112-TZM-766/images/Asset2-optimizing-enterprise-economics-serverless-architectures.pdf - examples
 % https://www.simform.com/serverless-aws-lambda-examples/
 % https://dashbird.io/blog/companies-using-serverless-in-production/
-% https://dashbird.io/blog/serverless-case-study-coca-cola/, https://aws.amazon.com/solutions/case-studies/coca-cola-freestyle/
 
 % \cite{ServerlessArchitectureOnAWS}
 % - suitable for some types of processing - reference to benefits
 % - serverless is suitable for building whole systems, create isolated components or implement specific and granular tasks - serverless can be applied to small and large tasks
 % - serverless is not only about processing by lambdas, but also 3rd party services, which amke possible to cut down the work
 
-\subsection*{Application backend}
+\subsection{Application backend}
 
 % https://livebook.manning.com/book/serverless-architectures-on-aws/chapter-2/36 - CloudGuru
 
-Serverless technologies are an appropriate solution for building scalable application backends for all kinds of web, mobile and desktop applications. They are favorable for this use-case, because the infrastructure management can be effectively automated ensuring dynamic scaling to meet uneven demand, while ensuring granular and predictable billing. Despite the fact that serverless technologies are a relatively new approach to building services some of the companies already used it to power large applications.
+Serverless technologies are an appropriate solution for building scalable application backends for all kinds of web, mobile and desktop applications. They are favorable for this use-case, because the infrastructure management can be effectively automated ensuring dynamic scaling to meet uneven demand, with proportional and predictable billing. Despite the fact that serverless technologies are a relatively new approach to building services, some of the companies already used it to power large applications.
 
-To build the application backend, serverless functions are used to transform the data representing the application logic together with other third party services capable of persisting data or exposing some desired functionalities. The API Gateway provides uniform access to various serverless functions using REST API, ensuring mapping between requests and respective serverless functions and enables integration with other services responsible for authentication and authorisation. Sending a request to the API can lead to execution of one or more serverless functions containing custom business logic and communicating respectively with some other services. It is also possible that the frontend application can communicate directly with external components bypassing the API Gateway. Nevertheless, it is essential to handle the communication in a secure manner for example using the delegation tokens \cite{ServerlessArchitectureOnAWS}.
+To build the application backend, serverless functions are used to transform the data representing the application logic together with other third party services capable of persisting data or exposing some desired functionalities. The API Gateway provides uniform access to various serverless functions using REST API, ensuring mapping between requests and respective serverless functions, enabling integrations with other services responsible for authentication and authorisation. Sending a request to the API can lead to execution of one or more serverless functions containing custom business logic and communicating respectively with other services. It is also possible that the frontend application can communicate directly with external components bypassing the API Gateway. Nevertheless, it is essential to handle the communication in a secure manner for example using the delegation tokens \cite{ServerlessArchitectureOnAWS}.
 
 \begin{figure}[h]
     \centering
@@ -568,34 +613,64 @@ To build the application backend, serverless functions are used to transform the
     \label{fig:cloudguru-architecture-diagram}
 \end{figure}
 
-CloudGuru, which is an online educational platform dedicated to people interested in learning numerous cloud related topics, is a good example of such a use-case. Core features of the platform include streaming large selection of video courses, interactive quizzes and practice exams, real-time discussion forum and integrations with third party services enabling users to buy access to the courses.
+CloudGuru, which is an online educational platform dedicated to people interested in learning numerous cloud related topics, is a good example of such a use-case. Core features of the platform include streaming large selection of video courses, interactive quizzes and practice exams, real-time discussion forum and integrations with third party services allowing users to buy access to the courses.
 
-The architecture of the e-learning platform utilises services of several cloud providers. Frontend of the web application built as a Single Page Application is hosted on Netlify, which acts as a Content Delivery Network (CDN) for the platform client. Auth0 service is responsible for registration and authentication functionalities and provides delegation tokens enabling client application to communicate directly and securely with other services. Firebase is used as a primary database, capable of updating clients in real-time using websockets to push updates to the clients. Questions and answers submitted by users to the forum are persisted in the Firebase, later the data is sent to AWS CloudSearch which is indexing it for further searching, enabling users to find information easier. Instructors can upload videos directly to S3 bucket, which triggers the video transcoding pipeline, which will be discussed in more details in the next section. Users can watch the videos served via CloudFront acting as a CDN if they call the lambda function beforehand giving them the permission to access the video assets for a limited period of time.
+The architecture of the e-learning platform utilises services of several cloud providers. Frontend of the web application built as a Single Page Application is hosted on Netlify, which acts as a Content Delivery Network (CDN) for the platform client. Auth0 service is responsible for registration and authentication functionalities and provides delegation tokens for client application to communicate directly and securely with other services. Firebase is used as a primary database, capable of updating clients in real-time using websockets to push updates to the client applications. Questions and answers submitted by users to the forum are persisted in the Firebase, later the data is sent to AWS CloudSearch which is indexing it for further searching purpose, enabling users to find information easier. Instructors can upload videos directly to S3 bucket, which triggers the video transcoding pipeline. Users can watch the videos served via CloudFront acting as a CDN if they call the lambda function beforehand, giving them the permission to access the video assets for a limited period of time.
 
-\subsection*{Event-driven data processing and manipulation}
-
-% https://livebook.manning.com/book/serverless-architectures-on-aws/chapter-2/36 - CloudGuru
-
-CloudGuru - transcoding videos
-MindMup - exporting mindmaps
-
-\cite{MartinFowlerServerless}
-
-one of the standard pattern is media conversion - store file to an S3 bucket taht triggers processing of the stored file
+\subsection{Event-driven data processing}
 
 % https://livebook.manning.com/book/serverless-applications-with-node-js/chapter-15/1 -  CodePen, MindMup
-% https://www.doc.ic.ac.uk/~rbc/papers/fse-serverless-17.pdf ~ MindMap in more details
+% https://www.doc.ic.ac.uk/~rbc/papers/fse-serverless-17.pdf ~ MindMup in more details
 
-\subsection*{Real-time stream processing}
+Serverless has also found application in numerous media conversion and transcoding as well as various data processing tasks. When the new file is inserted to the bucket responsible for data storage, it can trigger a serverless function passing the necessary data and file as an event to perform the processing. Such an event-driven approach is suitable for building pipelines for data-processing tasks, billed only for the lambda execution time and other BaaS components usage to transfer, transform or extract some information, if applicable \cite{ServerlessArchitectureOnAWS}.
 
-\subsection*{IoT applications}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{assets/02-serverless/MindMupArchitecture.png}
+    \caption{MindMup platform architecture for file export}
+    \label{fig:mindmup-architecture-diagram}
+\end{figure}
 
-\subsection*{Webhooks / chat boots / scheduled events}
+An example of such serverless use is MindMup, which is a popular web application mind mapping tool running in the web, developed with just 2 person team. The event-driven data processing is utilised in the case when user wants to export prepared diagram to some read-only format such as PDF, Word document, presentation or text file. The web application works as interactive user interface, upon user requests to export the diagram, it calls the Lambda placed behind the API Gateway to generate the presigned URL, which can be used for a short period of time to insert the file inside the S3 bucket, directly from the client application. It sends an event to the Amazon Simple Notification Service (SNS) triggering the appropriate function responsible for export to a particular file format. Each of the exporters have different requirements, for example CPU and memory usage for PDF exporter is much higher than for others or Microsoft Office exporters require usage of libraries written in Java. Moreover, some of the extensions such as Markdown are not as frequently selected by users as others. When the processing is complete, the output of the process is put back in the S3 bucket, where the users can access it. Additionally the event is sent to SNS which triggers other services such as DynamoDB that are listening to that topic to save some information for analytics purposes.
+
+The company admits that initially, the service responsible for exporting was running on the Heroku platform in the containerised environment, but after migration to the AWS Lambda they've noticed significant cost reduction even with the growth of the platform usage by the clients \cite{ServerlessApplicationsWithNodejs}.
+
+\subsection{Real-time stream processing}
+
+Serverless architecture also found application in the data ingestion tasks from numerous data sources such as logs, system events, transactions or social media feeds that need to be analyzed, aggregated and stored. Utilising BaaS components capable of event stream aggregation over time with the serverless function which can be configured to run when the specific number of records (forming a batch of records) is available. Such a messaging pattern is popular in distributed systems and allows decoupling the services and provides reliability by storing the messages in the queue when the consuming service cannot process more data at the moment, additionally providing retrying mechanism in case of failures \cite{ServerlessArchitectureOnAWS}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{assets/02-serverless/TemenosArchitecture.png}
+    \caption{Temenos platform architecture}
+    \label{fig:temenos-architecture-diagram}
+\end{figure}
+
+Temenos as one of the largest banking software providers is using such a pattern along with other serverless technologies in their T24 Transact banking system to achieve a highly elastic solution with low maintenance cost. It supports a large number of interactions and transactions between banking customers worldwide and due to leveraging the platform and managed services it reports that even the unpredictable workloads due to peaks in the market are handled efficiently. All the requests coming to the systems are getting through the AWS API Gateway which passes them the AWS Elastic Load Balancer (ELB) responsible for routing the requests to the proper container instance on AWS Fargate. The application running inside the container based on the request, performs the business actions and persists the result in Amazon Relational Database Service (RDS) that is an Online Transactional Processing Database (OLTP) designed to process the transactions effectively. Later the stream of data events and more complex business events is pushed from Amazon RDS to Amazon Kinesis which aggregate the data and triggers the AWS Lambda responsible for processing it to build a query-optimized data model that is stored in DynamoDB. When the banking system users want to query the data, they perform a request that goes from API Gateway to AWS Lambda that query the read-optimized data model from DynamoDB \cite{ThisIsMyAchitectureTemenos}.
+
+\subsection{IoT applications}
+
+With the growth of smart homes popularity along with other devices that are meant to help people, IoT devices started incorporating more sophisticated technologies to support people on a daily basis. iRobot is a leading company in terms of designing and building smart robots helping people around their household with the Roomba robotic vacuums as their most popular product. Besides robotics the company provides iRobot HOME application which enables customers to interact with their smart home devices.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{assets/02-serverless/iRobotArchitecture.png}
+    \caption{iRobot solution architecture for smart robots}
+    \label{fig:irobot-architecture-diagram}
+\end{figure}
+
+AWS IoT is an entry point for the Roomba vacuums to connect them with the cloud. For the communication purposes MQTT is used, which is a lightweight publish-subscribe protocol for IoT devices. The AWS IoT Shadow Device enables asynchronous communication mechanism, enabling the robot to work properly without the constant communications with the cloud. When the smart vacuum finishes its job, its data is synchronized with the cloud, which allows users to update the cleaning schedule according to changes made by them via the iRobot HOME application. Along with the AWS IoT developers can define additional IoT Rules that enable the device to connect with other services in the cloud, for example to update the device status along with its parameters, informing users that the vacuum tank is full. Moreover, the gathers additional information about usage and home mapping better plan their tasks and manage the battery power \cite{ServerlessIoTatiRobot}.
+
+Developers and designers of the robotics solutions observed many benefits related with the utilisation of cloud vendors services and the serverless paradigm, mentioning the scalability of the solution without need to manage infrastructure and significant cost reduction, while preserving the proper level of security and data privacy \cite{AWSIRobotIoT}.
+
+% \cite{ServerlessArchitectureOnAWS}
+
+% - bot - app/script running automated tasks for other services
+% - responding to commands, carry out small tasks, send reports and notifications
+
+% https://www.researchgate.net/publication/323314352_Case_Study_Building_a_Serverless_Messenger_Chatbot
 
 % ---
-
-% Gartner: Magic Quadrant for Cloud Infrastructure and Platform Services
-% https://www.gartner.com/doc/reprints?id=1-1ZDZDMTF&ct=200703&st=sb
 
 % A Review of Serverless Use Cases and their Characteristics - in depth analysis of several cases using serverless architecture (recommended)
 % https://arxiv.org/pdf/2008.11110.pdf
