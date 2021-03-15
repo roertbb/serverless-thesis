@@ -194,7 +194,7 @@ Document databases enable to store documents that are container for key-value pa
 Instead of normalising the data and encoding the relations, the document model prefer to embed the data into single document, which is a tradeoff granting faster reads due to data locality, but on the other hand it can introduce data duplication, it makes the writing and updating documents more complex, which may be not suitable for the relational data forming connected structures. Nevertheless, discussed approach enables developers to query the documents by matching semi-structured data, selecting parts of them or performing aggregation tasks on the underlying data. 
 The disadvantage of the model is the fact that the whole document need to be retreived when selecting only part of it and the entire documents need to be rewritten on updates.
 
-The document model can be more convenient from the development perspective, reducing the impedence mismatch by working on the JSON format, which is more similar to the objects compared to the data from relational model. The representants of the document model databases are MongoDB and DynamoDB \cite{DesignDataIntensiveApplications}.
+The document model can be more convenient from the development perspective, reducing the impedence mismatch by working on the JSON format, which is more similar to the objects compared to the data from relational model. The representants of the document model databases are MongoDB and CouchDB \cite{DesignDataIntensiveApplications}.
 
 \paragraph*{Wide-column databases}
 
