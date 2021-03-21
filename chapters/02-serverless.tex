@@ -83,8 +83,7 @@ Taking into consideration most popular requirements of various applications, the
 
 Looking closer from the application logic point of view, there are also repeatable functionalities implementations that can be extracted and reused across multiple developed applications. Most of the products will require some features enabling users to manage their identity and associated permissions. Most of the time, the capabilities will be not only limited to registering and logging users, but it will also include integrations with other services as identity providers. Managing and sending emails can be considered as another functionality that can be extracted into separate component from the code perspective and reused in other applications. Products such as Auth0 (serving as fully featured authorization and user management service) or Mailgun (capable of managing and processing emails) makes it possible to replace entirely the repeatable part of business logic.
 
-% TODO:rb update chapter reference
-Specific components and services that can be classified as Backend as a Services will be covered in more details in chapter ... when analysing services provided by leading cloud vendors. All of the mentioned components enable developers to create fully fledged applications and services similar to the solutions built using self-hosted component equivalents. The difference is that mentioned components are characterized by capabilities of the serverless architecture. They are provided by cloud vendors, who take responsibility for managing, provisioning and scaling them depending on the demand. Moreover, the possibility to replace the repeatable application features by utilising third-party services enables developers to iterate faster and shorten the lead time.
+Specific components and services that can be classified as Backend as a Services will be covered in more details in chapter \ref{chapter:serverless-service-providers} when analysing services provided by leading cloud vendors. All of the mentioned components enable developers to create fully fledged applications and services similar to the solutions built using self-hosted component equivalents. The difference is that mentioned components are characterized by capabilities of the serverless architecture. They are provided by cloud vendors, who take responsibility for managing, provisioning and scaling them depending on the demand. Moreover, the possibility to replace the repeatable application features by utilising third-party services enables developers to iterate faster and shorten the lead time.
 
 \subsection{Function as a Service}
 
@@ -281,7 +280,7 @@ Monitoring the service created by utilising the serverless architecture can be m
 
 Most cloud vendors provide some tooling to monitor the system and there are many third party offerings helping with achieving better observability in this area. Despite the fact that more of the operational context related with infrastructure management is handed off to the cloud vendor, there is still plenty of administration work with ensuring monitoring, proper security level and verifying that the appearance of alarms when crossing some of the established limits, does not affect the proper service execution. Introducing various checks in the deployment process can ensure that the service quality is preserved. Techniques like preemptive load testing and chaos engineering can help simulate various critical situations and verify that the system is able to cope with them \cite{MartinFowlerServerless}.
 
-\section{Cloud providers}
+\section{Cloud providers} \label{chapter:serverless-service-providers}
 
 Since the announcement of AWS Lambda in 2014, other companies followed the foodsteps of Amazon Web Services and started offering their solutions for building serverless applications and services. Currently, several major cloud vendors provide large variety of services and functionalities forming complete serverless platforms. Along with the public cloud expansion, couple of open-source projects and platforms emerged as an alternative, enabling to use FaaS on on-premise software and in a private or hybrid cloud. The variety of cloud vendors offerings is significant, some of them expose the fully-fledged platforms with numerous BaaS components that can be integrated together, others provide the FaaS along with the possibility to host the applications in containers, virtual machines or incorporate serveless processing, along the statically hosted websites or cloud-managed database products. When selecting the cloud providers it is essential to consider several factors, like industry adoption, maturity and number of services, ease of integration and cost of the services. According to the survey conducted in June 2020 by Cloud Native Computing Foundation's (CNCF) \cite{CNCFServerlessSurvey2020} the market share of FaaS platforms is presented in figure \ref{fig:hosted-serverless-platform-share-survey}
 
@@ -571,7 +570,20 @@ Nevertheless, utilising open-source platforms raises questions about maturity of
 \subsection{Comparison of serverless providers}
 
 % TODO:rb
-TBD?
+% Categories in table
+% \begin{enumerate}
+%     % Services
+%     \item Compute
+%     \item Data Store (Storage + Database)
+%     \item Network and Content Delivery (API management + Hosting)
+%     \item Application Integrations (Application Integration + Function Orchestration/Workflow)
+%     \item Analytics
+%     \item Security and Identity
+%     \item Development Tools
+%     % Other
+%     \item Targeted customers / offerings target
+%     \item Cost plan
+% \end{enumerate}
 
 % - comparable offering, but when diving into internals, the differences may be more visible if it comes to maturity of services
 % - different market share? 
