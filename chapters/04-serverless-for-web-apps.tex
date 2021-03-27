@@ -1,183 +1,203 @@
 \chapter{Serverless architecture for web applications}
 
-% różne podejścia do budowy aplikacji webowych - jak to przekłada się na architekturę serverless?
-% czy można wyznaczyć ogólne wytyczne pozwalające na efektywne tworzenie aplikacji webowych w architekturze serverless?
-% ---
-
-% reference to previous chapter, how serverless relates to:
-% - 1. distributed system - monolith -> microservices -> FaaS as next step
-% - 2. database - what are the requirements? consistency vs. availability
-% - 3. clients - thin -> thick (-> thin?) -> CDN / Lambda@Edge to render static pages, 3.5. client/server communication - REST / Websocket / GraphQL - GraphQL using AppSync
-
-% Serverless should be sufficient for what's needed to develop modern web application 
-
-% 1. Server
-
-% - Serverless - event-driven architecture, require building application compliant with that approach
-
-% ---
-
-% - What if processing is not compliant? - hybrid solution?
-% - what with limitations? - interactive clients, low latency / "real-time" 
-
-% 2. Database
-
-% - "Classic" databases are not suitable for serverless architecture - needs redefinition - DynamoDB, Aurora - investigation how these works? how does these affects the application development?
-% - functions are stateless - 3rd party components to persist state
-
-% 3. Clients 
-
-% - does not change much or does it?
-% - how serverless (cdn, static site rendering using lambda@edge) can be used to make it better?
-% - sdk/libraries for building clients
-
-% ---
-
-% % How to leverage serverless computing for developing web applications?
-% % Types of processing not suitable for serverless computing?
-% % https://aws.amazon.com/lambda/resources/reference-architectures/
-% % https://docs.aws.amazon.com/whitepapers/latest/modern-application-development-on-aws/modern-application-development-on-aws.pdf
-% % https://www.thoughtworks.com/insights/blog/traits-serverless-architecture
-
-% ---
-
-% - A Review of Serverless Use Cases and their Characteristics
-% - LEVERAGING SERVERLESS CLOUD COMPUTING ARCHITECTURES
-% - Patterns for Serverless Functions (Function-as-a-Service): A Multivocal Literature Review
-
-% % Migrating a web application to serverless architecture - serverless design patterns in more details
-% % https://jyx.jyu.fi/bitstream/handle/123456789/64836/URN%3ANBN%3Afi%3Ajyu-201906253422.pdf?sequence=1
-
-% ---
-
-% Research Questions:
-
-% 1. Is Faas appropriate approach for building web applications - lower cons, better reliability, better performance
-% - FaaS serverless as Backend ~ Microservices
-
-% \cite{BerkeleyServerless}
-% 3 Limitations of Today’s Serverless Computing Platforms
-
-% - can serverless handle some finer grained communication - comparing to the serverfull solution? - drawing / excalidraw like
-
-% \cite{LeveragingServerlessCloudComputingArchitectures}
-% - These serverless computing services enable creating microservices, without the need to manage servers, that can easily be deployed and are automatically scaled
-
-% ---
-
-% 2. Database for serverless - communicating with database
-
-% \cite{BerkeleyServerless}
-% Serverless SQLite: Databases
-
-% ---
-
-% 3. Client
-
-% - websockets / real-time communication / pushing update to the client - push to pull pattern - as being sustainable to be implemented utilising lambdas
-
-% ---
-
-% 4. Design patterns / good practice
-% - basic approach / FaaS -> optimised FaaS
-
-% ---
-
-% % Mikhail Shilkov - interesting blog around serverless, AWS, Azure, Pulumi
-% % - https://mikhail.io/serverless/coldstarts/big3/
-
-% ---
-
 \section{Intro}
 
-Describe how serverless relate to microservices?
+\subsection{Motivation}
 
 \begin{enumerate}
-    \item multiple components combined to perform application logic
-    \item event driven - triggers other components, lambda for transforming the data
-    \item scaling independent components
-    \item ...
+    \item serverless most frequently used for web apps (summary of research papers)
 \end{enumerate}
 
-Research questions:
+\subsection{Research questions}
 
 \begin{enumerate}
-    \item Is Faas appropriate approach for building web applications (FaaS serverless as Backend similar Microservices)? - lower cont, better reliability, better performance
-    \item Server tier?
-    \item Database for serverless - communicating with database
-    \item Client
-    \item Design patterns and good practice (basic approach / FaaS -> optimised FaaS)
+    \item Is serverless paradigm suitable for building web applications?
+    \item Server tier - How the serveless processing model can be utilised to perform web application business logic?
+    \item Data tier - How the storage systems are leveraged in the serverless paradigm?
+    \item Client tier
 \end{enumerate}
 
-why AWS? how the research looks like?
+\subsection{Research approach}
 
-\section{Is Faas appropriate approach for building web applications?}
+\begin{enumerate}
+    \item Why AWS?
+    \item How the research looks like? 2 - 3 examples / case studies + minor architecture implementations
+\end{enumerate}
 
-how serverless fulfills the requirements put in front of the web applications?
+\section{Serverless suitability for web applications}
 
----
+\subsection{Web app requirements}
 
-better performance
+considering the web application requirements mentioned in chapter \ref{section:web-apps-requirements}
 
-\begin{itemize}
-    \item cold starts - pre-warming functions, provisioned concurrency
-    \item serverless usually should not be faster than serverful
-    \item utilising parallel execution for faster processing of the tasks (regarding the latex parsing - splitting into chunks that can be parsed together)
-\end{itemize}
+\subsection*{Performance and Scalability}
 
-better reliability
+% web applications
+- performance from the user point of view - how fast the requests are fulfilled
+- performance fro the system point of view - many users performing actions at the time - application need to perform properly when the load is increased - system should scale to meet the demand
 
-\begin{itemize}
-    \item implicit failover
-    \item DLQ in SQS and others?
-\end{itemize}
-
-and so on
-
----
-
-lower cost
-
-\begin{itemize}
-    \item some types of processing are not sufficient - \cite{BerkeleyServerless}
-    \item some types of processing can be redesigned to leverage benefits of serverless - \cite{BerkeleyServerless}
-    \item calculating betteruptime.com on FaaS - more expensive than serverful on AWS, which is more expensive than VPS somewhere else
-    \item conditions/characteristics/decission tree - when serverless will be more expensive
-\end{itemize}
+- in case of serverless - horizontal scaling managed by the platform - allocating new resources absed on the events comming to the system, due to stateless architecture
+- some serverless, stateful storage components designed to work at scale - S3, DynamoDB
+- on the other hand - unpredictable performance, colds starts
+- by default lambda concurrency is limitted - can be increased when discussed with the provider
 
 ---
 
-examples
+\subsection*{Reliability}
 
-\begin{itemize}
+% web applications
+system continue correctly event when failure in some other part of application, resilience and fault tolerance, preventin app from stopping once error occurs
+
+- some of the serverless components are designed for failures - DLQ, Lambda destination - it needs to be handled by the developer to filter out and store all the failures
+- operating across multiple regions, availability zones - these are not connected with each other, even when one fail, the other should work, the architecture can operate on both of them
+- embracing automation to ensure good quality of service - automation tests running before the deployment, stress/load testing - due to the fact that serverless paradigm requires to run the app on the host platform it is worth it to automate the processes
+- logging, monitoring, CloudWatch alarms, ensuring proper level of observability is required
+
+---
+
+\subsection*{Security and Compliance}
+
+% web applications
+- larger and not fully researched area, some of the articles considering security gaps in the cloud providers platforms - bug bounty programs
+- by default - access denied
+- user authentication mechanism + proper configuration should prevent from accessing the resources without permissions (similar to traditional web apps, but in that case we're utilising most frequently the mechanism provided by the cloud vendor - which is not that trivial, which is thoughtfully tested, instead of the one developed by ourselves, which can include some security gaps)
+- fine grained IAM (Identity and Access Management) rules - FaaS should have no more than only the required permissions to other services - it could be difficult for larger applications more fine grained functions/resources
+
+---
+
+\subsection*{Maintainability}
+
+% web applications
+- no need to maintain the servers, no operational work with configuring them
+
+developers perspective
+- initially it reduces the amount of work developers neeed to do - utilising serverless components offered by the platform, new development opportunities - shorter lead time, greater agility
+- maintainability of the larger applications can be also not trivial, looks different than the traditional applications - is there any research measing maintainability of the serveless aplication in the long run?
+
+operational perspective
+- no need to manage servers, handle scaling of the services
+- monitoring, deployment, configuration management - could be more complex, without the knowledge of the platform
+
+---
+
+% \subsubsection*{Reduced development and operational cost}
+% - serverless is another step in infrastructure management outsourcing, cloud platform is responsible for provisioning resources and executing it, responsibility for managing the servers, databases transfered to the cloud provider
+% - less work related with managing the serverless solution 
+%     - labour cost related with management and operational aspects
+%     - development - using BaaS component replacing the application 
+
+\subsection{Serverless suitability}
+
+\begin{enumerate}
+    \item reference to the use cases - application backend, event-driven data processing, real-time data stream
+    \item (Adzic) Yubl \& MindMup - occasional, spiky traffic
+    \item (Leveraging serverless cloud computing architectures) Types of workloads are suitable for serverless - irregular traffic, low traffic, workload parallelisation
+    \item articles comparing serverless to microservices / monolith in case of performance
+    \item examples from Berkeley - rethinking the processing - hybrid solutions with VMs when need to keep the state, use FaaS for parallelisation
+    \item cost as important factor to consider
+\end{enumerate}
+
+\section{Example implementations}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{assets/04-serverless-for-web-apps/paragoneArchitecture.png}
+    \caption{Architecture of receipt processing web application}
+    \label{fig:paragone-web-app}
+\end{figure}
+
+\begin{enumerate}
     \item small web app - processing receipts/invoices
-    \item event driven processing - parsing latex files to interactive presentations
-\end{itemize}
+    \item API performance comparison - containters / API Gateway + lambda + db / API Gateway directly to db
+    \item parallelisation of processing - examples of video transcoding - AWS Step Function (compiling latex file to interactive presentation + orchestration) - performance / cost optimisation
+    \item event-driven game / collaboration tool - is serverless feasible, compared to the application using containers (AppSync / websockets, persisting data in DynamoDB - what's the latency/cost)
+    % https://serialized.net/2020/09/multiplayer/
+    % https://serialized.net/2021/03/serverless_gaming_limits/
+    % https://aws.amazon.com/blogs/compute/building-a-serverless-multiplayer-game-that-scales/
+\end{enumerate}
+
+Berkeley research papers example
+    
+https://aws.amazon.com/lambda/resources/reference-architectures/
 
 \section{Server Tier}
 
-\begin{itemize}
-    \item serverless processing characteristics - event driven - lambdas for transforming data
-    \item distributed sagas - step functions
-    \item good practices - using SQS for batching, streams from DynamoDB, using the lambda only to transform the data
-\end{itemize}
+\subsection{Serverless processing model / compared to microservices / event-driven}
 
-\section{Database Tier}
+% serverless vs microservices, serverless vs event-driven ~ event sourcing - similarities and differences
 
-\begin{itemize}
-    \item relational database not suitable for serverless - RDS proxy holding connections
-    \item DynamoDB, Aurora - how they work?
-    \item DynamoDB modeling? single table design - cost savings, increase performance
-\end{itemize}
+reference to articles comparing serverless / microservices / monolith for Web App API
 
-\section{Clients}
+\subsection{Web application workload types for serverless}
 
-\begin{itemize}
-    \item APIGateway - REST + websockets
-    \item AppSync - GraphQL
-    \item serverless loves async processing - push to pull pattern - pushing update to client
-    \item hosting static website from S3 + CloudFront - hosting client
-\end{itemize}
+% event driven system - paragone, workload parallelisation - latex?, push based approach, pull based for workers when data is batched
 
-\section{Desing patterns and good practices}
+synchronous - function needs to return smth and we're waiting till the services returns the data
 
+asynchronous - calling services and finishing execution - smth other calls another lambda - SNS for pub/sub, SQS for batching - event stream triggering new services one after the other
+
+function composition problems - StepFunction
+
+fanout - utilising parallelisation - serverless benefits
+
+% https://www.usenix.org/system/files/conference/hotcloud18/hotcloud18-paper-hong.pdf
+% https://www.researchgate.net/profile/Davide-Taibi/publication/340121613_Patterns_for_Serverless_Functions_Function-as-a-Service_A_Multivocal_Literature_Review/links/5e79f9fb92851c3091392bd4/Patterns-for-Serverless-Functions-Function-as-a-Service-A-Multivocal-Literature-Review.pdf
+% https://aws.amazon.com/lambda/resources/reference-architectures/
+
+\subsection{Serverless function optimisation}
+
+internals
+
+composition - StepFunction
+
+using with other services - push/pull/stream models - SNS / SQS / DynamoDB
+
+CPU bound is feasible, I/O not
+
+optimising cold starts
+
+patterns
+
+\section{Data Tier}
+
+\subsection{Issues when integrating traditional databases with serverless}
+
+\subsection{Serverless databases}
+
+DynamoDB - modeling for cost optimisation, increase performance, single table design
+
+Aurora
+
+S3
+
+how they work? streams, handling reusing connections, RDS proxy
+
+\section{Client Tier}
+
+\subsection{Client communication patterns with serverless architecture}
+
+APIGateway - REST + websockets
+
+AppSync - GraphQL - data aggregation from different resources
+
+gatekeeper - authentication
+
+direct resolvers to particular services with/without the lambda, pipeline resolvers (nested nodes in graph) - overhead comparison
+
+calling the services from the client - presigned URLs / using client libs to have access to resources
+
+\subsection{Serverless push based approach}
+
+request - response
+
+push to pull pattern
+
+GraphQL subscriptions triggered by mutation
+
+\subsection{Hosting web clients}
+
+hosting static files
+
+server side rendering
+
+\section{Desing patterns and best practices}
