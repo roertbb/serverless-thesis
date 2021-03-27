@@ -442,7 +442,24 @@
   year      = 2017
 }
 
-@conference{FowlerNoSQL,
+@article{RDBMS,
+  title   = {Database Management System},
+  author  = {Azhar Susanto Meiryani},
+  journal = {International Journal of Scientific \& Technology Research},
+  year    = {2019},
+  volume  = {8}
+}
+
+@misc{FowlerNoSQLDefinition,
+  author       = {Martin Fowler},
+  title        = {NoSQL Definition},
+  howpublished = {[on-line] \url{https://martinfowler.com/bliki/NosqlDefinition.html}},
+  note         = {(accessed on 19.02.2021)},
+  year         = {2003},
+  url          = {https://martinfowler.com/bliki/NosqlDefinition.html}
+}
+
+@conference{FowlerNoSQLGOTO,
   author    = {Martin Fowler},
   title     = {Introduction to NoSQL},
   year      = 2012,
@@ -477,6 +494,129 @@
   month  = {04},
   pages  = {},
   title  = {API Design in Distributed Systems: A Comparison between GraphQL and REST}
+}
+
+@misc{Redis,
+  author       = {Redis Labs},
+  title        = {Redis},
+  year         = {2021},
+  howpublished = {[on-line] \url{https://redis.io/}},
+  note         = {(accessed on 27.03.2021)},
+  url          = {https://redis.io/}
+}
+
+@misc{Memcached,
+  author       = {Dormando},
+  title        = {Memcached},
+  year         = {2021},
+  howpublished = {[on-line] \url{https://memcached.org/}},
+  note         = {(accessed on 27.03.2021)},
+  url          = {https://memcached.org/}
+}
+
+
+
+@misc{MongoDB,
+  author       = {MongoDB, Inc.},
+  title        = {MongoDB},
+  year         = {2021},
+  howpublished = {[on-line] \url{https://www.mongodb.com/}},
+  note         = {(accessed on 27.03.2021)},
+  url          = {https://www.mongodb.com/}
+}
+
+@misc{CouchDB,
+  author       = {The Apache Software Foundation},
+  title        = {Apache CouchDB},
+  year         = {2021},
+  howpublished = {[on-line] \url{https://couchdb.apache.org/}},
+  note         = {(accessed on 27.03.2021)},
+  url          = {https://couchdb.apache.org/}
+}
+
+@misc{Cassandra,
+  author       = {The Apache Software Foundation},
+  title        = {Apache Cassandra},
+  year         = {2021},
+  howpublished = {[on-line] \url{https://cassandra.apache.org/}},
+  note         = {(accessed on 27.03.2021)},
+  url          = {https://cassandra.apache.org/}
+}
+
+@misc{HBase,
+  author       = {The Apache Software Foundation},
+  title        = {Apache HBase},
+  year         = {2021},
+  howpublished = {[on-line] \url{https://hbase.apache.org/}},
+  note         = {(accessed on 27.03.2021)},
+  url          = {https://hbase.apache.org/}
+}
+
+@misc{Neo4j,
+  author       = {Neo4j, Inc.},
+  title        = {Neo4j},
+  year         = {2021},
+  howpublished = {[on-line] \url{https://neo4j.com/}},
+  note         = {(accessed on 27.03.2021)},
+  url          = {https://neo4j.com/}
+}
+
+@misc{Elasticsearch,
+  author       = {Elasticsearch B.V.},
+  title        = {Elasticsearch},
+  year         = {2021},
+  howpublished = {[on-line] \url{https://www.elastic.co/elasticsearch}},
+  note         = {(accessed on 27.03.2021)},
+  url          = {https://www.elastic.co/elasticsearch}
+}
+
+@misc{ApacheSolr,
+  author       = {The Apache Software Foundation},
+  title        = {Apache Solr},
+  year         = {2021},
+  howpublished = {[on-line] \url{https://solr.apache.org/}},
+  note         = {(accessed on 27.03.2021)},
+  url          = {https://solr.apache.org/}
+}
+
+@inproceedings{CAPTheorem,
+  author    = {Eric A. Brewer},
+  title     = {A certain freedom: thoughts on the {CAP} theorem},
+  booktitle = {Proceedings of the 29th Annual {ACM} Symposium on Principles of Distributed Computing, {PODC} 2010, Zurich, Switzerland, July 25-28, 2010},
+  pages     = {335},
+  publisher = {{ACM}},
+  year      = {2010}
+}
+
+@article{PACELC,
+  author     = {Abadi, Daniel},
+  title      = {Consistency Tradeoffs in Modern Distributed Database System Design: CAP is Only Part of the Story},
+  year       = {2012},
+  issue_date = {February 2012},
+  publisher  = {IEEE Computer Society Press},
+  address    = {Washington, DC, USA},
+  volume     = {45},
+  number     = {2},
+  issn       = {0018-9162},
+  url        = {https://doi.org/10.1109/MC.2012.33},
+  doi        = {10.1109/MC.2012.33},
+  abstract   = {The CAP theorem's impact on modern distributed database system design is more limited than is often perceived. Another tradeoff—between consistency and latency —has had a more direct influence on several well-known DDBSs. A proposed new formulation, PACELC, unifies this tradeoff with CAP.},
+  journal    = {Computer},
+  month      = feb,
+  pages      = {37–42},
+  numpages   = {6},
+  keywords   = {distributed database systems, computer systems organization, CAP theorem, networking and information technology, database architectures}
+}
+
+@book{SPA,
+  author    = {Mikowski, Michael and Powell, Josh},
+  title     = {Single Page Web Applications: JavaScript End-to-End},
+  year      = {2013},
+  isbn      = {1617290750},
+  publisher = {Manning Publications Co.},
+  address   = {USA},
+  edition   = {1st},
+  abstract  = {Summary In Single Page Web Applications you'll learn to build modern browser-based apps that take advantage of stronger client platforms and more predictable bandwidth. You'll learn the SPA design approach, and then start exploring new techniques like structured JavaScript and responsive design. And you'll learn how to capitalize on trends like server-side JavaScript and NoSQL data stores, as well as new frameworks that make JavaScript more manageable and testable as a first-class language. About this Book If your website is a jumpy collection of linked pages, you are behind. Single page web applications are your next step: pushing UI rendering and business logic to the browser and communicating with the server only to synchronize data, they provide a smooth user experience, much like a native application. But, SPAs can be hard to develop, manage, and test. Single Page Web Applications shows how your team can easily design, test, maintain, and extend sophisticated SPAs using JavaScript end-to-end, without getting locked into a framework. Along the way, you'll develop advanced HTML5, CSS3, and JavaScript skills, and use JavaScript as the language of the web server and the database. This book assumes basic knowledge of web development. No experience with SPAs is required. Purchase of the print book includes a free eBook in PDF, Kindle, and ePub formats from Manning Publications. What's InsideDesign, build, and test a full-stack SPA Best-in-class tools like jQuery, TaffyDB, Node.js, and MongoDB Real-time web with web sockets and Socket.IO Touch controls for tablets and smartphones Common SPA design mistakesAbout the Authors The authors are architects and engineering managers. Michael Mikowski has worked on many commercial SPAs and a platform that processes over 100 billion requests per year. Josh Powell has built some of the most heavily trafficked sites on the web. Table of ContentsPART 1: INTRODUCING SPAS Our first single page application Reintroducing JavaScript PART 2: SPA CLIENT Develop the Shell Add feature modules Build the Model Finish the Model and Data modules PART 3: THE SPA SERVER The web server The server database Readying our SPA for production}
 }
 
 @techreport{WebSocketRFC,
