@@ -1,4 +1,4 @@
-\chapter{Web applications}
+\chapter{Web applications} \label{chapter:web-apps}
 
 % aplikacje webowe - czym się charakteryzują?
 % jakie założenia trzeba spełnić? jakie wymagania stawiane są przed deweloperami?
@@ -45,7 +45,7 @@ A web application is a client-server application with any number of clients and 
 
 Taking into account both definitions, we can refer to web applications used currently as mainly two communicating with each other parts --- client (preferably used by web browser) and server, which can be any complex system by themselves.
 
-\section{Requirements} \label{section:web-apps-requirements}
+\section{Requirements} \label{chapter:web-apps-requirements}
 
 Having described the development of web applications over the years, it is relevant to consider what were the requirements placed on the web application that lead to such a development process. Currently, web applications can operate in numerous areas, and based on the business needs, target various customer groups and other non-functional requirements --- the desired capabilities they need to fulfill may differ. For example, a small e-commerce shop serving a handful of customers a day within one country will have different requirements than a large social network, in which millions of people participate worldwide on a daily basis. Nevertheless, several generic requirements applicable to the majority of web applications can be distinguished, but the importance of them, and to which extent they should be incorporated may differ depending on the application use-case and its scale.
 
@@ -59,7 +59,7 @@ Scaling can be referred to as the ability to cope with increased load which can 
 
 Reliability refers to the fact that the system should continue to work correctly (perform correct processing as user expected at desired level of performance), even when the failure occur \cite{DesignDataIntensiveApplications}. The designed system should be resilient and fault tolerant, preventing the web application from stopping providing the service to users. The aforementioned service level agreement (SLAs) metric can also refer to the uptime of the services, stating for example that not less than 99.9\% of availability time within a month is acceptable.
 
-The origin of fault may be different, but some of the major factors can be hardware faults, software bugs and human errors introduced while developing and managing the application. To prevent them, various techniques can be introduced. Hardware faults in form of hard disk crash, power grid blackout or network cables that are not plugged in properly can be masked by introducing redundant components that are utilised until the broken component is replaced or fixed. Software errors in the form of introduced bugs or other human errors related with configuring services can result in unexpected and undesired behaviour of application or even other components of the system. That area of errors is harder to mitigate, but proper manual and automation testing can prevent from introducing errors, while monitoring and analysing service behaviour in production will raise an alert if some deviation is noticed.
+The origin of failure may be different, but some of the major factors can be hardware faults, software bugs and human errors introduced while developing and managing the application. To prevent them, various techniques can be introduced. Hardware faults in form of hard disk crash, power grid blackout or network cables that are not plugged in properly can be masked by introducing redundant components that are utilised until the broken component is replaced or fixed. Software errors in the form of introduced bugs or other human errors related with configuring services can result in unexpected and undesired behaviour of application or even other components of the system. That area of errors is harder to mitigate, but proper manual and automation testing can prevent from introducing errors, while monitoring and analysing service behaviour in production will raise an alert if some deviation is noticed.
 
 The reliability is expected not only from larger web applications, but also from smaller ones. Downtime and software bugs in the web application can contribute to loss in revenue and damage the reputation.
 
@@ -99,7 +99,7 @@ It is divided into three sections taking into consideration the server applicati
 
 \subsection{Server Application Tier}
 
-\subsubsection{Microservice architecture}
+\subsubsection{Microservice architecture} \label{chapter:web-apps-microservices}
 
 Microservice architecture is one of the trends in the modern web application development gaining more interest, especially when taking into consideration various benefits and success stories of the biggest companies using it to run their services in the web. To consider microservices it is useful to compare it with the monolithic architecture, which refers to building server-side applications as a single logical executable unit responsible for handling the HTTP requests, execute the domain logic, retrieve and update data in the database and send back the adequate response. Such architecture can be effectively applied when building simple applications, but when the system grows and evolves over time it is harder to preserve good modularisation and keep changes within the modules they should belong to, expanding unnecessary complexity into other parts of the system. Altogether with the system growth, it may require to be scaled accordingly to the load. This can be achieved by running multiple instances of the server application behind load balancer, but it requires to scale the whole application, rather than particular components that require more resources. Another downside of the larger applications built as a monolith is the fact that every change requires rebuilding and deploying the whole application including the parts of the system, even not affected by changes.
 
@@ -127,7 +127,7 @@ Aside from introducing additional complexity, microservices are also not free fr
 
 The frequent and independant deployments are a great advantage of microservice architecture, but handling the rapidly changing set of components is a great operational challenge. In the case of complex solutions, automation is essential to support administration of the system. From the development perspective, working on the smaller components of the system may seem to be easier, but the real complexity might not be eliminated, but rather split across multiple interconnected services. Designing and working with such a system, requires a greater skill and can benefit from using more specified tooling. In that case, embracing DevOps culture can help with greater and tighter collaboration between developers and the operation team working together on the application \cite{FowlerMicroservicesTradeoffs}.
 
-\subsubsection{Event-driven architecture}
+\subsubsection{Event-driven architecture} \label{chapter:event-driven-architecture}
 
 When designing the system it is a common practice to model the fragment of reality as a set of entities and relations between them, then map them directly to the data model. Commonly, there is an application layer within the application utilising a set of service modules containing and performing the application logic, which update the models depending on the result of the processing. The model capabilities are frequently limited to basic create, read, update and delete operations. This approach can be applied successfully in many simpler applications, although when the complexity of business logic grows, it may become more difficult to efficiently manage and develop it \cite{FowlerAnemicModel}.
 

@@ -4,10 +4,6 @@
 
 \subsection{Motivation}
 
-\begin{enumerate}
-    \item serverless most frequently used for web apps (summary of research papers)
-\end{enumerate}
-
 \subsection{Research questions}
 
 \begin{enumerate}
@@ -26,76 +22,854 @@
 
 \section{Serverless suitability for web applications}
 
-\subsection{Web app requirements}
+The serverless paradigm is becoming more popular and appealing to numerous companies due to benefits it can bring, such as reducing operational and development cost, reducing time to market as well as outsourcing some of the operational and management overhead.
+Numerous startups decide to adopt serverless do build their products faster, while larger and more traditional enterprises want to become more agile and reduce their operational costs.
+Despite the fact that serverless is used extensively by some of the organisations, the applicability of the serverless paradigm is not fully comprehend and it is not entirely clear what problems are suitable to be implemented using this architecture.
+Cloud vendors provide guides and describe use cases of serverless applicability, but neglect to present when the serverless architecture is not suitable and has not been used effectively \cite{EvaluationOfServerlessApplicationProgrammingModel}.
 
-considering the web application requirements mentioned in chapter \ref{section:web-apps-requirements}
+The serverless architecture is a fairly new approach with various benefits, but also disadvantages and limitations, which are described in more details in chapter \ref{chapter:serverless-benefits-and-challenges}.
+In order to consider the suitability of serverless paradigm, some approach would be to create an intuition about the architecture characteristics --- leveraging the benefits it brings and understanding the limitations it has.
+However, some of the restrictions can be overcomed by providing workarounds or redesigning the software, to fully utilise the capabilities the architecture brings.
 
-\subsection*{Performance and Scalability}
+The section below covers the topic in more details, summarising the knowledge about benefits and challenges along with the deeper look into use cases and examples, to answer the research question considering the serverless suitability for web based services.
 
-% web applications
-- performance from the user point of view - how fast the requests are fulfilled
-- performance fro the system point of view - many users performing actions at the time - application need to perform properly when the load is increased - system should scale to meet the demand
+% \cite{EvaluationOfServerlessApplicationProgrammingModel}
+% - serverless growing in popularity 
+% - but still not entirely clear in whci to use it and in which not to use it
+% - benefits - cost savings, increasing lead time, outsourcing operational overhead
+% - startups adopting serveless to develop faster, larger and traditional orgs to become moer agile and reduce cost
+% - applicability of serverless not fully comprehend, researched
+% - cloud vendors tells when to sue it and shows usecases, but they neglect to tell when not to to use serverless, when it may be not applicable
+% - define criteria when serverless is applicable - answer to the research question
 
-- in case of serverless - horizontal scaling managed by the platform - allocating new resources absed on the events comming to the system, due to stateless architecture
-- some serverless, stateful storage components designed to work at scale - S3, DynamoDB
-- on the other hand - unpredictable performance, colds starts
-- by default lambda concurrency is limitted - can be increased when discussed with the provider
-
----
-
-\subsection*{Reliability}
-
-% web applications
-system continue correctly event when failure in some other part of application, resilience and fault tolerance, preventin app from stopping once error occurs
-
-- some of the serverless components are designed for failures - DLQ, Lambda destination - it needs to be handled by the developer to filter out and store all the failures
-- operating across multiple regions, availability zones - these are not connected with each other, even when one fail, the other should work, the architecture can operate on both of them
-- embracing automation to ensure good quality of service - automation tests running before the deployment, stress/load testing - due to the fact that serverless paradigm requires to run the app on the host platform it is worth it to automate the processes
-- logging, monitoring, CloudWatch alarms, ensuring proper level of observability is required
-
----
-
-\subsection*{Security and Compliance}
-
-% web applications
-- larger and not fully researched area, some of the articles considering security gaps in the cloud providers platforms - bug bounty programs
-- by default - access denied
-- user authentication mechanism + proper configuration should prevent from accessing the resources without permissions (similar to traditional web apps, but in that case we're utilising most frequently the mechanism provided by the cloud vendor - which is not that trivial, which is thoughtfully tested, instead of the one developed by ourselves, which can include some security gaps)
-- fine grained IAM (Identity and Access Management) rules - FaaS should have no more than only the required permissions to other services - it could be difficult for larger applications more fine grained functions/resources
-
----
-
-\subsection*{Maintainability}
-
-% web applications
-- no need to maintain the servers, no operational work with configuring them
-
-developers perspective
-- initially it reduces the amount of work developers neeed to do - utilising serverless components offered by the platform, new development opportunities - shorter lead time, greater agility
-- maintainability of the larger applications can be also not trivial, looks different than the traditional applications - is there any research measing maintainability of the serveless aplication in the long run?
-
-operational perspective
-- no need to manage servers, handle scaling of the services
-- monitoring, deployment, configuration management - could be more complex, without the knowledge of the platform
-
----
-
-% \subsubsection*{Reduced development and operational cost}
-% - serverless is another step in infrastructure management outsourcing, cloud platform is responsible for provisioning resources and executing it, responsibility for managing the servers, databases transfered to the cloud provider
-% - less work related with managing the serverless solution 
-%     - labour cost related with management and operational aspects
-%     - development - using BaaS component replacing the application 
+% - rb: some appraoch would be to utilise as much benefits as possible, while at the same time try to overcome the downsides or find some workarounds for them
+% - new architecture - various benefits and challenges - leveraging the benfits and overcoming the downsides - lead to utilising the serevrless paradigm effectively
+% - rb: answering the research question based on the overview of benefits and challenges, considering the usecases and research done in comparison with the traditional architecture
 
 \subsection{Serverless suitability}
 
-\begin{enumerate}
-    \item reference to the use cases - application backend, event-driven data processing, real-time data stream
-    \item (Adzic) Yubl \& MindMup - occasional, spiky traffic
-    \item (Leveraging serverless cloud computing architectures) Types of workloads are suitable for serverless - irregular traffic, low traffic, workload parallelisation
-    \item articles comparing serverless to microservices / monolith in case of performance
-    \item examples from Berkeley - rethinking the processing - hybrid solutions with VMs when need to keep the state, use FaaS for parallelisation
-    \item cost as important factor to consider
-\end{enumerate}
+\subsubsection*{Workload types}
+
+\paragraph{Utilisation patterns} \label{chapter:serverless-suitability-utilisation-patterns}
+
+The significant benefit of the serverless paradigm is the autoscaling capability, which enables to track the load with greater fidelity, scaling up quickly in case of demand increase and scaling down shortly after, in the absence of it.
+Moreover, all of the processing is billed proportionally to the services actual usage in terms of execution time, number of processed requests or volume of transported data \cite{BerkeleyServerless}.
+
+Mentioned characteristics make the serverless architecture applicable for dynamic and irregular workloads and when the services experience little traffic, which can benefit from the automatic and rapid scaling capabilities and granular pricing model \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+It greatly mitigates the problem of underprovisioning and overprovisioning by the automatic, granular scaling handled entirely by the cloud platform \cite{MartinFowlerServerless}.
+Nevertheless, moderate and consistent load, which does not utilise the advantage of the serverless architecture, may be more suitable to be executed on the dedicated virtual machines or containerised environment due to lower overall cost of the solution, without the need to scale based on the execution behaviour \cite{LeveragingServerlessCloudComputingArchitectures}.
+
+When considering the architecture selection it is essential to consider the cost of resources and operational work required to handle the expected load of the service.
+The serverless architecture can be more cost efficient when handling unpredictable or occasional load due to its autoscaling capabilities. It can be considered as a good and generic rule when selecting architecture, but it is advised to perform more thorough cost estimation considering the architecture utilisation under the expected load.
+However, the effective cost estimation for the serverless solution may be not trivial, considering different pricing models for various components and amount of data being transported, especially when handling peaking traffic or managing more complex systems \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+On the other hand, the reduction of overhead related to the operational management due to the infrastructure outsourcing can be also appealing and become a trade off being made, from the business point of view.
+
+% ---
+
+% \cite{EvaluationOfServerlessApplicationProgrammingModel}
+% - good for dynamic and irregular workloads - due to automatic and rapid scaling capabilities - with cost proportional to usage
+% - preferable when application is lightly used, sometimes usage peaks - paying for the time resources were executing code
+% - considering the billing model - when the traffic is stable - the dedicated VM handling the load may be more cost efficient
+
+% - beware that 3rd party services needs also to be stalable similar to the lambda when handling highly variable traffic - otherwise these can become a bottleneck
+% - predictability of the cost - peaking traffic characteristics can lead to hard to predictable costs, especially for more complex systems - different pricing of various components, amount of data being transferred
+
+% - pricing is tricky - it's tedious to predict the cost of amanged services with different billing policies billed per execution time, request
+% - serverless seems to be cheaper when working with unpredictable loads than VMs
+
+% \cite{LeveragingServerlessCloudComputingArchitectures}
+% - from the cost point of view - workload suitability is related with the execution behaviour and volumes of the data transferred - both of these can be proportionally converted to cost
+% - low utilisation or dynamic workloads are good fit for serverless - because of the scaling to zero in case of lack of traffic and rapidly scaling to meet the demand when the traffic peaks - reducing the under and over-provisioning
+% - moderate, consistent load - software deployed and running on VMs without need to scale based on the workload change
+% - when load is consistent and predictable - not using the benefits of FaaS evvectively
+
+% \subsubsection*{Autoscaling with proportional cost}
+% \cite{BerkeleyServerless}
+% - tracking the load with greate fidelity, scaling up quickly in case of increase in demand and scaling down shortly after in the absence of it
+% - granular only for affected components
+% \cite{MartinFowlerServerless}
+% - instant horizontal scaling - can be used to parallelisation of workloads - handled entirely by the cloud provider
+% - most beneficial with the occassional and inconsistent traffic - mitigate the under and overprovisioning - it's crucial advantage of the serverless
+
+% - granular autoscaling of components with proportional billing proportional to the time resources are used, the number of request being made
+% - instant horizontal scaling - automatic process handled by the cloud platform, quickly scaling up and provisionng new containers to execute the function code, deprovisioning the resources shortly after
+% - cost effective scaling - no over and under-provisioning
+
+\paragraph{Processing times} \label{chapter:serverless-suitability-processing-time}
+ 
+One of the biggest flaws pointed out in the serverless architecture is the "cold start" latency caused by the resource provisioning, leading to significant latency and unpredictable response time \cite{BerkeleyServerless}.
+The phenomenon, caused by resource allocation and environment bootstrapping, is a subject of various studies, dedicated to understanding it better and mitigating its causes. Moreover, cloud vendors continuously work on the various solutions and virtualisation techniques to reduce the latency. Some of the vendors provide dedicated services such as AWS Provisioned Concurrency, there are also other programmatic solutions for pre-warming the serverless function which mitigate the problem, but comes with additional cost \cite{MartinFowlerServerless}.
+
+The most significant impact of the "cold start" on the response time is visible, when multiple functions are sequentially combined to perform some workflow. Along with the latency caused by the communication overhead, the compounded processing time may become significantly longer \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+To prevent these undesirable situations, it is advised to keep the user-faced function chains as short as possible to make the response time short as well.
+
+Both factors mentioned above, may indicate that serverless paradigm is not suitable for the high-performant and mission critical workloads that need to guarantee certain response time requirements.
+It is more difficult to ensure the performance of the serverless solution, due to unpredictable performance of the underlying serverless platform, but depending on the characteristics of the developed application, the additional latency added to the response time may be acceptable \cite{LeveragingServerlessCloudComputingArchitectures}.
+
+The serverless solution can be effectively utilised to perform some background tasks, which does not require to to directly respond to the users. Moreover, due to scaling capabilities the workloads can be effortlessly parallelised, reducing the overall processing time.
+
+% ---
+
+% \cite{EvaluationOfServerlessApplicationProgrammingModel}
+% - suffering from cold starts
+% - additioanlly, when multiple functions are combined the latency caused by cold starts and communication overhead sums up - increasing the overall processing time
+% - relying on the cloud providers - some SLA, but no 100\% availability - it may be not suitable for mission critical workloads when the system needs to be 24/7 functioning all the time
+% - workload can be almost effortlessly paralelised using serverless technology - reducing the overall processing time
+
+% \cite{LeveragingServerlessCloudComputingArchitectures}
+% - highly performant soft taht has to fulfil certain response time requirements - serverless might not be the best choice
+% - on the other hand - serveless is good enough most of the time - difficult to guarantee the performance due to unpredictable nature of serverless
+% - depends on app characteristics if the cold start or compounded overhead is acceptable
+
+% - good fit for background tasks, that does not require to directyl answer to the client - running in the background without user waiting for the response
+
+% \subsubsection*{Startup latency and platform improvements}
+% \cite{BerkeleyServerless}
+% - cold start - the time required to allocate the resources and bootstrap the environment - research from both practitioners and cloud providers side
+% \cite{MartinFowlerServerless}.
+% - other approaches to mittigate the problem in more critical workflows such as pre-warming in a programatic way or specific services such as AWS Provisioned Concurrency
+
+% - more transparency from the provider side would be beneficial for developers to understand the workflow behaviour on the serverless platform - on the other hand it is understandable that they won't share implementation details
+
+\subsubsection*{Serverless processing limitations}
+
+\paragraph{Runtime and data restrictions}
+
+Another factors significantly impacting the serverless suitability are the runtime and data restrictions of the Function as a Service processing model. These are covered in more details in chapter \ref{chapter:serverless-challenges-related-to-the-nature-of-serverless-architecture}, when considering the challenges related to the nature of the serverless architecture.
+Regardless of the provider, serverless functions are designed to be effectively stateless, running code within ephemeral and isolated containers, constrained by the limited processing time. Configured amount of the memory, CPU units and network bandwidth is allocated from the shared resource pool, assigned to the container and deprovisioned shortly after processing finishes.
+Such architecture enables functions to scale horizontally, but on the other hand requires to preserve state in external components, which can introduce significant overhead when large volumes of data are transported.
+Moreover, developers do not have control over the container execution and their addressability, which requires external components serving as intermediate messaging brokers \cite{MartinFowlerServerless}. Lastly, various BaaS components can also have limitations, for example constraining the operation throughput or volume of the data that can be processed.
+
+Mentioned limitations can make the serverless paradigm not suitable for some problems, requiring fine-grained data sharing or significant amount of coordination and communication, due to overall messaging overhead or the cost of external intermediary services.
+Nevertheless, various practitioners and architects analyse numerous problems and provide ideas for limitation workarounds or redesign some of the solution architectures to fit the serverless paradigm or utilise it within hybrid solution \cite{BerkeleyServerless}.
+
+When it comes to various cloud providers, the runtime restrictions can differ and it is crucial to consider if the problem characteristics fit within the constraints of the vendor services \cite{LeveragingServerlessCloudComputingArchitectures}.
+
+AWS Lambda \cite{AWSLambdaQuotas} as one of the most developed FaaS offerings, allows to configure the memory allocation in range of 128 MB to 10GB, with proportionally allocated CPU up to 6 vCPU cores for multithread processing \cite{AWSLambdaRAMandCPU}.
+The serverless function execution time is limited to 900 seconds, with invocation payload up to 6 MB for synchronous invocation and 256 KB for asynchronous.
+The temporal, local disc storage available for the container is limited to 512 MB.
+The deployment package of the function in the form of zip archive is restricted up to 50 MB when compressed. When uncompressed the limit is set to 250 MB, including up to 5 layers, which are a solution to share some common code across multiple functions \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+
+Lastly, major cloud providers introduced various solutions for running custom execution runtimes using container images, which may be a solution to overcome some of the mentioned limitations, but feasibility of such solution was not entirely researched yet \cite{AWSLambdaContainerImageSupport}.
+
+% \cite{EvaluationOfServerlessApplicationProgrammingModel}
+% - share nothing - isolated, ephemeral containers, stateless, has its own memory for execution time, storage, running within limitted time, can't distinguish which container runs the code, how to connect them
+% - AWS Lambda deployment package size limit is 50MB compressed and 250MB after extraction - usually the bigger the package, the longer the cold start
+% - Request payload - up to 6MB when sync and 128KB when async
+% - limited execution time - 900 seconds per request
+% - access to 500MB temporary disc space
+% - memory and proportional CPU + network traffic allocation
+% - direct access to the container, adjusting the OS is limitted, code neds to be hardware agnostic
+% - runtiem environemtn is short lived, no durable changes
+% - rb: check AWS constraints if it comes to lambda
+
+% \cite{LeveragingServerlessCloudComputingArchitectures}
+% - package size limitations - larger packages, including more dependencies and runtime related libraries increase the bootstrap time until the function is ready to process the event
+% - it's hard to generalize, but other providers may introduce other limitations, which are inherent to the serverless paradigm
+% - it is crucial to consider if the characteristic fits within the limits
+% - hardware agnostic, can't depend on clocal changes due to automatic containers deprovisioning due to lack of events to process
+
+% \ref{chapter:serverless-challenges-related-to-the-nature-of-serverless-architecture}
+% \subsubsection*{Function state management}
+% \cite{MartinFowlerServerless}
+% - FaaS effectively stateless, should be assumed taht state from 1 invocation won't be avaiable in next, but some optimisations rely on container reuse
+% - lack of control over container
+% - state need to be preserved in external components - introduces significant overhead
+% \cite{BerkeleyServerless}
+% - some computation relying on fine grained communication pattern are not suitable
+
+% \subsubsection*{Function communication and data transfer}
+% \cite{ServerlessComputingSurveyOfOpportunitiesChallengesApplications}
+% - serverless processing relies on transporting the data between services building the workflow, which can be spread across the whole provider data center - overhead, latency
+% - functions / containers are anonymous and not addressable, requires 3rd party components as intermediate storage or messaging system - increases communication overhead
+% \cite{BerkeleyServerless}
+% - some more sophisticated communication pattern (broadcast / aggregation) may be not suitable - in traditioal architecture can utilise some data sharing or aggregation which benefits the processing - require rethinking the processing or some hybrid processing with long running processes
+% - no direct communication, utilising 3rd aprty services, workflow coordinators such as AWS Step Function to preserve state between subsequent function invocation
+% - limitted configuration possibilities - referring to FaaS but BaaS components as well
+
+\paragraph{Operation types} \label{chapter:serverless-suitability-operation-types}
+
+Considering the serverless billing model with granular cost proportional to the execution time, it is crucial to utilise the available computing power as efficiently as possible. The CPU bound operations including the intensive calculations, such as image manipulation or some sophisticated mathematical computation, are more suitable for the serverless processing model and can fully utilise the underlying allocated resources.
+
+On the other hand the I/O bound operations, like loading large volumes of the data, inserting large sets of data to the database or heavy network communication, may be less suitable from the cost perspective, because the operations can be relatively slow, extending the function processing time. Moreover, when considering the communication with some external I/O components, each container invocation may require establishing new connections, introducing additional latency \cite{LeveragingServerlessCloudComputingArchitectures}.
+
+Due to that fact some of the dedicated services capable of I/O operations are redesigned for serverless architecture --- the workflow can be transformed into a more event-driven approach. The processing using the third party service is initiated by one of the functions and when the action is performed, the incoming event can trigger another serverless function to process the response, which prevents the lambda from idle waiting. Serverless functions can be configured to poll some of the BaaS storage components and be notified when a particular action is performed, such as data modification or file insertion \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+
+Another operation constraint is related to the implicit failover, provided out of the box by the serverless platform. When the function processing fails due to some error, it is retried up to several times, based on the underlying configuration. Due to that fact of the at least once delivery semantics, the operation performed by the function should be idempotent or additional mechanism needs to be implemented to prevent from subsequent processing of the event \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+
+% \cite{EvaluationOfServerlessApplicationProgrammingModel}
+% - considering the billing model - when operations are heavily I/O bound, loading the data is inefficient from cost point of view
+% - downloading large set of data is innecifient - takes time - cost depends on execution time and network I/O
+% - latency and bandwith - workarounds 
+%     - transforming processing to more event driven approach - initiating the communication with 3rd aprty services - perform action when getting response - no idle lambda, but usually some more latency required the platform to react to the event
+%     - operaing on data streams, not using the lambda to store the data, but stream the data direcly to some 3rd party service existing in the cloud
+
+% - implicit failover - provisioning new container picking up the request - opeartions need to be idemponent or have some special mechanism included to prevent from processing more than once
+
+% \cite{LeveragingServerlessCloudComputingArchitectures}
+% - considering 2 types of operations
+
+% I/O bound 
+% - read/write operations - writing files, inserting the data to the database, heavy network communication like uploading the file
+% - can be relatively slow, function waits for the to finish - considering billing model it is wasting money
+% - considering statelessness - I/O operation for each invocation - creating new connection with I/O service, no possiblity to cache the data, download it once and reuse for subeequent computation calls
+
+% CPU bound 
+% - intensive calculations, editing images, mathematic calculations - fully utilising the machines' CPU
+% - better for serverless - utilising fully the underlying allocated resources
+
+% - idempotent - identical output and side effects for two invocations with identical input
+
+\subsubsection*{Vendor dependence} \label{chapter:serverless-suitability-vendor-dependence}
+
+As with any outsourcing technology, the serverless paradigm relies heavily on the dependence on the service provider, which was discussed in more detail in section \ref{chapter:serverless-cloud-platform-and-vendor-challenges}.
+Giving up the control of a significant part of the application, on one hand enables to hand off the infrastructure management overhead, but on the other hand leads to vendor lock-in \cite{MartinFowlerServerless}.
+
+API level lock-in, in which application code relies on the interface of the third party components, can be partially mitigated.
+Solutions such as extracting the business logic from the function handler, incorporating ports and adapters pattern to rely on abstract interfaces, rather than concrete service implementations or using some of the serverless frameworks, enables abstraction over the cloud providers interfaces to a certain degree.
+
+The service level lock-in, in which the developed solution relies on particular feature or behaviour of the external service, can be harder to mitigate, due to the fact that there may be no alternative components with similar capabilities, blocking the migration and requiring to redesign some of the functionalities \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+
+Moreover, the tooling related to the deployment, monitoring, logging and configuration may require to be replaced when changing the cloud vendor platform \cite{MartinFowlerServerless}.
+
+The cloud provider is responsible for maintaining, updating and protecting the underlying architecture and generally can ensure sufficient level of services, because of the knowledge, experience and qualified staff it has. However, incidents happen due to some unpredictable events or human errors, causing unexpected outages and connection disruption, even in the largest data centers \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+
+When deciding on the service architecture, it is essential to consider if such vendor dependence is bearable \cite{LeveragingServerlessCloudComputingArchitectures}.
+The vendor lock-in in the serverless architecture can be seen as a tradeoff, rather than limitation, when considering whether the benefits one can obtain are sufficient to sacrifice the elasticity, compared to other architectures.
+
+% ---
+
+% - vendor lock in as tradeoff - it is essential to consider if it is bearable, if the benefits one can be obtained are enough to sacrifice the elasticity
+
+% \cite{EvaluationOfServerlessApplicationProgrammingModel}
+% - vendor lock-in as tradeoff, not limitation - every cloud provider have similar services, but there are differences in functionality
+% - API level lock-in - app code relies on 3rd aprty services interface - wrapping 2rd aprty services - business logic is extracted from the lambda handler, ports and adapters - relying on abstract interfaces instead of concrete implementation, using frameworks which enable abstraction over the cloud provider interfaces for some of the services
+% - service level lock-in - no service alternative providing some functionality - relying on some particular features or hebaviour of the services, blocks the possibility to migrate to other service/provider
+
+% - trust provider - responsible for protecting, updating, maintaining underlying infrastructure - generally doing better than peopel on prem, because of the experience, knowledge and scale
+% - they provide some SLA, however incidents happen - human errors, unpredictable events - unexpected outages or connection disruptures
+% - it's worth it to compare with the on-prem services, when some of the catastrophies are also unavoidable
+
+% \cite{LeveragingServerlessCloudComputingArchitectures}
+% - essential to consider to what extent the solution can be dependant on the cloud
+% - the irsk may or may not be worth the benefits of serverless paradigm one can obtain
+% - cloud providers bill for data egress (data leacing the cloud platform) - limiting the hybrid cloud approch (multip cloud or partially on prem)
+
+% \label{chapter:serverless-cloud-platform-and-vendor-challenges}
+% \subsubsection*{Vendor dependency}
+% \cite{MartinFowlerServerless}
+% - as with any outsourcing  technology - control given up to the provider - can meet some limitations, constraints from their side
+
+% \subsubsection*{Vendor lock-in}
+% \cite{MartinFowlerServerless}
+% - API level lock-in can be somehow mitigated
+% - differences in implementation details of particular services - can make migration impossible without refactoring part of the application
+% - differences in tooling of cloud providers - deployment, monitoring, logging, configuration management stack may require to be replaced
+
+\subsection{Serverless applicability for web based services}
+
+\subsubsection*{Suitability for web based workloads} \label{chapter:serverless-suitability-for-web-based-workloads}
+
+The idea of web application has been introduced and discussed in more details in chapter \ref{chapter:web-apps}. Modern web applications can take a variety of forms and implement numerous architectures to fulfill the requirements put in front of them.
+It is difficult to generalise and unambiguously answer the question whether the serverless architecture is suitable for the web applications, because the number of variables deciding on the applicability is significant.
+
+It is considered that the serverless paradigm can be utilised successfully for building entire systems or incorporate isolated components, implementing granular or larger tasks, into the existing system \cite{ServerlessArchitectureOnAWS}.
+
+The examples provided in section \ref{chapter:serverless-example-use-cases} covers a significant amount of use cases, showing how the services were designed to utilise the serverless architecture and its benefits into the production ready services. The section below discusses in more details the applicability of serverless architecture, discussing the examples and their capabilities as well as providing additional information to claim the serverless suitability for described workloads.
+
+% It is difficult to generalise and delibelatery select the workloads suitable for the serverless paradigm, because the number of variables deciding on the applicability is significant
+
+% \ref{chapter:web-apps}
+% - idea of web application - can take variety of forms, emergence of various architectures to fulfill the requirements
+% - difficult to clearly present and generalise the idea of web application - various types of workloads - various requirements put in front of the developed solution, targeting various customers group 
+% - different types of web application, different types of workloads, different requirements
+
+% \cite{ServerlessArchitectureOnAWS}
+% serverless suitable for building whole systems, create isolated components, implement specific granular tasks - large and small tasks
+
+% % reference to the use cases - application backend, event-driven data processing, real-time data stream
+% \ref{chapter:serverless-example-use-cases}
+% most of the examples, applications redesigned to leverage the benefits of serverless and fit the workloads into the serverless suitability
+
+\paragraph*{MindMup}
+
+Mindmup, serving the role of online collaboration tool for mind mapping, is one of the early adopters of the serverless paradigm, which has undergone an architecture migration from the traditional architecture running on Heroku, experiencing significant operational cost reduction \cite{ServerlessComputingEconomicAndArchitecturalImpact}.
+The redesign of the exporters services enabled developers to reduce the boilerplate code responsible for managing, logging and monitoring the processing, and focus only on the converter's logic running in the serverless functions.
+Due to the fact that some of the file formats were used less frequently, all the processing logic was initially bundled into single services for cost optimisation. The negative aspect of such coupling has been observed by exhausting all of the available resources and bugs propagation, impacting other exporters.
+Re-architecturing the flow to event-driven approach and the logic orchestration pushed to the client along with the further migration of the application backend, contributed to the cost reduction by 50\%, even with the active users increase --- resulting in the overall cost savings estimated to 66\%.
+The MindMup example of exporters processing benefits from utilising the serverless architecture for the high-throughput task utilising fine-grained serverless function scaling.
+
+% \subsection{Event-driven data processing}
+% - media conversion and data processing tasks
+% - when file inserted - triggers the serverless function, performing the processing
+% - can be also utilised for more complex ETL tasks and data processing tasks
+
+% MindMup
+% - mind mapping tools using serverless for the whole app, developed with just 2 devs
+% - when exporting the mindmup to read only format - generating the presigned URL for the secure access to S3 bucket, triggering the processing pipeline, put back the file to S3, from which user can access it
+% - different exporters split into separate serverless functions - reducing coupling, adjusting the parameters to make them work efficiently - cost savings due to on demand nature, reducing coupling of exportes, adjusting configuration for their demand
+
+% (Adzic) Serverless Computing: Economic and Architectural Impact - Yubl \& MindMup
+
+% \cite{ServerlessComputingEconomicAndArchitecturalImpact}
+
+% - serverless - potential to change how the client/server applications are designed, developed, operated
+% - two industrail studies of early adopters - showing how migration to serverless from VM based env reduced the hosting cost by 66\% and 95\%
+% - high-throughput applications are more suitable than high-availability for serverless
+
+% benefits
+% - change in capital expenses to operational expenses
+% - serverless similar as with VMs hosted in the cloud, but with reduced amount to work needed to handle and scale the solution, developers are required only to provide the application code for executing the application logic - logic for processing the event
+
+% economic effects - on the industrial examples, 3 main factors affecting architectural decisions when serverless computing is available
+% - paying for actual utilisation, not reserved capacity 
+%     - no need to handle dedicated failover machine, 
+%     - not paying for idle, but for the time function has been executed - paying for the actual resource consumption - suitability for granular and occasional tasks
+%     - compared to the containerisation, but handler by the cloud provider
+% - distributed request-level auth
+%     - each request untrusted - coming from lambda or client applciation - treated the same way
+%     - suitable when accessing the service directly from client - proper validation and autauthorization needs to be done - it is acceptable to directly access backend services from the client - most often it is cheaper due to the fact that lest moving part is touched
+%     - AWS IAM , AWS Cognito - obtaining security roles enforcing fine-grained control
+% - different service billed according to different utilisation metrics
+%     - optimising the cost by letting clients perform the direct access 
+%     - authorize user once per session and then let client do the direct access
+%     - as with beforementioned I/O bound oeprations - lambda function to authorize user to perform action on S3, uploading the file to S3, followed by the lambda trigger triggered to process the event
+
+% \cite{ServerlessComputingEconomicAndArchitecturalImpact}
+% mindmup
+% - comercial collaboration, online mind-mapping application
+% - initially app hosted on heroku
+% - significant boilerplate code reduction - the exporters case
+% - initially the file conversions tasks were taking the information from the message queue, dealing with connectin with the queue, retrying failed conversion, logging and monitoring - moving to lambda reduced the boilerplate and enabled to focus on the converter logic
+% - due to the fact that some of the exporters were used less frequently - these were bundeld into one - cheaper than instance per file conversion service
+% - negative efffect of bundling - one service impacting other - exchausting the all the available resources, bug in one of the exporters taken down all of them
+
+% - redesigning the flow to be event-driven without busy waiting for the processing to finish - pushing the orchestration to the client app - uplaoding the file to the S3 bucket and polling for the result being ready, all of it secured by using presigned URL making the access available only for the particular resources in S3 bucket
+% - authors after the transition noticed the cost drop by 50\% along with the active users increase by 50\% - resulting in savings 66\% despite the fact of adding new services to the application
+
+\paragraph*{Yubl} \label{chapter:serverless-suitability-yubl}
+
+Another example of the early adopter of the serverless technology was London based, social networking company named Yubl \cite{ServerlessComputingEconomicAndArchitecturalImpact}.
+Initially, their solution was implemented as a monolithic system, serving as a backend for a mobile application.
+The significant problem of the platform was the spiky social media traffic, exceeding up to 70 times the normal usage pattern, especially when the advertisers or influencers posted some news.
+The autoscaling feature of the AWS Elastic Compute Cloud has been enabled by engineers, but the time required to provision new instances was too long to handle the instant increase in demand.
+After lowering the threshold responsible for triggering the scaling, the rapid traffic growth could be partially handled, but in the long run it led to notable resource overprovisioning.
+
+The migration to serverless architecture was based on the cost efficiency, possibility of more frequent deployments and minimising the operational overhead related to the maintenance of the system.
+Despite the fact that Yubl has been closed, because of not securing another round of funding, the engineers migrated significant part of the application backend, using around 170 different serverless functions in production, with the cost savings estimated to 95\%.
+Moreover, breaking the monolithic system into separate functions reduced the number of conflicts and improved the agility, enabling developers to introduce new features quicker.
+Working on smaller units of the system allowed an increase in the number of production deployments from 4-6 to about 80 on a monthly basis.
+
+% ---
+
+% yubl 
+% - social networking application - getting through similar migration
+% - london based social networking company
+% - initially monolithic system serving as backend for mobile app
+% - social media traffic pattern was a subject of large spikes, especially when influencers posted something or adversiters ran their campaigns
+% - running AWS autoscaling - noticed the scaling up Autoscaling Group caould take avg 15 minutes - which was too slow for aggresive spike up to 70x normal usage
+% - adjusting autoscaling threshold lower at 50\% of CPU - most frequently running with a lot of unused resources
+
+% - change dictated by cost efficiency, minimise effort to keep the system operational, more frequent deploys
+% - despite the fact they've been closed down in Nov 2016 due to not securing another round of funding - migrated significant part of their backend
+% - 200\$ for 170 lambdas monthly, compared to 5000\$ per month for much smaller instances EC2 instances - the estimated operational cost reduction estimated to 95\%
+
+% - part of their system migrated first - processed tasks work queue - background processes migrated to the lambda
+% - decresing the lead time and increasing the releases number from 4-6 production releases per month up to 80 with the same number of engineers
+% - moving into service oriented architecture, breaking monolith into separate functions, splitting the work - removing the conflicts, deploying each feature independently, spending more time on development by delegating the infrastructure management responsibilities to the cloud
+% - working on smaller units, deploying after running the automated test for each unit in the pipeline, with possibility to instant rollback when something went wrong
+
+% ---
+
+\paragraph*{CloudGuru} \label{chapter:serverless-suitability-cloudguru}
+
+The CloudGuru educational platform is an example of a fully-fledged web application, serving the role of the scalable application backend, including numerous workloads characterized by different properties.
+
+The simpler tasks included API calls, triggering the AWS Lambda to execute the code responsible for business logic, communicating with external BaaS services to perform some action or preserve the state in the database.
+The video processing task is an example of a more complex workflow, initiated after uploading the video directly to S3 bucket, preceded by obtaining the presigned URL granting secure access.
+The instructor, who uploaded the video can be further notified, when the asynchronous action is completed, along with the transcoded video uploaded to a separate S3 bucket and the status in the database updated, making the video available for students.
+The Firebase real-time communication capabilities is a convenient solution, enabling users communication without polling, while the background jobs are further managed to index the forum entries for better search capabilities.
+
+What is interesting, is the fact that the described architecture includes services from multiple providers --- Netlify as a host for the static web application, Auth0 as identity provider, responsible for authenticating and authorizing users and Firebase as a main database, directly accessed from the client. Nevertheless, all of the largest cloud providers, covered in more details in section \ref{chapter:serverless-service-providers}, include in their portfolio similar services, allowing developers to build the complete, production ready application using resources from a single platform.
+
+The architecture of the CloudGuru platform can be described as a serverless, RESTful monolith based on the API Gateway and AWS Lambda for processing and Firebase as a primary database.
+The example describes the real, sophisticated and production-grade system, supporting thousands of users on a daily basis and scaling to the demand, while keeping the operational cost low (on a monthly basis the API Gateway and AWS Lambda cost estimated below 1000\$).
+
+Despite the fact that the system was performing well, the architecture has undergone a significant transformation as described in the second edition of the "Serverless Architecture on AWS" book \cite{ServerlessArchitectureOnAWSSecondEdition}, initially written by Peter Sbarski \cite{ServerlessArchitectureOnAWS}.
+The CloudGuru case study describes an interesting example of re-architecturing the large, serverless-based web application.
+The major problems mentioned as a migration reason were the coupling between the system parts as well as shallow isolation of the boundaries.
+Making some changes to a single, primary Firebase database most frequently affected multiple functions and was leading to conflicts and overlaps during developments.
+
+The company decided to split the monolithic, serverless architecture into multiple parts resembling the microservices approach, based on different parts of the product, where each service ensured proper boundaries and owned its data for particular context.
+The GraphQL has been used to prevent from overfetching and multiple round trips, when accessing the data by the clients.
+The Backend For Frontend pattern enabled engineers to expose different endpoints for web and mobile clients, running custom GraphQL servers in AWS Lambda and combining the response from multiple microservices.
+Each serverless microservices has been split into stateless components (API Gateway, AWS Lambda) and stateful components (DynamoDB, S3) deployed independently.
+Common services, such as AWS Virtual Private Network, AWS Web Application Firewall and Amazon Redshift serving as data warehouse, have been extracted and loosely coupled with specific microservies.
+
+The desired outcome of the migration has been achieved --- teams are working more independently without affecting others, owning responsibility for their microservices and at the same time noticed performance improvements.
+The serverless architecture enabled developers to migrate the platform gradually, implementing new features while keeping the old one serving the production traffic.
+The developers could focus on the migration process without worrying about provisioning resources and their cost, by adjusting the services configuration described in the Infrastructure as a Code approach and letting the platform provide new resources \cite{ServerlessArchitectureOnAWS}.
+
+
+% ---
+
+% \subsection{Application backend}
+% - scalable application backends - web, mobile, desktop apps
+% - automated infrastructure management, automated scaling to meet the variable demand with proportional cost
+
+% - AWS Lambda to run teh application logic, communicate with 3rd party services to persist the data
+% - API Gateway as application front - mapping request to proper serverless function, enabling authentication and authorization when integrated with other services
+% - frontend app communicating directly with the BaaS components - database, storage
+
+% CloudGuru 
+% - online educational platform - complete product with several sophisticated actions
+% - frontend single page app - hosted and distributed via CDN on Netlify
+% - Auth0 as auth and authorization with other services
+% - Firebase as database, directly accessed by the clients, pushing updates to them
+% - processing in the background - question and answers indexed in AWS CloudSearch for further searching, updating courses directly to S3, which triggers transcoding
+% - serving videos from CDN
+
+% CloudGuru from the second edition?
+
+% In the second edition of the book authors described major transformation of the CloudGuru platform. Although the first one is also a suitable example it is worth it to investigate what's the reason behind the migration and what the benefits of it are
+
+% - init: RESTful monolith on API Gateway, AWS Lambda, Google Firebase as primary database
+% - after: GraphQL-driven microservices architecture
+
+% - 1st version - building real, sophisticated systems, supporting thousands of users using REST, utilising technologies from both AWS and GCP
+% - another benefit of serverless - possibility to rearchitect the system quicker, developers focusing on the application code when not need to worry about provisioning resource or server capacity, only changing/adding the configuration files describing the infrastructure as code
+
+% - Frontend on Netlify, Auth0 providing registration and auth, creating delegation token to securely communicate with various services from the client
+% - Firebase convenient for real-time communication with clients, without need to polling
+% - direct access to S3, starting the transcoding job, saving files into other buckets, updating database, making the video available for other users
+% - the original system scaled to many users and has been quite unexpensive to run
+
+% - the original system worked well and scaled to many thousands of users, inexpensive to run with AWS bill jsut afew thoussands dollars (Lambda + API Gateway under 1000\$)
+
+% problems:
+% - serverless monolith connected to one Firebase database - making a change to database - affecting multiple lambdas, leading to conflicts during development
+% - business wanted owning different teams for different parts of the product - more suitable to microservices approach
+% - true microservices approach - each of them owns its data and its view of the appliaction - teams working in parallel - moving away from Firebase
+% - higher system isolation and clearer boundaries
+% - moving to GraphQL to prevent overfetching and multiple server round trips, serving API for both web and mobile client
+
+% - moving from Firebase which was one of the mostcostly component t oother more cost efficient and scalable db - DynamoDB - AWS Stack + event build in event triggers
+% - why GraphQL - DynamoDB for each microservice - rethinking the architecture - how to combine response from multiple microservices effectively, without round trips and data hydration
+
+% microservices - breaking apart the monolith
+% - API Gateway + Lambdas + storage services like DynamoDB or S3
+% - packing - separate stack for stateless (API Gateway, Lambda) and statefull (DynamoDB, S3) components + global dependencies such as Amazon Redhift (data warehouse), AWS WAF, AWS VPC loselly coupled with particular microservices
+
+% GraphQL
+% - currently AWS AppSync available, but about that time it was not and the solution was to run GraphQL from lambda function containing small servers
+% - designing Backend For Fronted pattern - each client ahs its own API endpoint (dedicated web/mobile), each endpoint querying appropriate microservices, while clients needs to only know how to request data from endpoint
+% - each of the BFF GraphQL servers queries specific microservices which itselves include the GraphQL endpoint, return the data base on the database requests - the BFF combines the response based on the schema stiching
+
+% security - 2 level auth
+% - users auth using Auth0, generating JWT tokens, validatet using custom authorizer at the API Gateway, if token valid the request is allowed to BFF endpoint
+% - BFF authenticates to the microservices using API Keys
+
+% migration 
+% - side by side with the existing running services, the old Firebase database was still in use to power some of the components not fully migrated yet
+% - to keep the Firebase up to date - dynamoDB streams calling lambda to update Firebase - effectively pushing changes to Firebase, serving as materialized vuew driving some part of apps - done while transitioning
+% - lesson - gradual migration, implementing new features while keeping the old one and replace them one by one
+
+% lessons learned
+% - teams working independently, responsible for their microservices, without affecting others
+% - performance improvements with BFF fetching only the required data, supporting multiple client types and devices
+% - GraphQL introduces problems with caching, but there are improvements in the currently available AppSync to cover that (link to caching on AppSync)
+
+\paragraph*{Temenos}
+
+The banking system developed by Temenos effectively utilises the event-driven architecture, implementing to some degree the event sourcing approach along the command query responsibility segregation, mentioned in section \ref{chapter:event-driven-architecture}.
+The first part of the processing pipeline is responsible for the Online Transactions Processing (OLTP), accepting the transactions data and serving the role of command operations. It consists of the API Gateway, AWS Elastic Load Balancer, AWS Fargate running containers with the application including the business logic and saving the transactions in the database hosted by AWS Relational Database Service.
+Later, the AWS RDS is streaming the data to Amazon Kinesis, which aggregates the records and triggers the AWS Lambda to process them, and store the data in the DynamoDB in the form of a read-optimized model, which is a subject of performing query operations.
+
+The serverless solution developed by Themenos enabled to decouple the processing, providing proper scalability level, effectively incorporating the serverless paradigm for high-throughput data ingestion tasks performed in the background, as part of the larger  hybrid solution.
+
+
+% ---
+
+% % \subsection{Real-time stream processing}
+% - ingestion tasks from numerous data source
+% - event stream aggregation from BaaS, batching the records and processing using the serverless function
+% - decoupling of the processing, providing better reliability of processing events
+
+% Temenos
+% - processing transactions and interactions between banking customers to handle the unpredictable workloads even with peaks of traffic happening in the market, low maintenance cost
+% - API Gateway - AWS Elastic Load Balancer - AWS Fargate containers - AWS RDS to persist data in main OLTP processing transactions effectively - streaming the data from AWS RDS - Amazon Kinesis - aggregates the data and calls AWS Lambda to save the data in query optimized data model
+% - effectively implemented event-sourcing pattern using kind of hybrid solution - workload requireing high-performance and throughput implemented using containerised applications, and the data ingestion task, performed as background activity
+
+% ---
+
+% % \subsection{IoT applications}
+% iRobot
+% - mainly focused on building smart robots, helping people and enhancing smart homes
+% - serverless enabled them to effectively cope with scaling, run the backend for their mobile application, which enabled them to communicate with the IoT devices, sychronize the data, update the settings, gathering additional information beneficial in smart home surrounding - no need to manage infra and handle the stuff they're not profficient with, preserving the proper level of security and data privacy
+
+
+\subsubsection*{Comparison with traditional architectures} \label{chapter:comparison-with-traditional-architectures}
+
+The common use-case for web application servers is to provide an API used by the clients running in the web browsers.
+There are several research \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}\cite{MicroservicesvsServerlessAPerformanceComparisonOnCloudNativeWebApplication} analysing the performance, scalability, reliability and cost of the API built using serverless, microservices and monolithic architectures.
+
+Mentioned papers compare simple API services performing basic operations, communicating with the database or processing some CPU-bound computation.
+Both simulate user behaviour with different traffic characteristics and workload volume within a specified period of time, measuring the response time of the implementations using different architectures with comparable resource configuration. The results of researches are categorized and concluded below.
+
+% ---
+
+% - most frequently used as backend for frontend application - provide API - specific and common use-case for Web Applications
+% - finding best way to deploy web api, user focus - response time
+
+% \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}
+% - no significant response time difference found when VMs configured for the expected load and test scenarios within lambda limitations
+% - scenarios simulating real user behaviour
+% - different traffic characteristics - measured within short period of time with quite intensive load - utilising benefits of FaaS scalability
+
+% - comparing simple API services, performing simple CRUD operations on the database or processing the files as CPU-bound
+% - microservices running in containers with autoscaling enabled by adding more instances to the container cluster and load balancer distributing the load
+% - calculating the response time - HTTP request duration
+% - billing estimation based on the available providers pricing data
+
+\paragraph*{Serverless is more agile in terms of scalability and with more stable performance characteristics}
+
+During the initial phase of load testing, it has been noticeable that the serverless implementation suffered the "cold start" impacting the response time.
+After that period of 2 minutes, the performance has stabilized and the response time remained almost constant until the tests completion.
+The implementation utilising serverless technology characterise with instant scaling matching the increase in workloads.
+The higher number of requests or unexpected spikes are handled automatically, with small impact on the response time and small performance degradation observed \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}.
+
+Which is in contrast to the solution implemented using the microservice architecture, which starts to scale after reaching preconfigured utilisation criteria.
+Moreover, for some types of the traffic increase, the delay of responsiveness to re-balance the current workloads was greater, which lead to notable increase in the response time \cite{MicroservicesvsServerlessAPerformanceComparisonOnCloudNativeWebApplication}.
+
+% ---
+
+% \cite{MicroservicesvsServerlessAPerformanceComparisonOnCloudNativeWebApplication}
+
+% - serverless suffers from the cold starts during initial 2 minutes - when the load increased new containers were allocated, despite cold starts serverless performed stable after that, with little degradation when the load was increased significantly
+% - serverless more agile in terms of scalability - instant scaling with the serverless deployemnt, microservice starts to scale after service reaches defined criteria, there is a delay of responsiveness to re-balance current workloads, as there is increase in response time with the increasing workload, droping after new containers have been added
+
+% \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}
+
+% - FaaS prewarmed
+% - when higher number ofrequests or unexpected loads happens - FaaS handles it effortlessly, where additional labour needsto be included in VMs to achieve equivalent results
+% - FaaS response time almost ocnstant compared to the monolith and services, very small performance degradation
+% - FaaS handling burst quite well due to its autoscaling capabilities, higher load have small impact on the response time, as load increase the defrataion increase only slightly
+
+\paragraph*{Microservices suffers from load balancing nad traffic distribution problems}
+
+The solution implemented in the microservice and monolithic architecture is capable of maintaining the performance level for the stable and smaller loads, but characterized with longer response time under more rapid traffic growth. After the autoscaling utilisation threshold is met, more instances are added into the cluster, improving the response time, which with further scaling could match the performance of serverless implementation \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}.
+
+Moreover, the high peak response time is observed for the microservices implementation, scattered randomly during tests, which could be potentially caused by the traffic distribution within the cluster, when the new instances are added or deprovisioned. Due to that, the serverless solution, despite the initial "cold start" period, notes more stable and favourable performance characteristics \cite{MicroservicesvsServerlessAPerformanceComparisonOnCloudNativeWebApplication}.
+
+% ---
+
+% \cite{MicroservicesvsServerlessAPerformanceComparisonOnCloudNativeWebApplication}
+
+% - microservices suffers from load balancing and traffic distribution problems - microservices had high peak of duration scattered randomly during tests, potential explanation - scaloing out and scaling in time of the autoscaling resulting in the increased response time - serevrless suffering initially from the cold starts, but performance seems to be more stable later
+
+% \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}
+
+% - monolith and microservices - longer response time with more rapid traffic growth
+% - monolith and microservices - can handle smaller load, but could not keep with the increasing one, however the autoscaling was not enabled for monolith and microservices,, would require fine-tuning to match the auto-scaling features of FaaS, when 2 to 3 instances were added, the response time improved up to 50\% over the single instance - further scaling could enable to match the performance of FaaS
+
+\paragraph*{Serverless performance is comparable with the microservices or monolithic architecture}
+
+Overall, the serverless implementation characterised with comparable performance, leading in some of the tests over the microservices, especially when heavily affected by the load increase.
+However, the microservices handled the small size and repetitive tasks more efficiently, which could be a result of less processing overhead, related with the virtualisation stack and involving multiple components in the serverless implementation \cite{MicroservicesvsServerlessAPerformanceComparisonOnCloudNativeWebApplication}.
+
+However, with the growth of the load the performance degradation of the monolithic implementation significantly impacted the response time, while the solution based on microservices degraded performance much slower. \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}
+
+% ---
+
+% \cite{MicroservicesvsServerlessAPerformanceComparisonOnCloudNativeWebApplication}
+
+% - microservices better for small size, repetitive tasks - cost advantages and no cold-starts - serverless has minimum overhead due to virtualization stack, different components involved
+% - microservices sutiable for more granular requests processing, less procesing overhead
+
+% \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}
+
+% - for smaller loads monolith performs better, but degraeds faster when the load increases - the initial better results can be explained by more powerfull machine
+% - microservices have larger response time, but seems to degrade slower due to traffic redistribution
+% - when increasing the payload to perform harder cpu-bound operations - the monolith performed the best, cause could utilise the whole CPU and RAM available to process individual requests, FaaS after and later microservices - these couldn't borrow more resources
+
+\paragraph*{Cost effectiveness depends on workload characteristics}
+
+The cost analysis conducted by one of the authors of the papers \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs} claims that the solution utilising the virtual machines is more cost efficient --- resulting with the estimated cost to be 12 times lower without autoscaling and 6 times lower with autoscaling enabled, which still could not match the serverless performance for some tests.
+Nevertheless, the additional cost of the data transfer and other components such as load balancer, storage, database are not included into the research.
+Some of the mentioned components are specific to the architecture based on the virtual machines as well as the labour cost related to the maintenance of the solution, which could increase the cost.
+On the other hand, when the traffic is stable and the virtual machines are configured to match the workload, the solution can be much cheaper and preserve the suitable performance characteristics.
+For one of the tests purposes, the serverless architecture used AWS Lambda configured for the 1.5 GB of memory allocation. Optimising the function configuration in terms of the performance to cost ratio, could reveal that other settings could yield similar performance with lower cost, because AWS Lambda price is established based on the memory size per execution time basis.
+The research concluded that there is no clear choice and one need to carefully measure the cost, based on the estimated traffic characteristics and include the cost of all components used in both implementations.
+
+% ---
+
+% \cite{MicroservicesvsServerlessAPerformanceComparisonOnCloudNativeWebApplication}
+
+% - serverless provide immediate scalability when handling random spike traffic, but microservices is more cost effective when handling regular traffic patterns
+
+% \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}
+
+% - no clear choice - one needs to carefully memeasure costs and focator-in all components included in FaaS, VMs - additional cost of provisioning and configuring underlying infrastructure - load balancing and dynamic scaling as customer responsibility
+
+% - cost analysis - VM deployments up to 12 times cheaper - without autoscaling, with autoscaling turned on for the other experiment - only 6 times cheaper (but still not matchin the lambda performance)
+% - moreover - lambda could not utilise the whole 1.5 GB memory allocated - fine tuning and reducing the memory setting could reduce the cost, cause lambda is billed per memory GB/ms
+% - additional cost not reflected in the calculations - data transfer, load balancer, database, storage, as well as labour cost - some are VM specific and could affect the cost, on the other hand VMs can be reserved in advance reducing the overall cost
+% - the answer for the general case - require thorough analysis, before deciding on deployment model, cause there are many costs affecting deployment
+
+% - no considerable differences in response time, when the VMs are properly configured - but this requires additional effort and money inversted in VM deployments
+% - VMs cheaper when configured for expected load, however research does not include the maintenance and configuration cost - additional work to maintain and scale the VM based solution
+% - FaaS successfully handles scaling, but VMs seems to provide more raw power
+% - summing up - thorough analysis before choosing type of deployment - many variables affectin performance and cost
+
+% ---
+
+% \subsubsection*{Architectural opportunities}
+
+% variaty of available services on the serverless platforms which that can be incorporated
+
+% examples from Berkeley - rethinking the processing - hybrid solutions with VMs when need to keep the state, use FaaS for parallelisation
+
+% different approaches to the same problem - video transcoding - https://livebook.manning.com/book/serverless-architectures-on-aws-second-edition/chapter-8/v-7/55
+
+% \cite{EvaluationOfServerlessApplicationProgrammingModel}
+% - new possibilities, using best libraries and languages
+% - research how the larger app is structured, how share code
+% - some legacy soft requires redesigning to fit into the limitations of the serverless
+
+\subsection{Fulfilment of the web application requirements}
+
+The discussion on the serverless suitability and further analysis of the implementations using the serverless architecture for variety of web based workloads, can indicate that the serverless architecture finds the applicability for web based workloads. 
+Some of the thoroughly designed implementations can bring significant benefits in terms of the solution scalability and performance, cost reduction and development agility.
+The section covers in more details how the serverless paradigm is applicable for the web application requirements covered in the chapter \ref{chapter:web-apps-requirements}.
+
+% \ref{chapter:web-apps-requirements}
+
+% - depending on the web application requirements and the limitation and use cases - the suitability may be different, but generally serverless find the application in the area of bringing benefits from various perspecives mentioned before
+
+\subsection*{Performance and Scalability}
+
+The performance of the serverless solution considered from the point of view of the single request can be still debatable as described in section \ref{chapter:serverless-suitability-processing-time}. 
+The "cold start" phenomenon along with the compounded communication overhead can significantly impact the processing time. 
+However, the architects and developers with the thoroughly designed application architecture can alleviate the undesired latency to make it acceptable for the developed web application.
+Moreover, the cloud providers tends to introduce further improvements and functionalities to mitigate the unpredictability of the serverless platform and provide dedicated services to provide the predictable execution and response time.
+
+On the other hand, when thinking about the performance of the system, the users are not using the application alone. 
+Most commonly, the solution is utilised by multiple users at the same time, performing various actions. 
+The research discusssed in the section \ref{chapter:comparison-with-traditional-architectures} covers the analysis of performance and scalability of the serverless based system compared with the more traditional microservices architectures. 
+The performance of the serverless based implementation is comparable with more stable performance characteristics and lower degradation, especially when the application experiences increase in the traffic and needs to scale accordingly to maintain the satisfactory response time.
+
+The serverless paradigm characterise with the fine-grained scaling capabilities, enabling instant horizontal scaling to meet the demand. It is especially beneficial when handling the unpredictable and variable traffic as summarized in chapter \ref{chapter:serverless-suitability-utilisation-patterns}.
+From the application examples covered in section \label{chapter:serverless-suitability-for-web-based-workloads} the Yubl social media platform utilised the scaling capabilities to meet their spiky traffic, significantly reducing the cost when migrating their product to the serverless architecture.
+
+% ---
+
+% - user point of view - measure user interaction ,how long it takes to respond, if the app is available
+% - system point of view - how the system hebaves when multiple users perform some actions - handle their work without performance degradation
+
+% - scaling - coping with the load increase
+% - scaling vertically (stronger machines) and horizontally (more machines)
+
+% - autoscaling, allocating new resources, when the demand increase, beneficial when the load increase
+% - FaaS scale horizontally - new container instances, BaaS components - data partitioning across multiple nodes with some quorum algorithm to ensure that particular guarantees are maintained
+
+% ---
+
+% % \subsubsection*{Autoscaling with proportional cost}
+% - granular autoscaling of components with proportional billing proportional to the time resources are used, the number of request being made
+% - instant horizontal scaling - automatic process handled by the cloud platform, quickly scaling up and provisionng new containers to execute the function code, deprovisioning the resources shortly after
+% - cost effective scaling - no over and under-provisioning
+
+% % - rb: reference to \subsubsection*{Workload types} - performance worse than traditional, but can effortlessly parallelise workload to reduce the response time
+% % - scaling - effortless and automatic - especially visible for spiky traffic - working better comparing to more autoscaling VMs and containers which have larger delay
+
+% - rb: processing time - individual functions affected by cold starts and compounded overhead - user perspective
+% - rb: when multiple users operate on the system - comapriosn to microservices - lambda can have better performance due to its scaling capabilities - system perspective
+
+\subsection*{Reliability}
+
+Considering the serverless as one of the outsourcing technology, the significant amount of the overhead and responsibility for the system to run properly is handed off to the cloud provider as described in chapter \label{chapter:serverless-suitability-vendor-dependence}. Thanks to the knowledge, experience and more qualified engineers, the cloud provider most of the time is able to ensure the reliability level, exceeding the services client could guarantee by itself. Nevertheless the mistakes happens and the disruption and outages are inevitable. Some solution for them would be to deploy services into multiple availability zones managed by the cloud provider, where each of them is independently supplied with the electricity and network access, to mitigating the downtime.
+
+Multiple serverless components are provided with various retry mechanics in case of the errors occuring during processing. The AWS Lambda, which is invoked asynchronously, automatically retries the event executin upon upon failures up to 3 times. After that the event can be placed in so called Dead Letter Queue, including all of the unprocessed evets due to errors for the later consideration. 
+
+Along with the programatic solutions, establishing processes including proper monitoring and observability, triggering alarms in case of the undesired components behaviour could be beneficial, which mitigate further administrator intervention or even restores the system automatically to the appropriate state.
+
+To mitigate such situation for the production running application, the solutions similar to discusssed in the section \ref{chapter:web-apps-microservices} considering the microservices architecture as well as all of the effors required to ensure proper monitoring and observability described in more details in section \ref{chapter:serverless-monitoring-and-observability}.
+The automated testing running as part of the deployment pipeline on the environment mirroring the one available in the production along with the load testing can indicate various discrepancies.
+
+The serverless solution reliability can further benefit from the higher level deployment techniques and instant rollback capability, in case of observing failures after the release. Lastly, the serverless function can utilise the services providing dynamic configuration, enabling them to alter their behaviour by toggling ceratin features or implementing the circuit breaker behaviour preventing from the whole system degradation in case of software bugs introduced into the implementation.
+
+% ---
+
+% - system continues to work even when smth goes wrong - resiliency and fault-tolerance - prevent app from stoping entirely
+% - various source of failures - hardware faults masked by redundancy
+% - software bugs - properly tested, automated testing before deployment
+% - monitoring and observability - raising alarms when some unexpected behaviours occurs
+
+% - higher level deployments and function versioning - blue/green or traffic shifting - automatic rollback when some undesired behaviour happens
+% - for some of the application it can be suitable to use circuit breaker mechanism used in microservices - disconecting components to prevent from further degradation in distributed system
+% - functions are configurable - their behaviour can be altered by using the configuration services, passing the data and altering the properties to enable some feature - feature flags, combined with toggling for percentage - enables A/B testing easily
+
+% - automated testing running before deploy on mirrored environment, load testing the solution to check if it meets expected scalability capabilities
+% - monitoring and observability - triggering alarms in case of undesired components behaviour - mitigating the further action from dev or admins side or performing some action automatically if 
+
+% ---
+
+% \cite{EvaluationOfServerlessApplicationProgrammingModel}
+% - provider trust - usually dealing better than clients on prem - but as mentioned before - there are outages from various reasons
+% - punishments for multitenancy?
+
+% - implicit failover by instantiating new container - operations requires to be idemponent
+% - sometimes needs to be handled by the developemd software - AWS utilising DLQ to store the events causing the failures for further invatigation and handlig them or Lambda Destination in case of the lambda failures
+
+% --
+
+% rb: on one hand implicit failover - ref to processing time
+% rb: on the other hand vendor dependence - outages - ref to vendor control
+% rb: deploying services on multiple availability zones running by provider, separate place, power supply - mittigating the problems of outages to keep the solution operational
+% rb: proper monitoring and observability and testing
+
+\subsection*{Security and Compliance}
+
+As described in the section \label{chapter:serverless-security-concerns} the serverless tends to have larger security surface attack which has been not fully researched yet. 
+The cloud providers do their best to ensure proper security level and tenant isolation on their side. 
+
+For example AWS introduce shared responsibility mode in which the security of the underlying infrastructure including the hardware, default software and the network configuration is maintained and protected by the cloud vendor, while the client is responsible for ensuring the compliance on the application side.
+Moreover, there are numerous services and configuration services helping with the portection configuration --- API Gateway can be configured to authenticate and authorize the access, provide data procetioon and input validation, while AWS Web Application Firewall can provide DDoS protection and rate limiting, blocking the undesired and dangerous behaviours \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+
+Nevertheless, the new attacks considering the serverless architecture are emerging highlighting the problems regarding the security of the serverless applications. The granularity of the serverless functions deployment, makes their dependencies updated less often resulting in less frequent security patching of the third party dependencies. 
+The direct access to the BaaS components is forbidden by default, but their improper configuration lead to the various incidents exposing confidential information or spreading the malware.
+Other types of the attacks include problems such as broken authentication configuration, insecure secrets storage, function's event-data injection and inadequate logging and monitoring \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+
+Most of the problems iwth the security of the serverless solutions results from the misconfiguration, but the security awareness is developing to provide guidelines on how to protect the serverless workloads and guarantee their compliance with security regulations.
+
+% ---
+
+% - processing confidential and sensitive informations, apps process larger amounts of the data
+% - breaching into the app, otehr app vulnerabilities
+% - hardening the app and mitigate attacks - proper compliance and security standards
+
+% ---
+
+% \cite{EvaluationOfServerlessApplicationProgrammingModel}
+% - serverless apps - tends to have bigger surface attacks - each function has its own code and configuration
+% - security by obscurity - attacker don't know what machine is executing the code
+% - AWS defines shared responsibility model - cloud provider responsible for infrastructure (hardware, software, network), user responsible for securing application code
+% - managed AWS services helping with protection - API Gateway - auth, authorization, data protection (TLS), input validation - recommended to perform further validation and encrypt the transferred data
+% - AWS WAF - Web Application Firewall - dealing with DDoS and common web-based attacks - blocking IP addresses, rate limiting, blocking when submiting invalid input 
+% - DDoS are billing issue instead of security
+
+% - dependencies management problem - each function is packed independently with deps, 
+% - often updated less often because serving small and complete functionality, easily deploying new functions, forgeting about old, not used ones, multiple versions of dependencies
+% - no widespread practice and solutions to track and identify bvulnerable dependencies - solutions suhc as Snyk for scaning dependencies and vulnerabilities
+% - BaaS services with improper settings - access forbidden by default, incidents with exposing confident data, malware spread - automate permission verificcation if it comes to exposed resources
+% - problems such as Function Event-Data injection, broken auth, over-priviledged function permissions and roles, inadequate monitoring and logging, insecure secrets storage, insecure 3rd party dependencies
+
+% - observability is more difficult - multiple functions processing the request, asynchronously
+% - due to ephemeral nature of containers monitoring is harder and needs to be included within the executed code, before the container is deprovisioned, storign the messages somewhere
+
+% - security awareness is developing and gaining traction
+% - practices similar as with traditional architecture, most problems due to misconfiguration
+% - fine grained security policies - small, medium apps can be convenient, but larger may be more troublesome to manage over time
+
+% % \subsubsection*{Security concerns}
+% \cite{LeveragingServerlessCloudComputingArchitectures}
+% - questions about the attack surface - not fully researched
+% - cloud providers should ensure the security level and monitoring of their platform, however the application code and config is in hand of developers
+% \cite{BerkeleyServerless}
+% - platform - ensure proper security level and tenants isolation - while maintaining short startup time in shared resource pool
+% \cite{MartinFowlerServerless}
+% - direct comunication to BaaS components - access needs to be properly protected, users needs to authenticate and authorize access to resources
+
+\subsection*{Maintainability} \label{chapter:serverless-suitability-maintainability}
+
+One of the greatest benefit of the serverless architecture is the reduction of operational cost discussed in section \ref{chapter:serverless-reduced-development-and-operational-cost}, because the provider is responsible for provisioning, managing and maintaining resources. The labour cost related with the operational aspects such as setup and maintenance of the software is reduced, due to simplification of the deployment process in which the developers provide the artifact with the proper configuration and the platform is responsible for executing the application as covered in section \ref{chapter:serverless-easier-operational-management}.
+
+The developers can benefit from multiple BaaS components, which can introduce new development opportunities and reduce the development time as highlighted in section \ref{chapter:serverless-development-opportunities}. On the other hand, the serverless paradigm is fairly new approach of building services with the new ideas and patterns researched and best practices created to further guide the development \ref{chapter:serverless-development-and-debugging}.
+The development process can be harder initially, beacuse of the greater granularity of the functions compared to other architectures and a new approach of running, testing and debugging the applications in the cloud environment \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+
+To ensure satisfactory level of confidence in testing the serverless solutions, the end to end tests running in the cloud environment mirroring the production need to be conducted. Along with the advanced operational tooling capabilities the testing can be enhanced with the canary releases or the A/B testing of the users, driven by the appropriate monitoring, ensuring that the application works properly as covered in section \ref{chapter:serverless-testing}.
+
+Lastly, the serverless architecture encourage to adjust the architecture to current needs with only a significant amount of overhead. The example of the CloudGuru migration described in section \ref{chapter:serverless-suitability-cloudguru} shows such a migration process for the fully-fledged web application experiencing significant traffic.
+
+% ---
+
+% - keepign the system operational, resolving failures, fixing bugs
+% - operational aspects - monitoring, patching, deployment, maintenance
+% - dev - system is easy to understand- no coupled modules, or tangled dependencies
+% - reducing the complexity of maintainability - increate agility, evolving easier, quicker
+
+% ---
+
+% \cite{EvaluationOfServerlessApplicationProgrammingModel}
+% - higher-level abstraction - combine smaller units - gather data from multiple services - composition in standalone unit, no need to reach to the other teams, can select language and libraries on its own
+% - on the other hand it couples the system and business logic becomes dependant - distributed monolith which is harder to maintain
+
+% - fine grained - more granular than microservices, focus on single responsibility - easier to reason about, change, test or replace
+% - hard boundaries between services - coupling them increase the executin time which is not effective - designing with clear architecture in mind
+% - when system is larger and more complex - cognitive load is greater when interacting with many small functions
+
+% dev
+% - development can be harder initiallly - greater granulatiry within distributed system compared to microservices - new approach to developing, testing and running the software
+% - managed services reduce the development time
+
+% testing
+% - unit testing easier - functions hiving the same output for the same input
+% - end-to-end testing more difficult, requires to testing in the cloud environment to give enough confidence
+
+% operations
+% - infra management outsourcing - outweigh the difficulties of the development
+% - moreover - production ready environment - robust, scalable, highly-available
+% - advanced deployment techniques out of the box - blue/green, canary
+
+% tooling
+% - monitoring and observability - tooling ahve been done a in a better way
+% - tools for logs proecssing and security focused - area of improvement
+
+% % \subsubsection*{Reduced development and operational cost}
+% \cite{BerkeleyServerless}
+% - essentially - infrastructure outsourcing, provider is responsible for provisioning, maintaining, fixing the resources and running users code
+% \cite{MartinFowlerServerless}
+% - the labour cost is also decreased
+%     - operational aspects - no need to setup, maintain hardware - resources management and provisioning handled by the provider
+%     - dev - usage of BaaS components, reducing the amount of code developers need to produce by themselves
+
+% % \subsubsection*{Easier operational management}
+% \cite{MartinFowlerServerless}
+% - scaling handled by the platform - no need to hire people
+% - packing and deployment process simplified, paltform handles running the provided artifact with appropriate configuration - can be furhter automated - idea of continuous integration and continuous deployment
+
+% % \subsubsection*{Development opportunities}
+% \cite{LeveragingServerlessCloudComputingArchitectures}
+% - focus on the business logic an development productivity
+% - automatic horizontal scaling, implicit failover, effective workload parallelisation - capabilities which can be utilised by developers to process the workload effectively
+% \cite{MartinFowlerServerless}
+% - reducing the time to market, trying out new experimental things, producing proof of concept, features with lower effort and cost
+% - better granularity - choosing proper runtime, libraries for the problem - not constrained that much by what's already existing
+
+% \ref{chapter:serverless-development-and-operational-challenges}
+
+% % \subsubsection*{Development and debugging}
+% \cite{ServerlessComputingSurveyOfOpportunitiesChallengesApplications}
+% - new approach - how to model the problem to make it implemented properly - architects and practitioners insight required
+% - new idas and patterns researched, best practices and reference architectures created to guide development
+
+% \cite{MartinFowlerServerless}
+% - requires deploying and testing in cloud environment - although most of the vendors provide some tooling to enable the local development and debugging of FaaS
+% - offerings enabling the distributed monitoring and request tracing
+% - over recent years the ecosystem of tooling evolved and provided various products helping with the development, monitoring, deployment and maintenance of software developed in serverless paradigm
+
+% % \subsubsection*{Testing}
+% \cite{MartinFowlerServerless}
+% - functions unit tested using mocked implementation of services, however end-to-end testing required to ensure the service is working properly
+% - automation running on the mirrored environment to make sure everything is working fine - load testing - bring additional cost of resource usage and people work
+% - new opportunities - testing in production due to canary releases, A/B testing users driven by monitoring
+
+% % \subsubsection*{Monitoring and observability}
+% - vendor offering + 3rd aprty services for observability
+% - there is still ops work despite the fact that infra management handed off to cloud vendor - ensuring monitoring, proper security level, verifying alarms
+% - checks in deployment process, tests, monitoring, preemptive load testing and hcaos engineering - ensuring the service works properly in case of 
+
+% - rb: cloudguru - easier migration
 
 \section{Example implementations}
 
@@ -116,9 +890,22 @@ operational perspective
     % https://aws.amazon.com/blogs/compute/building-a-serverless-multiplayer-game-that-scales/
 \end{enumerate}
 
-Berkeley research papers example
+% Step Function 
+% - map task - https://youtu.be/w6cqUhSdy-M
+% - local dev - https://youtu.be/lKbeBBV1gyc?t=1996
+% - architecturing serverless parallel computing - https://livebook.manning.com/book/serverless-architectures-on-aws-second-edition/chapter-8/v-7/1
+% - https://serverlessland.com/patterns
+
+% Berkeley research papers example
     
-https://aws.amazon.com/lambda/resources/reference-architectures/
+% https://aws.amazon.com/lambda/resources/reference-architectures/
+
+parsing latex case
+
+\begin{enumerate}
+    \item latex hard to parallelise - most of the work related with compiling the presentation, slides chunked per 5, but due to the fact how the presentation was created, last chunks required the whole presentation to be compiled, smaller part of pdf -> svg + upload parallelized
+    \item different approach - parse initial part quickly - respond to the user, later parse the remaining part that takes more time and repond to the user
+\end{enumerate}
 
 \section{Server Tier}
 
@@ -139,6 +926,8 @@ asynchronous - calling services and finishing execution - smth other calls anoth
 function composition problems - StepFunction
 
 fanout - utilising parallelisation - serverless benefits
+
+composition vs orchestration
 
 % https://www.usenix.org/system/files/conference/hotcloud18/hotcloud18-paper-hong.pdf
 % https://www.researchgate.net/profile/Davide-Taibi/publication/340121613_Patterns_for_Serverless_Functions_Function-as-a-Service_A_Multivocal_Literature_Review/links/5e79f9fb92851c3091392bd4/Patterns-for-Serverless-Functions-Function-as-a-Service-A-Multivocal-Literature-Review.pdf
@@ -190,7 +979,7 @@ calling the services from the client - presigned URLs / using client libs to hav
 
 request - response
 
-push to pull pattern
+poll to push pattern
 
 GraphQL subscriptions triggered by mutation
 

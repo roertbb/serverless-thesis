@@ -158,7 +158,7 @@ Based on the use case, several invocation types can be differentiated:
     \item Batch Jobs - Refers to jobs that can be splitted into smaller tasks and processed in parallel by multiple functions. The entire process is completed when all subsequent tasks are finished.
 \end{itemize}
 
-\section{Benefits and challenges}
+\section{Benefits and challenges} \label{chapter:serverless-benefits-and-challenges}
 
 The emergence of serverless architecture has met with great interest from various software architects, developers and companies that noticed numerous advantages of this approach. In addition to the promise of significant cost reduction, the development and operational opportunities and reducing time to market are just a few of the benefits that serverless introduces.
 
@@ -168,7 +168,7 @@ Based on the reports and articles discussing the advantages and drawbacks connec
 
 \subsection{Benefits}
 
-\subsubsection*{Reduced development and operational cost}
+\subsubsection*{Reduced development and operational cost} \label{chapter:serverless-reduced-development-and-operational-cost}
 
 Serverless is essentially another step in the process of infrastructure management outsourcing, similar to IaaS and PaaS. In this approach, developers instead of requesting resources, provide an artifact including code to be executed and the cloud platform is responsible for provisioning the resources and executing the code, based on defined triggers' configuration. The responsibility of managing the servers, databases and application execution is transferred to the cloud provider \cite{BerkeleyServerless}. The favourable and competitive prices are available due to economy of scale, in which one vendor is running thousands of predefined services, effectively sharing the infrastructure among the customers.
 
@@ -182,11 +182,11 @@ Additionally, with the greater granularity, only the components affected by incr
 
 The cost reduction is the most visible when the service has to process the occasional or inconsistent traffic. In the first case, the processing will be executed based on the event, billed accordingly to execution time and not paying for idle, which is significantly more efficient, compared to the self-hosted solution in which some server is running the application all the time. When running the application in the latter case, it may be necessary to have enough hardware to handle the highest demand to ensure the running service is capable of handling all the requests. With the serverless solution the cloud provider is responsible for scaling to handle the demand. The customers pay only for the additional time hardware was computing to satisfy the higher traffic. Comparing to provisioning virtual machines, there is no risk of overprovisioning (when demand is handled on time, but the resources are not fully utilised) or underprovisioning (when the average processing capacity is optimised, but the highest traffic may not be handled on time or even not at all). These examples are deliberately picked to showcase the significant cost savings of serverless, but on the other hand when the traffic shape is making a good utilisation of running servers, the cost of using serverless technologies can be higher. Lastly considering the serverless model, any performance optimisations making the function execution shorter or reducing the number of requests to some other BaaS component can accordingly reduce the cost \cite{MartinFowlerServerless}.
 
-\subsubsection*{Easier operational management}
+\subsubsection*{Easier operational management} \label{chapter:serverless-easier-operational-management}
 
 Considering the scaling is automatically handled by the cloud vendor, there is no need to hire the qualified administrators to manage and scale the application and make sure that the service is running properly, which leads to further cost reduction. The packing and deployment process for serverless solutions is also simplified compared to deployment of new versions of software to the servers. There is no need to manage some scripts or specified software responsible for managing the deployment, the serverless solution can be packed, zipped with appropriate configuration and deployed to the cloud, where the cloud vendor handles the rest of the process. In the fully serverless solutions the system administration role can be effectively minimised by the serverless platform when embracing the proper process automation \cite{MartinFowlerServerless}.
 
-\subsubsection*{Development opportunities}
+\subsubsection*{Development opportunities} \label{chapter:serverless-development-opportunities}
 
 Serverless solution is appealing, due to the possibility to reduce the cycle time. The focus of development can be put on the business logic and developing the product instead of managing the infrastructure.
 
@@ -202,7 +202,7 @@ The growth of awareness about environmental problems has influenced the way the 
 
 Cloud infrastructure partially mitigates that problem, because the companies are renting the computing resources based on the demand, rather than provisioning the servers on their own, especially when these are run without adequate awareness about the capacity management. When using IaaS, PaaS or self-hosted solutions most frequently the users are responsible for scaling the services, preferably overprovisioning the resources, which leads to inefficient energy utilisation. The cloud provider takes the responsibility for the serverless solutions by provisioning the compute resources and handling the capacity decisions to fulfill the needs, leading to far more efficient resource and energy utilisation across data centers and reducing the environmental impact \cite{MartinFowlerServerless}.
 
-\subsection{Challenges related to the nature of serverless architecture}
+\subsection{Challenges related to the nature of serverless architecture} \label{chapter:serverless-challenges-related-to-the-nature-of-serverless-architecture}
 
 \subsubsection*{Function state management}
 
@@ -220,7 +220,7 @@ To address that problem, cloud providers could enable developers to assign the g
 
 Some of the approaches proposed by various practitioners consider sort of hybrid solution to address the problem of externalized state constraint and lack of function addressability. The low-latency application can be run as the regular, long-running server, handling the requests and keeping the context in local memory. Later, the process can hand off the fully contextualized request to the FaaS, which can be executed concurrently to perform some computation without need to lookup for external data
 
-\subsection{Cloud platform and vendors challenges}
+\subsection{Cloud platform and vendors challenges} \label{chapter:serverless-cloud-platform-and-vendor-challenges}
 
 \subsubsection*{Vendor dependency}
 
@@ -246,7 +246,7 @@ Another factor limiting the serverless function execution is constrained executi
 
 To achieve efficient resource utilisation, multiple cloud functions from different applications and customers are executed on the same virtual machine, enabling the cloud platform to provide affordable services. Cloud vendors are doing their best to provide a proper level of isolation between different tenants and application execution. Most of the largest providers developed mature technology to ensure the high quality of their services, but for other less mature solutions, some problems can be noticeable. Among the most common issues robustness (error in customer’s software causes failures of other), performance (one customer takes majority of the machine resources causing others to slow down) or even security (seeing data of other customers) can be distinguished \cite{MartinFowlerServerless}.
 
-\subsubsection*{Security concerns}
+\subsubsection*{Security concerns} \label{chapter:serverless-security-concerns}
 
 Serverless architecture opens a large number of security questions, taking into consideration the attacks surface of serverless composition, which is not fully researched yet. On one hand, the cloud providers should ensure proper security level of their services by monitoring the services and patching eventual vulnerabilities. However, executing the computation within a shared resource pool extends the area of potential attacks, when breaking out from the ephemeral function container \cite{LeveragingServerlessCloudComputingArchitectures}.
 
@@ -256,25 +256,25 @@ Another security concern takes into account the direct access to the services di
 
 When building some service utilising different functions and components it will require cooperation between them to perform the processing. Each of the functions should have granular access policies granting only the required permissions to the BaaS components used by the function. Maintaining and validating the security and access policies is not a trivial task, especially when the service and number of its components and access patterns are increasing overtime \cite{MartinFowlerServerless}.
 
-\subsection{Development and operational challenges}
+\subsection{Development and operational challenges} \label{chapter:serverless-development-and-operational-challenges}
 
-\subsubsection*{Development and debugging}
+\subsubsection*{Development and debugging} \label{chapter:serverless-development-and-debugging}
 
 The serverless computing introduces a relatively new approach for developing services and with the lack of knowledge and proper modeling paradigm it can lead to many development approaches that can reduce the quality of service and complicate the collaboration between developers. New ideas and patterns are created and researched to utilise serverless architecture effectively, which leads to high demand for practitioners and architects aware of the best practices and providing reference architectures \cite{ServerlessComputingSurveyOfOpportunitiesChallengesApplications}.
 
-Developing the fully serverless solution introduces additional difficulties due to inability to replicate the cloud environment locally. Some of the cloud vendors provide tooling to execute the functions locally, for example AWS Serverless Application Model enables to execute functions locally and pass the event payload saved beforehand. Altogether with the execution, some tools enable function debugging, while Azure even makes it possible to run local debugging for functions triggered by remote events. Nevertheless, to verify behaviour of other services it is essential to deploy the service and verify it's behaviour in a cloud environment. The idea of distributed monitoring, which enables tracing the flow of a single request across multiple components, is covered by services such as Amazon X-Ray and other third party offerings.
+Developing the fully serverless solution introduces additional difficulties due to inability to replicate the cloud environment locally. Some of the cloud vendors provide tooling to execute the functions locally, for example AWS Serverless Application Model enables to execute functions locally and pass the event payload saved beforehand. Altogether with the execution, some tools enable function debugging, while Azure even makes it possible to run local debugging for functions triggered by remote events. Nevertheless, to verify behaviour of other services it is essential to deploy the service and verify its behaviour in a cloud environment. The idea of distributed monitoring, which enables tracing the flow of a single request across multiple components, is covered by services such as Amazon X-Ray and other third party offerings.
 
 Over the recent years, the ecosystem of serverless tooling significantly evolved, providing various products and services, which helps with the development and operational aspects of managing serverless applications and services. The process of deployment and bundling improved with the introduction of Serverless Framework, AWS SAM and AWS Cloud Development Kit, which allow to define the architecture using many popular programming languages. Lastly, the serverless tooling helps with operational aspects enabling various higher level releases approach, supporting traffic shifting, A/B testing, blue-green deployments or canary releases which are essential when releasing complex, distributed application that consist of hundreds of functions \cite{MartinFowlerServerless}.
 
-\subsubsection*{Testing}
+\subsubsection*{Testing} \label{chapter:serverless-testing}
 
-The unit testing of serverless functions, which are initially pure functions that are mapping input to the output, is fairly simple. Contrary to the integration testing, because most functions use various BaaS components or other external services creating a dependency in tests. Some of the vendors supply mocked implementations or stubs that can be  incorporated into tests and imitate the BaaS behaviour. Nevertheless, the idea giving the most confidence is to deploy the service into the cloud environment and conduct some end-to-end tests to verify the quality of software.
+The unit testing of serverless functions, which are initially pure functions that are mapping input to the output, is fairly simple. Contrary to the integration testing, because most functions use various BaaS components or other external services creating a dependency in tests. Some of the vendors supply mocked implementations or stubs that can be incorporated into tests and imitate the BaaS behaviour. Nevertheless, the idea giving the most confidence is to deploy the service into the cloud environment and conduct some end-to-end tests to verify the quality of software.
 
 The ideal and most appealing approach would be to create a suite of automated integration tests, deploying the functions and infrastructure configuration to the cloud as part of the integration pipeline to verify whether it is working as intended. However, running such tests creates additional cost with every execution, due to resource usage for processing the test data. It may also require more work compared to writing integration tests for regular services created as stateful applications. 
 
 One radical change that could be embraced, is the idea of testing in production and monitoring-driven development that is related to switching subset of the traffic to the newer version and comparing the observed behaviour with the previous one \cite{MartinFowlerServerless}.
 
-\subsubsection*{Monitoring and observability}
+\subsubsection*{Monitoring and observability} \label{chapter:serverless-monitoring-and-observability}
 
 Monitoring the service created by utilising the serverless architecture can be more difficult due to the ephemeral, granular and distributed nature of the processing. Aforementioned distributed monitoring is especially desired to trace the flow of a request not only to verify if the application works correctly, but also to give more insight into performance aspects directly correlated with the cost \cite{LeveragingServerlessCloudComputingArchitectures}.
 
@@ -601,7 +601,7 @@ Nevertheless, utilising open-source platforms raises questions about maturity of
 % https://thenewstack.io/serverless-on-public-cloud-the-ultimate-showdown/
 % https://www.datadoghq.com/state-of-serverless/
 
-\section{Example use cases}
+\section{Example use cases} \label{chapter:serverless-example-use-cases}
 
 % https://pages.awscloud.com/rs/112-TZM-766/images/Asset2-optimizing-enterprise-economics-serverless-architectures.pdf - examples
 % https://www.simform.com/serverless-aws-lambda-examples/
@@ -647,7 +647,7 @@ Serverless has also found application in numerous media conversion and transcodi
 
 An example of such serverless use is MindMup, which is a popular web application mind mapping tool running in the web, developed with just 2 person team. The event-driven data processing is utilised in the case when a user wants to export prepared diagram to some read-only format such as PDF, Word document, presentation or text file. The web application works as interactive user interface, upon user requests to export the diagram, it calls the Lambda placed behind the API Gateway to generate the presigned URL, which can be used for a short period of time to insert the file inside the S3 bucket, directly from the client application. It sends an event to the Amazon Simple Notification Service (SNS) triggering the appropriate function responsible for export to a particular file format. Each of the exporters have different requirements, for example CPU and memory usage for PDF exporter is much higher than for others or Microsoft Office exporters require usage of libraries written in Java. Moreover, some of the extensions such as Markdown are not as frequently selected by users as others. When the processing is complete, the output of the process is put back in the S3 bucket, where the users can access it. Additionally, the event is sent to SNS which triggers other services such as DynamoDB that are listening to that topic to save some information for analytics purposes.
 
-The company admits that initially, the service responsible for exporting was running on the Heroku platform in the containerised environment, but after migration to the AWS Lambda they've noticed significant cost reduction even with the growth of the platform usage by the clients \cite{ServerlessApplicationsWithNodejs}.
+The company admits that initially, the service responsible for exporting was running on the Heroku platform in the containerised environment, but after migration to the AWS Lambda they have noticed significant cost reduction even with the growth of the platform usage by the clients \cite{ServerlessApplicationsWithNodejs}.
 
 \subsection{Real-time stream processing}
 
