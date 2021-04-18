@@ -27,9 +27,9 @@ Numerous startups decide to adopt serverless do build their products faster, whi
 Despite the fact that serverless is used extensively by some of the organisations, the applicability of the serverless paradigm is not fully comprehend and it is not entirely clear what problems are suitable to be implemented using this architecture.
 Cloud vendors provide guides and describe use cases of serverless applicability, but neglect to present when the serverless architecture is not suitable and has not been used effectively \cite{EvaluationOfServerlessApplicationProgrammingModel}.
 
-The serverless architecture is a fairly new approach with various benefits, but also disadvantages and limitations, which are described in more details in chapter \ref{chapter:serverless-benefits-and-challenges}.
+The serverless architecture is a fairly new approach with various benefits, but also disadvantages and limitations, which were described in more details in chapter \ref{chapter:serverless-benefits-and-challenges}.
 In order to consider the suitability of serverless paradigm, some approach would be to create an intuition about the architecture characteristics --- leveraging the benefits it brings and understanding the limitations it has.
-However, some of the restrictions can be overcomed by providing workarounds or redesigning the software, to fully utilise the capabilities the architecture brings.
+However, some of the restrictions can be overcome by providing workarounds or redesigning the software, to fully utilise the capabilities the architecture brings.
 
 The section below covers the topic in more details, summarising the knowledge about benefits and challenges along with the deeper look into use cases and examples, to answer the research question considering the serverless suitability for web based services.
 
@@ -48,7 +48,7 @@ The section below covers the topic in more details, summarising the knowledge ab
 
 \subsection{Serverless suitability}
 
-\subsubsection*{Workload types}
+\subsubsection{Workload types}
 
 \paragraph{Utilisation patterns} \label{chapter:serverless-suitability-utilisation-patterns}
 
@@ -103,7 +103,7 @@ The phenomenon, caused by resource allocation and environment bootstrapping, is 
 The most significant impact of the "cold start" on the response time is visible, when multiple functions are sequentially combined to perform some workflow. Along with the latency caused by the communication overhead, the compounded processing time may become significantly longer \cite{EvaluationOfServerlessApplicationProgrammingModel}.
 To prevent these undesirable situations, it is advised to keep the user-faced function chains as short as possible to make the response time short as well.
 
-Both factors mentioned above, may indicate that serverless paradigm is not suitable for the high-performant and mission critical workloads that need to guarantee certain response time requirements.
+Both factors mentioned above, may indicate that serverless paradigm is not suitable for the highly-performant and mission critical workloads that need to guarantee certain response time requirements.
 It is more difficult to ensure the performance of the serverless solution, due to unpredictable performance of the underlying serverless platform, but depending on the characteristics of the developed application, the additional latency added to the response time may be acceptable \cite{LeveragingServerlessCloudComputingArchitectures}.
 
 The serverless solution can be effectively utilised to perform some background tasks, which does not require to directly respond to the users. Moreover, due to scaling capabilities the workloads can be effortlessly parallelised, reducing the overall processing time.
@@ -131,11 +131,11 @@ The serverless solution can be effectively utilised to perform some background t
 
 % - more transparency from the provider side would be beneficial for developers to understand the workflow behaviour on the serverless platform - on the other hand it is understandable that they won't share implementation details
 
-\subsubsection*{Serverless processing limitations}
+\subsubsection{Serverless processing limitations}
 
 \paragraph{Runtime and data restrictions}
 
-Another factors significantly impacting the serverless suitability are the runtime and data restrictions of the Function as a Service processing model. These are covered in more details in chapter \ref{chapter:serverless-challenges-related-to-the-nature-of-serverless-architecture}, when considering the challenges related to the nature of the serverless architecture.
+Another factors significantly impacting the serverless suitability are the runtime and data restrictions of the Function as a Service processing model. These were covered in more details in chapter \ref{chapter:serverless-challenges-related-to-the-nature-of-serverless-architecture}, when considering the challenges related to the nature of the serverless architecture.
 Regardless of the provider, serverless functions are designed to be effectively stateless, running code within ephemeral and isolated containers, constrained by the limited processing time. Configured amount of the memory, CPU units and network bandwidth is allocated from the shared resource pool, assigned to the container and deprovisioned shortly after processing finishes.
 Such architecture enables functions to scale horizontally, but on the other hand requires to preserve state in external components, which can introduce significant overhead when large volumes of data are transported.
 Moreover, developers do not have control over the container execution and their addressability, which requires external components serving as intermediate messaging brokers \cite{MartinFowlerServerless}. Lastly, various BaaS components can also have limitations, for example constraining the operation throughput or volume of the data that can be processed.
@@ -220,7 +220,7 @@ Another operation constraint is related to the implicit failover, provided out o
 
 % - idempotent - identical output and side effects for two invocations with identical input
 
-\subsubsection*{Vendor dependence} \label{chapter:serverless-suitability-vendor-dependence}
+\subsubsection{Vendor dependence} \label{chapter:serverless-suitability-vendor-dependence}
 
 As with any outsourcing technology, the serverless paradigm relies heavily on the dependence on the service provider, which was discussed in more detail in section \ref{chapter:serverless-cloud-platform-and-vendor-challenges}.
 Giving up the control of a significant part of the application, on one hand enables to hand off the infrastructure management overhead, but on the other hand leads to vendor lock-in \cite{MartinFowlerServerless}.
@@ -235,14 +235,14 @@ Moreover, the tooling related to the deployment, monitoring, logging and configu
 The cloud provider is responsible for maintaining, updating and protecting the underlying architecture and generally can ensure sufficient level of services, because of the knowledge, experience and qualified staff it has. However, incidents happen due to some unpredictable events or human errors, causing unexpected outages and connection disruption, even in the largest data centers \cite{EvaluationOfServerlessApplicationProgrammingModel}.
 
 When deciding on the service architecture, it is essential to consider if such vendor dependence is bearable \cite{LeveragingServerlessCloudComputingArchitectures}.
-The vendor lock-in in the serverless architecture can be seen as a tradeoff, rather than limitation, when considering whether the benefits one can obtain are sufficient to sacrifice the elasticity, compared to other architectures.
+The vendor lock-in in the serverless architecture can be seen as a trade-off, rather than limitation, when considering whether the benefits one can obtain are sufficient to sacrifice the elasticity, compared to other architectures.
 
 % ---
 
-% - vendor lock in as tradeoff - it is essential to consider if it is bearable, if the benefits one can be obtained are enough to sacrifice the elasticity
+% - vendor lock in as trade-off - it is essential to consider if it is bearable, if the benefits one can be obtained are enough to sacrifice the elasticity
 
 % \cite{EvaluationOfServerlessApplicationProgrammingModel}
-% - vendor lock-in as tradeoff, not limitation - every cloud provider have similar services, but there are differences in functionality
+% - vendor lock-in as trade-off, not limitation - every cloud provider have similar services, but there are differences in functionality
 % - API level lock-in - app code relies on 3rd aprty services interface - wrapping 2rd aprty services - business logic is extracted from the lambda handler, ports and adapters - relying on abstract interfaces instead of concrete implementation, using frameworks which enable abstraction over the cloud provider interfaces for some of the services
 % - service level lock-in - no service alternative providing some functionality - relying on some particular features or hebaviour of the services, blocks the possibility to migrate to other service/provider
 
@@ -268,14 +268,14 @@ The vendor lock-in in the serverless architecture can be seen as a tradeoff, rat
 
 \subsection{Serverless applicability for web based services}
 
-\subsubsection*{Suitability for web based workloads} \label{chapter:serverless-suitability-for-web-based-workloads}
+\subsubsection{Suitability for web based workloads} \label{chapter:serverless-suitability-for-web-based-workloads}
 
 The idea of web application has been introduced and discussed in more details in chapter \ref{chapter:web-apps}. Modern web applications can take a variety of forms and implement numerous architectures to fulfill the requirements put in front of them.
 It is difficult to generalise and unambiguously answer the question whether the serverless architecture is suitable for the web applications, because the number of variables deciding on the applicability is significant.
 
 It is considered that the serverless paradigm can be utilised successfully for building entire systems or incorporate isolated components, implementing granular or larger tasks, into the existing system \cite{ServerlessArchitectureOnAWS}.
 
-The examples provided in section \ref{chapter:serverless-example-use-cases} covers a significant amount of use cases, showing how the services were designed to utilise the serverless architecture and its benefits into the production ready services. The section below discusses in more details the applicability of serverless architecture, discussing the examples and their capabilities as well as providing additional information to claim the serverless suitability for described workloads.
+The examples provided in section \ref{chapter:serverless-example-use-cases} cover a significant amount of use cases, showing how the services were designed to utilise the serverless architecture and its benefits into the production ready services. The section below discusses in more details the applicability of serverless architecture, discussing the examples and their capabilities as well as providing additional information to claim the serverless suitability for described workloads.
 
 % It is difficult to generalise and delibelatery select the workloads suitable for the serverless paradigm, because the number of variables deciding on the applicability is significant
 
@@ -295,8 +295,8 @@ The examples provided in section \ref{chapter:serverless-example-use-cases} cove
 
 Mindmup, serving the role of online collaboration tool for mind mapping, is one of the early adopters of the serverless paradigm, which has undergone an architecture migration from the traditional architecture running on Heroku, experiencing significant operational cost reduction \cite{ServerlessComputingEconomicAndArchitecturalImpact}.
 The redesign of the exporters services enabled developers to reduce the boilerplate code responsible for managing, logging and monitoring the processing, and focus only on the converter's logic running in the serverless functions.
-Due to the fact that some of the file formats were used less frequently, all the processing logic was initially bundled into single services for cost optimisation. The negative aspect of such coupling has been observed by exhausting all of the available resources and bugs propagation, impacting other exporters.
-Re-architecturing the flow to event-driven approach and the logic orchestration pushed to the client along with the further migration of the application backend, contributed to the cost reduction by 50\%, even with the active users increase --- resulting in the overall cost savings estimated to 66\%.
+Due to the fact that some of the file formats were used less frequently, all the processing logic was initially bundled into single service for cost optimisation. The negative aspect of such coupling has been observed by exhausting all of the available resources and bugs propagation, impacting other exporters.
+The re-architecturing of the flow to event-driven approach and the logic orchestration pushed to the client along with the further migration of the application backend, contributed to the cost reduction by 50\%, even with the active users increase --- resulting in the overall cost savings estimated to 66\%.
 The MindMup example of exporters processing benefits from utilising the serverless architecture for the high-throughput task utilising fine-grained serverless function scaling.
 
 % \subsection{Event-driven data processing}
@@ -404,7 +404,7 @@ The company decided to split the monolithic, serverless architecture into multip
 The GraphQL has been used to prevent from overfetching and multiple round trips, when accessing the data by the clients.
 The Backend For Frontend pattern enabled engineers to expose different endpoints for web and mobile clients, running custom GraphQL servers in AWS Lambda and combining the response from multiple microservices.
 Each serverless microservices has been split into stateless components (API Gateway, AWS Lambda) and stateful components (DynamoDB, S3) deployed independently.
-Common services, such as AWS Virtual Private Network, AWS Web Application Firewall and Amazon Redshift serving as data warehouse, have been extracted and loosely coupled with specific microservies.
+Common services, such as AWS Virtual Private Network, AWS Web Application Firewall and Amazon Redshift serving as data warehouse, have been extracted and loosely coupled with specific microservices.
 
 The desired outcome of the migration has been achieved --- teams are working more independently without affecting others, owning responsibility for their microservices and at the same time noticed performance improvements.
 The serverless architecture enabled developers to migrate the platform gradually, implementing new features while keeping the old one serving the production traffic.
@@ -508,7 +508,7 @@ The serverless solution developed by Themenos enabled to decouple the processing
 % - serverless enabled them to effectively cope with scaling, run the backend for their mobile application, which enabled them to communicate with the IoT devices, sychronize the data, update the settings, gathering additional information beneficial in smart home surrounding - no need to manage infra and handle the stuff they're not profficient with, preserving the proper level of security and data privacy
 
 
-\subsubsection*{Comparison with traditional architectures} \label{chapter:comparison-with-traditional-architectures}
+\subsubsection{Comparison with traditional architectures} \label{chapter:comparison-with-traditional-architectures}
 
 The common use-case for web application servers is to provide an API used by the clients running in the web browsers.
 There are several research \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}\cite{MicroservicesvsServerlessAPerformanceComparisonOnCloudNativeWebApplication} analysing the performance, scalability, reliability and cost of the API built using serverless, microservices and monolithic architectures.
@@ -555,7 +555,7 @@ Moreover, for some types of the traffic increase, the delay of responsiveness to
 % - FaaS response time almost ocnstant compared to the monolith and services, very small performance degradation
 % - FaaS handling burst quite well due to its autoscaling capabilities, higher load have small impact on the response time, as load increase the defrataion increase only slightly
 
-\paragraph*{Microservices suffers from load balancing nad traffic distribution problems}
+\paragraph*{Microservices suffer from load balancing and traffic distribution problems}
 
 The solution implemented in the microservice and monolithic architecture is capable of maintaining the performance level for the stable and smaller loads, but characterized with longer response time under more rapid traffic growth. After the autoscaling utilisation threshold is met, more instances are added into the cluster, improving the response time, which with further scaling could match the performance of serverless implementation \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}.
 
@@ -640,18 +640,18 @@ The research concluded that there is no clear choice and one need to carefully m
 
 The discussion on the serverless suitability and further analysis of the implementations using the serverless architecture for variety of web based workloads, can indicate that the serverless architecture finds the applicability for web based workloads. 
 Some of the thoroughly designed implementations can bring significant benefits in terms of the solution scalability and performance, cost reduction and development agility.
-The section covers in more details how the serverless paradigm is applicable for the web application requirements covered in the chapter \ref{chapter:web-apps-requirements}.
+The section covers in more details how the serverless paradigm is applicable for the web application requirements presented in the chapter \ref{chapter:web-apps-requirements}.
 
 % \ref{chapter:web-apps-requirements}
 
 % - depending on the web application requirements and the limitation and use cases - the suitability may be different, but generally serverless find the application in the area of bringing benefits from various perspecives mentioned before
 
-\subsection*{Performance and Scalability}
+\subsection{Performance and Scalability}
 
 The performance of the serverless solution considered from the point of view of the single request can be still debatable as described in section \ref{chapter:serverless-suitability-processing-time}. 
 The "cold start" phenomenon along with the compounded communication overhead can significantly impact the processing time. 
 However, the architects and developers with the thoroughly designed application architecture can alleviate the undesired latency to make it acceptable for the developed web application.
-Moreover, the cloud providers tends to introduce further improvements and functionalities to mitigate the unpredictability of the serverless platform and provide dedicated services to provide the predictable execution and response time.
+Moreover, the cloud providers tend to introduce further improvements and functionalities to mitigate the unpredictability of the serverless platform and provide dedicated services to offer the predictable execution and response time.
 
 On the other hand, when thinking about the performance of the system, the users are not using the application alone. 
 Most commonly, the solution is utilised by multiple users at the same time, performing various actions. 
@@ -685,9 +685,9 @@ From the application examples covered in section \label{chapter:serverless-suita
 % - rb: processing time - individual functions affected by cold starts and compounded overhead - user perspective
 % - rb: when multiple users operate on the system - comapriosn to microservices - lambda can have better performance due to its scaling capabilities - system perspective
 
-\subsection*{Reliability}
+\subsection{Reliability}
 
-Considering the serverless as one of the outsourcing technology, the significant amount of the overhead and responsibility for the system to run properly is handed off to the cloud provider as described in chapter \label{chapter:serverless-suitability-vendor-dependence}. Thanks to the knowledge, experience and more qualified engineers, the cloud provider most of the time is able to ensure the reliability level, exceeding the services client could guarantee by itself. Nevertheless, the mistakes happens and the disruption and outages are inevitable. Some solution for them would be to deploy services into multiple availability zones managed by the cloud provider, where each of them is independently supplied with the electricity and network access, to mitigating the downtime.
+Considering the serverless as one of the outsourcing technology, the significant amount of the overhead and responsibility for the system to run properly is handed off to the cloud provider as described in chapter \label{chapter:serverless-suitability-vendor-dependence}. Due to the knowledge, experience and more qualified engineers, the cloud provider most of the time is able to ensure the reliability level, exceeding the services client could guarantee by itself. Nevertheless, the mistakes happen and the disruption and outages are inevitable. Some solution for them would be to deploy services into multiple availability zones managed by the cloud provider, where each of them is independently supplied with the electricity and network access, to mitigating the downtime.
 
 Multiple serverless components are provided with various retry mechanics in case of the errors occuring during processing. The AWS Lambda, which is invoked asynchronously, automatically retries the event executin upon upon failures up to 3 times. After that the event can be placed in so called Dead Letter Queue, including all of the unprocessed evets due to errors for the later consideration. 
 
@@ -728,7 +728,7 @@ The serverless solution reliability can further benefit from the higher level de
 % rb: deploying services on multiple availability zones running by provider, separate place, power supply - mittigating the problems of outages to keep the solution operational
 % rb: proper monitoring and observability and testing
 
-\subsection*{Security and Compliance}
+\subsection{Security and Compliance}
 
 As described in the section \label{chapter:serverless-security-concerns} the serverless tends to have larger security surface attack which has been not fully researched yet. 
 The cloud providers do their best to ensure proper security level and tenant isolation on their side. 
@@ -780,7 +780,7 @@ Most of the problems iwth the security of the serverless solutions results from 
 % \cite{MartinFowlerServerless}
 % - direct comunication to BaaS components - access needs to be properly protected, users needs to authenticate and authorize access to resources
 
-\subsection*{Maintainability} \label{chapter:serverless-suitability-maintainability}
+\subsection{Maintainability} \label{chapter:serverless-suitability-maintainability}
 
 One of the greatest benefit of the serverless architecture is the reduction of operational cost discussed in section \ref{chapter:serverless-reduced-development-and-operational-cost}, because the provider is responsible for provisioning, managing and maintaining resources. The labour cost related with the operational aspects such as setup and maintenance of the software is reduced, due to simplification of the deployment process in which the developers provide the artifact with the proper configuration and the platform is responsible for executing the application as covered in section \ref{chapter:serverless-easier-operational-management}.
 
@@ -873,12 +873,71 @@ Lastly, the serverless architecture encourage to adjust the architecture to curr
 
 \section{Example implementations}
 
-\begin{figure}[h]
+\subsection{Receipt processing}
+
+\subsubsection{Problem description}
+
+% Based on https://panparagon.pl/
+
+\subsubsection{Designed solution}
+
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{assets/04-serverless-for-web-apps/paragoneArchitecture.png}
     \caption{Architecture of receipt processing web application}
     \label{fig:paragone-web-app}
 \end{figure}
+
+\subsection{Generating interactive presentations based on Latex files}
+
+\subsubsection{Problem description}
+
+% Based on http://pitagoras-korepetytor.pl/
+
+idea similar to mindmup converters - solution ensuring effortless scalability and low cost due to occasional requests
+
+\subsubsection{Processing optimisation}
+
+\paragraph{Containerised environment and Lambda Layers}
+
+\paragraph{Parallel processing}
+
+\paragraph{Reducing the function chain length}
+
+\paragraph{Updating client with the initial batch}
+
+\subsubsection{Designed solution}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{assets/04-serverless-for-web-apps/euclidArchitecture.png}
+    \caption{Architecture of presentation processing}
+    \label{fig:euclid-web-app}
+\end{figure}
+
+% Poll to push - https://aws.amazon.com/blogs/compute/from-poll-to-push-transform-apis-using-amazon-api-gateway-rest-apis-and-websockets/
+
+\subsubsection{Cost of the solution}
+
+\begin{enumerate}
+    \item 2 paths - 1st with initial batch, 2nd with the rest
+    \item batching svg, mp3 files to reduce number of uploaded items to S3
+\end{enumerate}
+
+% parsing latex case
+
+% \begin{enumerate}
+%     \item latex hard to parallelise - most of the work related with compiling the presentation, slides chunked per 5, but due to the fact how the presentation was created, last chunks required the whole presentation to be compiled, smaller part of pdf -> svg + upload parallelized
+%     \item different approach - parse initial part quickly - respond to the user, later parse the remaining part that takes more time and repond to the user
+% \end{enumerate}
+
+% Step Function 
+% - map task - https://youtu.be/w6cqUhSdy-M
+% - local dev - https://youtu.be/lKbeBBV1gyc?t=1996
+% - architecturing serverless parallel computing - https://livebook.manning.com/book/serverless-architectures-on-aws-second-edition/chapter-8/v-7/1
+% - https://serverlessland.com/patterns
+
+\subsection{Other}
 
 \begin{enumerate}
     \item small web app - processing receipts/invoices
@@ -890,32 +949,13 @@ Lastly, the serverless architecture encourage to adjust the architecture to curr
     % https://aws.amazon.com/blogs/compute/building-a-serverless-multiplayer-game-that-scales/
 \end{enumerate}
 
-% Step Function 
-% - map task - https://youtu.be/w6cqUhSdy-M
-% - local dev - https://youtu.be/lKbeBBV1gyc?t=1996
-% - architecturing serverless parallel computing - https://livebook.manning.com/book/serverless-architectures-on-aws-second-edition/chapter-8/v-7/1
-% - https://serverlessland.com/patterns
-
 % Berkeley research papers example
-    
+
 % https://aws.amazon.com/lambda/resources/reference-architectures/
-
-parsing latex case
-
-\begin{enumerate}
-    \item latex hard to parallelise - most of the work related with compiling the presentation, slides chunked per 5, but due to the fact how the presentation was created, last chunks required the whole presentation to be compiled, smaller part of pdf -> svg + upload parallelized
-    \item different approach - parse initial part quickly - respond to the user, later parse the remaining part that takes more time and repond to the user
-\end{enumerate}
 
 \section{Server Tier}
 
-\subsection{Serverless processing model / compared to microservices / event-driven}
-
-% serverless vs microservices, serverless vs event-driven ~ event sourcing - similarities and differences
-
-reference to articles comparing serverless / microservices / monolith for Web App API
-
-\subsection{Web application workload types for serverless}
+\subsection{Serverless processing types}
 
 % event driven system - paragone, workload parallelisation - latex?, push based approach, pull based for workers when data is batched
 
@@ -927,7 +967,7 @@ function composition problems - StepFunction
 
 fanout - utilising parallelisation - serverless benefits
 
-composition vs orchestration
+composition vs orchestration - function chain vs aws step function
 
 % https://www.usenix.org/system/files/conference/hotcloud18/hotcloud18-paper-hong.pdf
 % https://www.researchgate.net/profile/Davide-Taibi/publication/340121613_Patterns_for_Serverless_Functions_Function-as-a-Service_A_Multivocal_Literature_Review/links/5e79f9fb92851c3091392bd4/Patterns-for-Serverless-Functions-Function-as-a-Service-A-Multivocal-Literature-Review.pdf
