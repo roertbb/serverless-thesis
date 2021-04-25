@@ -646,7 +646,7 @@ The section covers in more details how the serverless paradigm is applicable for
 
 % - depending on the web application requirements and the limitation and use cases - the suitability may be different, but generally serverless find the application in the area of bringing benefits from various perspecives mentioned before
 
-\subsection{Performance and Scalability}
+\subsubsection{Performance and Scalability}
 
 The performance of the serverless solution considered from the point of view of the single request can be still debatable as described in section \ref{chapter:serverless-suitability-processing-time}. 
 The "cold start" phenomenon along with the compounded communication overhead can significantly impact the processing time. 
@@ -685,7 +685,7 @@ From the application examples covered in section \label{chapter:serverless-suita
 % - rb: processing time - individual functions affected by cold starts and compounded overhead - user perspective
 % - rb: when multiple users operate on the system - comapriosn to microservices - lambda can have better performance due to its scaling capabilities - system perspective
 
-\subsection{Reliability}
+\subsubsection{Reliability}
 
 Considering the serverless as one of the outsourcing technology, the significant amount of the overhead and responsibility for the system to run properly is handed off to the cloud provider as described in chapter \label{chapter:serverless-suitability-vendor-dependence}. Due to the knowledge, experience and more qualified engineers, the cloud provider most of the time is able to ensure the reliability level, exceeding the services client could guarantee by itself. Nevertheless, the mistakes happen and the disruption and outages are inevitable. Some solution for them would be to deploy services into multiple availability zones managed by the cloud provider, where each of them is independently supplied with the electricity and network access, to mitigating the downtime.
 
@@ -728,7 +728,7 @@ The serverless solution reliability can further benefit from the higher level de
 % rb: deploying services on multiple availability zones running by provider, separate place, power supply - mittigating the problems of outages to keep the solution operational
 % rb: proper monitoring and observability and testing
 
-\subsection{Security and Compliance}
+\subsubsection{Security and Compliance}
 
 As described in the section \label{chapter:serverless-security-concerns} the serverless tends to have larger security surface attack which has been not fully researched yet. 
 The cloud providers do their best to ensure proper security level and tenant isolation on their side. 
@@ -780,7 +780,7 @@ Most of the problems iwth the security of the serverless solutions results from 
 % \cite{MartinFowlerServerless}
 % - direct comunication to BaaS components - access needs to be properly protected, users needs to authenticate and authorize access to resources
 
-\subsection{Maintainability} \label{chapter:serverless-suitability-maintainability}
+\subsubsection{Maintainability} \label{chapter:serverless-suitability-maintainability}
 
 One of the greatest benefit of the serverless architecture is the reduction of operational cost discussed in section \ref{chapter:serverless-reduced-development-and-operational-cost}, because the provider is responsible for provisioning, managing and maintaining resources. The labour cost related with the operational aspects such as setup and maintenance of the software is reduced, due to simplification of the deployment process in which the developers provide the artifact with the proper configuration and the platform is responsible for executing the application as covered in section \ref{chapter:serverless-easier-operational-management}.
 
@@ -873,13 +873,42 @@ Lastly, the serverless architecture encourage to adjust the architecture to curr
 
 \section{Example implementations}
 
+text is still work in progress - but ideas could be worth sharing 
+
+raw data - https://docs.google.com/spreadsheets/d/1FuK-0jdcRfabTthrnyhck7Z5snExLgG4wPvu70EBpEw/edit?usp=sharing
+
 \subsection{Receipt processing}
 
 \subsubsection{Problem description}
 
-% Based on https://panparagon.pl/
+Based on https://panparagon.pl/
+
+- collecting receipts, enabling users to return or complaint of product or services, reminding about the date of return and warranty period, show spending stats
+- simple backend for the web application performing some calculations and business logic, integrating with the external services
+
+features
+- reading informations from receipts, including name of the shop, purchase date and amount
+- based on the simple heuristics the receipts are further categorized for the user convenience
+- storing loyalty cards
+- reminding about the date of return and warranty period
+- summarising spendings for a given period, giving more insights for the user
+- from others - preparing shopping lists, showing current offers and promotions, allow users to electronically insure their equipment
+
+- serverless seems appealing to that, using various services provided by the cloud - OCR, some text analysis tools to help with the receipt classification - can help with the processing of the images, without the need to develop fully fledged services or components for that
+- moreover the responsibility for hosting and managing them is othe clodu providers, aleviating the need to manage them and utilise them in a matter of the integration with the services API
 
 \subsubsection{Designed solution}
+
+key takeaway from the architecture point of view
+
+\begin{itemize}
+    \item GraphQL API - example showing how to provide basic backend for the web application, using AppSync service to expose the GraphQL API, integrated with AWS Cognito provide user authentication and authorization to the user data. User needs to be logged in to perform queries, GraphQL operations like queries and subscriptions unsure that the user has access only to its own data. Once the receipt processing is completed and the data is stored in the database, the user is notified about the changes in the real-time. It's done by the lambda polling for the updates from DynamoDB, once the DynamoDB stream returns the insert or update operation, the lambda triggers GraphQL mutation for specific user, the AppSync enables to create GraphQL subscriptions, triggered based on specified mutation being performed, pushing the data to the client based on hte values returned from the mutation. Such mechanism is used there to notify the client in real time about the results of asynchronous processing
+    \item Performing actions on the files securely - to make sure that the access to the assets is performed in a secure way, the mechanism of presigned URL is used to generate links that access particular items from S3 bucket directly, upload files under predefined path within defined period of time, after which the access is revoked
+    \item Asynchronous receipt processing - the receipt processing is done asynchronously, the upload to s3 bucket triggers lambda extracting some metadata about the file and sends the request to textract to retrieve the text from the photo. Once the processing is completed, the SNS receives the event and further notifies the AWS lambda subscribing for particular SNS topic. The Lambda takes the results of the text processing job and based on simple heuristics retrieves from them the price, which is further stored in DynamoDB aused as the main database
+    \item Hosting web application client - hosting client application, once the client application is built, the results in form of the static assets are stored in the S3. The Cloudfront is serving as a CDN
+\end{itemize}
+
+- along with the text extraction - more features could be extracted from the data and several other services could be further incorporated, for example assign the receipt to proper category. Neverheless, it would work the same way, extending the asynchronous flow of processing the receipt
 
 \begin{figure}[H]
     \centering
@@ -892,19 +921,304 @@ Lastly, the serverless architecture encourage to adjust the architecture to curr
 
 \subsubsection{Problem description}
 
-% Based on http://pitagoras-korepetytor.pl/
+Based on http://pitagoras-korepetytor.pl/
 
-idea similar to mindmup converters - solution ensuring effortless scalability and low cost due to occasional requests
+virtual tutor, meant for high school students, providing a large collection of exercises from different fields of matematics
+students can select the exercise from defined list, provide some parameters for the tasks and based on that, within couple of seconds the interactive presentation will be generated
+the slides presenting further steps required to solve the exercise will be presented and changed automatically, creating the slideshow navigating student on how to solve the problem
+additionally the audio commentary is playing in the background, explaining the steps being done by to solve the exercise
+
+inspecting the results of the processing, user is given a set of images to display in the order with the audio commentary for particular steps of the 
+
+\subsubsection{Proposed solution and flow description}
+
+inserting different inputs and based on that generating various presentations, with different calculations or event some branching logic, cause some combination of parameters may impact how the exercise should be solved
+Some idea from the academia presentations being done in latex, which gives quite some flexibility in terms of defining the solution, gives possibility to easily describe computations, draw some figures and graphs and also enables to define more complicated logic including some branching 
+
+- some of the tasks can have some constraints - check if the input is within boundaries
+- input needs to get injected into the latex files, then the PDF needs to be generated, then it would be easier to transform the PDF into separate slides
+- meanwhile when the processing of the latex is being done - the commentary with included variables could be extracted and transcribed to the audio
+- additionally some metadata could be extracted - which of the slides include the audio commentary, when the slides should be changing
+- once everything is done - the result of processing can be returned to the user
 
 \subsubsection{Processing optimisation}
 
+evaluating if the serverless paradigm would be capable of performing such an extraordinary task
+idea similar to mindmup converters - solution ensuring effortless scalability and low cost due to occasional requests
+
+many students may want to rewise the knowledge before some exams, taking into consideration the variability in traffic - during classes noone can use the service, but before some examination session, there may be many students rewising the knowledge
+
+Using step function as the orchestration of the more complex task with several branches, to have the visibility of the processing and examine how it can affect the whole processing
+
+the user still needs to be notified about the results of the asynchronous processing flow
+instead of pooling to get to know if the service is ready - it can be better to go with the push based appraoch to tackle the problem
+% Poll to push - https://aws.amazon.com/blogs/compute/from-poll-to-push-transform-apis-using-amazon-api-gateway-rest-apis-and-websockets/
+
+Exercise details - different overhead for the latex processing
+
+\begin{itemize}
+    \item Exercise 1 - 71 page long presentation with exercise including only math equation
+    \item Exercise 2 - 103 page long presentation, including in the first part various graphics and in the second part, besides the graphics, it also contains equations
+\end{itemize}
+
+Preconditions
+
+\begin{itemize}
+    \item each of the tests executed 10 times and the average time is calculated
+    \item cold starts ensured by re-deploying the infrastructure, confirmed by the information from logs
+    \item files related to latex compilation are removed after the execution - to prevent situation when the subsequent execution uses the same file and can benefit from some data cached
+    \item From the initial research and experiments --- latex presentation processing considered as the largest chunk of the processing, that takes the most significant amount of time
+\end{itemize}
+
 \paragraph{Containerised environment and Lambda Layers}
 
-\paragraph{Parallel processing}
+Verifying which of the solution can be used effectively for processing the latex files to PDFs
+
+\begin{itemize}
+    \item containerized environemnt - custom runtime for the lambda
+    \item lambda layers - possibility to share some code, common assets to reduce the need to download them every time, possibility to introduce external libraries to perform logic not related to the programming languages
+\end{itemize}
+
+\pgfplotstableread{
+% xaxis, Layer Cold, Layer Warm, Image Cold, Image Warm
+0.125 5.455 2.147 7.943 2.209
+0.375 9.469 5.235 10.832 5.210
+% 2 2 3 4 5
+% 3 2 3 4 5
+}\datasetLayerVsImage
+
+\begin{tikzpicture}
+\begin{axis}[ybar,
+        width=.9\textwidth,
+        ymin=0,
+        ymax=12,        
+        xmin=0,
+        xmax=0.5,        
+        ylabel={response time [s]},
+        xtick=data,
+        xticklabels = {
+            Exercise 1,
+            Exercise 2,
+            % Category 3,
+            % Category 4
+        },
+        major x tick style = {opacity=0},
+        minor x tick num = 1,
+        minor tick length=1ex,
+        legend style={at={(0.5,0.99)},anchor=north east}
+        ]
+\addplot[draw=black,fill=blue!30,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=1] \datasetLayerVsImage; % Layer Cold
+\addplot[draw=black,fill=red!30,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=2] \datasetLayerVsImage; % Layer Warm
+\addplot[draw=black,fill=blue!60,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=3] \datasetLayerVsImage; % Image Cold
+\addplot[draw=black,fill=red!60,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=4] \datasetLayerVsImage; % Image Warm
+\legend{Lambda Layer - cold start, Lambda Layer - warm start, Container image - cold start, Container image - warm start}
+\end{axis}
+\end{tikzpicture}
+
+Key takeaways
+
+\begin{itemize}
+    \item Cold start times - for lambda layer 273 ms and 279 on average for Exercise 1 and Exercise 2, accordingly. For processing executed in the container image - 1108 ms and 810 ms.
+    \item Warm starts - no significant difference noticeable
+    \item Cold start time for container images is added to the billing for procesing
+    \item Step function overhead (computed as the Step Function processing times - the execution time of tasks that make up the processing) ranges from 400 ms to 450 ms
+    \item The Step Function log indicating the task duration of the tex to pdf processing for the Lambda Layer and cold starts indicates the average value of 3609 ms while the average lambda execution is 2422 ms. Taking into consideration the cold start time, which is on average 273 ms --- there is an additional overhead greater than the cold start time, that for the montioned example is equal to 915 ms. It could be related with the resource provisioning and transporting the data. On the other hand, for the warm starts the 
+    \item Result / decission taken - using Lambda Layer for further steps of the optimisation - reducing risk of significant cold start
+\end{itemize}
 
 \paragraph{Reducing the function chain length}
 
+Considering the task of parsing the latex file to PDF and after to svg, which ca be effectively downloaded by the client and used easily by the implemented player to show the slides.
+
+the problem --- chaining several functions --- compound of the overhead related with the communication and cold starts of the functions --- it could be more effective from the performance point of view to implement the whole processing logic inside 1 function instead of 2.
+
+\pgfplotstableread{
+% xaxis, Single Cold, Single Warm, Chain Cold, Chain Warm
+0.125 6.242 2.724 7.084 2.970
+0.375 10.039 5.731 11.612 5.963
+% 2 2 3 4 5
+% 3 2 3 4 5
+}\datasetChainVsSingle
+
+\begin{tikzpicture}
+\begin{axis}[ybar,
+        width=.9\textwidth,
+        ymin=0,
+        ymax=12,        
+        xmin=0,
+        xmax=0.5,        
+        ylabel={response time [s]},
+        xtick=data,
+        xticklabels = {
+            Exercise 1,
+            Exercise 2,
+            % Category 3,
+            % Category 4
+        },
+        major x tick style = {opacity=0},
+        minor x tick num = 1,
+        minor tick length=1ex,
+        legend style={at={(0.5,0.99)},anchor=north east}
+        ]
+\addplot[draw=black,fill=blue!30,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=1] \datasetChainVsSingle; % Single Cold
+\addplot[draw=black,fill=red!30,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=2] \datasetChainVsSingle; % Single Warm
+\addplot[draw=black,fill=blue!60,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=3] \datasetChainVsSingle; % Chain Cold
+\addplot[draw=black,fill=red!60,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=4] \datasetChainVsSingle; % Chain Warm
+\legend{Single function - cold start, Single function - warm start, Function chain - cold start, Function chain - warm start}
+\end{axis}
+\end{tikzpicture}
+
+Key takeaways
+
+\begin{itemize}
+    \item Keep the function chain short - avoiding the overhead
+    \item Using small lib pdf2svg added into the same lambda layer - it is essential to consider the lambda layer limitations (50 MB when compressed and 250 MB for all layers when decompressed). In that case the library is small and fits well along with the latex related files in the same layer and additional Perl layer required by the latex.
+\end{itemize}
+
+\paragraph{Parallel processing}
+
+Reference to the use case with video processing - \cite{ServerlessArchitectureOnAWSSecondEdition}
+
+Latex is pretty specific if it comes to the parallel processing - beamer presentations need to have slides in separate frames with labels, which can be selected with \\includeonlyframes directive
+
+The parallel solution splits the latex compilation into several function executions. Each function is assigned predefined 5 pages to process from tex to svg and put them in S3 bucket. The metadata extraction and extracting and transcribing of the comments is done in parallel to the latex processing --- initial testing showed that it requires less tome to be completed that the latexprocessing
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{assets/04-serverless-for-web-apps/stepFunctionGraphParallel.png}
+    \caption{Step Function graph - processing the presentation in parallel}
+    \label{fig:step-function-processing-the-presentation-in-parallel}
+\end{figure}
+
+\pgfplotstableread{
+% xaxis, Single Cold, Single Warm, Parallel Cold, Parallel Warm
+0.125 6.242 2.724 4.996 2.136
+0.375 10.039 5.731 7.477 3.186
+% 2 2 3 4 5
+% 3 2 3 4 5
+}\datasetSingleVsParallel
+
+\begin{tikzpicture}
+\begin{axis}[ybar,
+        width=.9\textwidth,
+        ymin=0,
+        ymax=12,        
+        xmin=0,
+        xmax=0.5,        
+        ylabel={response time [s]},
+        xtick=data,
+        xticklabels = {
+            Exercise 1,
+            Exercise 2,
+            % Category 3,
+            % Category 4
+        },
+        major x tick style = {opacity=0},
+        minor x tick num = 1,
+        minor tick length=1ex,
+        legend style={at={(0.5,0.99)},anchor=north east}
+        ]
+\addplot[draw=black,fill=blue!30,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=1] \datasetSingleVsParallel; % Single Cold
+\addplot[draw=black,fill=red!30,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=2] \datasetSingleVsParallel; % Single Warm
+\addplot[draw=black,fill=blue!60,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=3] \datasetSingleVsParallel; % Parallel Cold
+\addplot[draw=black,fill=red!60,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=4] \datasetSingleVsParallel; % Parallel Warm
+\legend{Single function - cold start, Single function - warm start, Parallel execution - cold start, Parallel execution - warm start}
+\end{axis}
+\end{tikzpicture}
+
+Key takeaways
+
+\begin{itemize}
+    \item Generating presentations from the latex cannot be effectively parallelised - some part of the process is repeated in every execution. However, for the more difficult presentation, the performance benefit is more significantly visible.
+    \item It is essential to consider that the orchestration of the several tasks brings some overhead, the processing waits for all of the tasks
+    \item Additional costs of the Lambdas processing time of the specified batch
+\end{itemize}
+
 \paragraph{Updating client with the initial batch}
+
+The previous approach is limitted with the fact that the pushing the updates with results waits for all of the tasks, whether or not some of them ended earlier. When taking into consideration how the presentation are built, most frequently the first several slides takes more than 10 seconds, because of the introduction to the exercise being made. From the user experience perspective, the user does not need the whole presentation, but only the first batch can be displayed, while the further slides can be delivered later.
+
+Several chunks processed in the parallel based on the parameter stored in the database with pushin the update to the client once the processing of the batch is finished. Both of given exercises have the first slides considered to take more than 10 seconds, based on that decided to render 5 first slides in the initial batch and the rest in the second one.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{assets/04-serverless-for-web-apps/stepFunctionGraphInitialBatch.png}
+    \caption{Step Function graph - pushing updates to the client with partially processed presentation}
+    \label{fig:step-function-pushing-updates-to-the-client-with-partially-processed-presentation}
+\end{figure}
+
+\pgfplotstableread{
+% xaxis, Single Cold, Single Warm, Parallel Cold, Parallel Warm, FirstBatch Cold, RestBatch Cold, FirstBatch Warm, RestBatch Warm
+0.125 6.242 2.724 4.996 2.136 4.315 4.680 1.710 2.718
+0.375 10.039 5.731 7.477 3.186 5.611 9.755 1.803 5.814
+% 2 2 3 4 5
+% 3 2 3 4 5
+}\datasetUploadInitialBatch
+
+\begin{tikzpicture}
+\begin{axis}[ybar,
+        width=.9\textwidth,
+        ymin=0,
+        ymax=12,        
+        xmin=0,
+        xmax=0.5,        
+        ylabel={response time [s]},
+        xtick=data,
+        xticklabels = {
+            Exercise 1,
+            Exercise 2,
+            % Category 3,
+            % Category 4
+        },
+        major x tick style = {opacity=0},
+        minor x tick num = 1,
+        minor tick length=1ex,
+        legend style={at={(0.5,0.99)},anchor=north east}
+        ]
+\addplot[draw=black,fill=blue!30,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=1] \datasetUploadInitialBatch; % Single Cold
+\addplot[draw=black,fill=red!30,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=2] \datasetUploadInitialBatch; % Single Warm
+\addplot[draw=black,fill=blue!60,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=3] \datasetUploadInitialBatch; % Parallel Cold
+\addplot[draw=black,fill=red!60,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=4] \datasetUploadInitialBatch; % Parallel Warm
+\addplot[draw=black,fill=blue!80,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=5] \datasetUploadInitialBatch; % FirstBatch Cold
+\addplot[draw=black,fill=blue!100,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=6] \datasetUploadInitialBatch; % RestBatch Cold
+\addplot[draw=black,fill=red!80,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=7] \datasetUploadInitialBatch; % FirstBatch Warm
+\addplot[draw=black,fill=red!100,error bars/.cd,y dir=both,y explicit] 
+    table[x index=0,y index=8] \datasetUploadInitialBatch; % RestBatch Warm
+\legend{Single function - cold start, Single function - warm start, Parallel execution - cold start, Parallel execution - warm start, First Batch - cold start, Remaining Batch - warm start, First Batch - cold start, Remaining Batch - warm start}
+\end{axis}
+\end{tikzpicture}
+
+Key takeaways
+
+\begin{itemize}
+    \item from the user experience perspective --- the bset performance --- delivering and displaying the initial batch as soon as possible, while processing the remaining part, delivering it and updating the client state once its completed
+\end{itemize}
+
+% \paragraph{Lambda params power tunning}
+
+% % TODO:rb add it later in the server tier description
+
+% proportionally to the amount of memory the other parameters such as CPU or network bandwidth are assigned
+% the latex compiling seems to be not su much memmory consuming, cause the logging most frequently indicate that no more than 200 MB of memory has not been used for the processing
 
 \subsubsection{Designed solution}
 
@@ -917,13 +1231,13 @@ Raw data - https://docs.google.com/spreadsheets/d/1FuK-0jdcRfabTthrnyhck7Z5snExL
     \label{fig:euclid-web-app}
 \end{figure}
 
-% Poll to push - https://aws.amazon.com/blogs/compute/from-poll-to-push-transform-apis-using-amazon-api-gateway-rest-apis-and-websockets/
-
 \subsubsection{Cost of the solution}
 
+possible improvements, trade-offs regarding the cost of the solution
+
 \begin{enumerate}
-    \item 2 paths - 1st with initial batch, 2nd with the rest
-    \item batching svg, mp3 files to reduce number of uploaded items to S3
+    \item batching svg, mp3 files to reduce number of uploaded items to S3 - reducing the cost, but most probably increasing the time the 
+    \item some heuristic or data driven approach - measuring the execution time - if it is below some threshold it is not worth it to run the processing in parallel or just pushin the initial batch, otherwise it should be executed in parallel to provide good UX for the cost of concurrent lambda execution
 \end{enumerate}
 
 % parsing latex case
@@ -939,7 +1253,7 @@ Raw data - https://docs.google.com/spreadsheets/d/1FuK-0jdcRfabTthrnyhck7Z5snExL
 % - architecturing serverless parallel computing - https://livebook.manning.com/book/serverless-architectures-on-aws-second-edition/chapter-8/v-7/1
 % - https://serverlessland.com/patterns
 
-\subsection{Other}
+\subsection{Other ideas}
 
 \begin{enumerate}
     \item small web app - processing receipts/invoices
