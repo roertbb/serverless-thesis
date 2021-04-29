@@ -930,6 +930,11 @@ additionally the audio commentary is playing in the background, explaining the s
 
 inspecting the results of the processing, user is given a set of images to display in the order with the audio commentary for particular steps of the 
 
+evaluating if the serverless paradigm would be capable of performing such an extraordinary task
+idea similar to mindmup converters - solution ensuring effortless scalability and low cost due to occasional requests
+
+many students may want to rewise the knowledge before some exams, taking into consideration the variability in traffic - during classes noone can use the service, but before some examination session, there may be many students rewising the knowledge
+
 \subsubsection{Proposed solution and flow description}
 
 inserting different inputs and based on that generating various presentations, with different calculations or event some branching logic, cause some combination of parameters may impact how the exercise should be solved
@@ -940,13 +945,9 @@ Some idea from the academia presentations being done in latex, which gives quite
 - meanwhile when the processing of the latex is being done - the commentary with included variables could be extracted and transcribed to the audio
 - additionally some metadata could be extracted - which of the slides include the audio commentary, when the slides should be changing
 - once everything is done - the result of processing can be returned to the user
+- due to variables given by the user, the presentation can can't be prepared ahead of time
 
 \subsubsection{Processing optimisation}
-
-evaluating if the serverless paradigm would be capable of performing such an extraordinary task
-idea similar to mindmup converters - solution ensuring effortless scalability and low cost due to occasional requests
-
-many students may want to rewise the knowledge before some exams, taking into consideration the variability in traffic - during classes noone can use the service, but before some examination session, there may be many students rewising the knowledge
 
 Using step function as the orchestration of the more complex task with several branches, to have the visibility of the processing and examine how it can affect the whole processing
 
@@ -961,13 +962,15 @@ Exercise details - different overhead for the latex processing
     \item Exercise 2 - 103 page long presentation, including in the first part various graphics and in the second part, besides the graphics, it also contains equations
 \end{itemize}
 
+% TODO:rb - how long it takes to render these on personal computer
+
 Preconditions
 
 \begin{itemize}
     \item each of the tests executed 10 times and the average time is calculated
     \item cold starts ensured by re-deploying the infrastructure, confirmed by the information from logs
     \item files related to latex compilation are removed after the execution - to prevent situation when the subsequent execution uses the same file and can benefit from some data cached
-    \item From the initial research and experiments --- latex presentation processing considered as the largest chunk of the processing, that takes the most significant amount of time
+    \item From the initial research and experiments --- latex presentation processing considered as the largest chunk of the processing, that takes the most significant amount of time. Text transcription can be processed in parallel to the latex processing and it is not constraining the performance
 \end{itemize}
 
 \paragraph{Containerised environment and Lambda Layers}
@@ -1022,19 +1025,19 @@ Verifying which of the solution can be used effectively for processing the latex
 Key takeaways
 
 \begin{itemize}
-    \item Cold start times - for lambda layer 273 ms and 279 on average for Exercise 1 and Exercise 2, accordingly. For processing executed in the container image - 1108 ms and 810 ms.
+    \item Cold start times - for lambda layer 273 ms and 279 ms on average for Exercise 1 and Exercise 2, accordingly. For processing executed in the container image - 1108 ms and 810 ms.
     \item Warm starts - no significant difference noticeable
     \item Cold start time for container images is added to the billing for procesing
     \item Step function overhead (computed as the Step Function processing times - the execution time of tasks that make up the processing) ranges from 400 ms to 450 ms
     \item The Step Function log indicating the task duration of the tex to pdf processing for the Lambda Layer and cold starts indicates the average value of 3609 ms while the average lambda execution is 2422 ms. Taking into consideration the cold start time, which is on average 273 ms --- there is an additional overhead greater than the cold start time, that for the montioned example is equal to 915 ms. It could be related with the resource provisioning and transporting the data. On the other hand, for the warm starts the 
-    \item Result / decission taken - using Lambda Layer for further steps of the optimisation - reducing risk of significant cold start
+    \item Result / decission taken - using Lambda Layer for further steps of the optimisation - reducing risk of significant cold start + reducing cost when the cold starts occurs
 \end{itemize}
 
 \paragraph{Reducing the function chain length}
 
 Considering the task of parsing the latex file to PDF and after to svg, which ca be effectively downloaded by the client and used easily by the implemented player to show the slides.
 
-the problem --- chaining several functions --- compound of the overhead related with the communication and cold starts of the functions --- it could be more effective from the performance point of view to implement the whole processing logic inside 1 function instead of 2.
+the problem --- chaining several functions --- compound of the overhead related with the communication and cold starts of the functions --- it could be more effective from the performance point of view to implement the whole processing logic inside 1 function instead of 2. Additionally, when there are 2 functions, the intermediate result in form of the PDF file needs to be stored in the external component (S3 in that case) and be retrieved by the second function)
 
 \pgfplotstableread{
 % xaxis, Single Cold, Single Warm, Chain Cold, Chain Warm
@@ -1080,6 +1083,7 @@ Key takeaways
 
 \begin{itemize}
     \item Keep the function chain short - avoiding the overhead
+    \item Result / decision taken - single function
     \item Using small lib pdf2svg added into the same lambda layer - it is essential to consider the lambda layer limitations (50 MB when compressed and 250 MB for all layers when decompressed). In that case the library is small and fits well along with the latex related files in the same layer and additional Perl layer required by the latex.
 \end{itemize}
 
@@ -1089,7 +1093,7 @@ Reference to the use case with video processing - \cite{ServerlessArchitectureOn
 
 Latex is pretty specific if it comes to the parallel processing - beamer presentations need to have slides in separate frames with labels, which can be selected with \\includeonlyframes directive
 
-The parallel solution splits the latex compilation into several function executions. Each function is assigned predefined 5 pages to process from tex to svg and put them in S3 bucket. The metadata extraction and extracting and transcribing of the comments is done in parallel to the latex processing --- initial testing showed that it requires less tome to be completed that the latexprocessing
+The parallel solution splits the latex compilation into several function executions. Each function is assigned predefined 5 pages to process from tex to svg and put them in S3 bucket. The metadata extraction and extracting and transcribing of the comments is done in parallel to the latex processing --- initial testing showed that it requires less time to be completed that the latex processing
 
 \begin{figure}[H]
     \centering
@@ -1143,6 +1147,7 @@ Key takeaways
 \begin{itemize}
     \item Generating presentations from the latex cannot be effectively parallelised - some part of the process is repeated in every execution. However, for the more difficult presentation, the performance benefit is more significantly visible.
     \item It is essential to consider that the orchestration of the several tasks brings some overhead, the processing waits for all of the tasks
+    \item parallel processing is limited by the task that takes the longest
     \item Additional costs of the Lambdas processing time of the specified batch
 \end{itemize}
 
@@ -1210,7 +1215,10 @@ Several chunks processed in the parallel based on the parameter stored in the da
 Key takeaways
 
 \begin{itemize}
-    \item from the user experience perspective --- the bset performance --- delivering and displaying the initial batch as soon as possible, while processing the remaining part, delivering it and updating the client state once its completed
+    \item from the user experience perspective --- the best performance --- delivering and displaying the initial batch as soon as possible, while processing the remaining part, delivering it and updating the client state once its completed
+    \item Remaining batch time is longer than the Single function - on one hand there is less work to be done, but on the other there is there could be additional overhead orchestration overhead and there is more work to be done --- defining several tasks, adding the directive
+    \item TODO:rb - parallel processing of the remaining batch
+    \item TODO:rb - container - how long it takes without serverless architecture - shared infrastructure - simple NodeJS server doing the processing
 \end{itemize}
 
 % \paragraph{Lambda params power tunning}
