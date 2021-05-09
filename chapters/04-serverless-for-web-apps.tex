@@ -133,7 +133,7 @@ The serverless solution can be effectively utilised to perform some background t
 
 \subsubsection{Serverless processing limitations}
 
-\paragraph{Runtime and data restrictions}
+\paragraph{Runtime and data restrictions} \label{chapter:serverless-processing-limitations-tunrime-and-data-restrictions}
 
 Another factors significantly impacting the serverless suitability are the runtime and data restrictions of the Function as a Service processing model. These were covered in more details in chapter \ref{chapter:serverless-challenges-related-to-the-nature-of-serverless-architecture}, when considering the challenges related to the nature of the serverless architecture.
 Regardless of the provider, serverless functions are designed to be effectively stateless, running code within ephemeral and isolated containers, constrained by the limited processing time. Configured amount of the memory, CPU units and network bandwidth is allocated from the shared resource pool, assigned to the container and deprovisioned shortly after processing finishes.
@@ -989,56 +989,119 @@ Key points of the suggested architecture:
 
 \section{Server Tier}
 
-\subsection{Serverless processing types/patterns}
+\subsection{Lambda function as a compute resource}
 
-% event driven system - paragone, workload parallelisation - latex?, push based approach, pull based for workers when data is batched
+The idea of Function as a Service is already briefly introduced in section \ref{chapter:serverless-faas}. 
+An example of such FaaS offering is AWS Lambda \cite{AWSLambda}, which is serving the role of the serverless compute service that require no resource management, it provides the auto-scaling capabilities, high-availability built-in and pay-per-use billing model based on the function execution and the processing time with granularity of miliseconds.
 
-synchronous - function needs to return smth and we're waiting till the services returns the data
+The function can be invoked by one of defined triggers, such as endpoint request or inserting new record to the database, serving as data sources. 
+When data sources create an event, it creates a triggering call instantiating the Lambda function. 
+Once the function environment is bootstrapped along with the language runtime and other required by function dependencies, the function handler is executed, receiving the event responsible for invoking the function. 
+The lambda execution environment is ephemeral and deprovisioned shortly after function execution, which means that there is no ability to impact the environment the function will be invoked in as well as the function state needs to be preserved in some external component \cite{BuildingMicroservicesWithAWSLambda}. 
 
-asynchronous - calling services and finishing execution - smth other calls another lambda - SNS for pub/sub, SQS for batching - event stream triggering new services one after the other
+\subsubsection*{Function limitations}
 
-function composition problems - StepFunction
+The AWS Lambda execution is constrained by quotas reffering to the compute and storage resource taht can be used by the serverless function. 
+Some of the AWS Lambda restrictions are already discussed in section \ref{chapter:serverless-processing-limitations-tunrime-and-data-restrictions}. 
+The list below includes additional limitations along with explanation of their impact on the processing of serverless workloads based on the service documentation \cite{AWSLambdaQuotas}.
 
-fanout - utilising parallelisation - serverless benefits
+\begin{itemize}
+    \item \textbf{Concurrent executions} --- 1000 executions --- The serverless paradigm ensures about the inifinite scalability of the underlying platform, however the default maximum number of functions that can be invoked is limitted. It is essential to keep that in mind when developing some serverless solution extensively using the Lambda, that there is some threshold above which the function execution will be throttled. The limit can be increased further by the cloud provider.
+    \item \textbf{Function memory allocation} --- from 128 MB to 10240 MB --- The function memory allocation can be configured which translates into the available CPU and network bandwidth. When the memory of the function is set above the 1769 MB threshold, it provides processors with multiple cores capable of multithreading processing. Therefore, further increase for single threaded computation will increase the memory or bandwidth, which will be suitable accordingly for memory-bound or I/O-bound processing \cite{BecomeAServerlessBlackBelt}. 
+    \item \textbf{Function timeout} --- 900 seconds (15 minutes) --- The Lambda execution time is strictly limitted, which makes it not suitable for processing various long-running tasks
+    \item \textbf{Deployment package size} --- 50 MB (zipped) and 250 MB (unzipped, including layers) --- The function deployment package including the function code and it's dependencies is constrained as well. The function execution environment can be additionally extended by the Lambda Layers including additional code, libraries or dependencies. When the size constraints do not allow to pack all of the required dependencies, the function can be also based on the custom Container Image limitted to 10 GB. The topic of Labda Layer and Container Image is discussed further in section \ref{chapter:lambda-custom-runtimes}.
+    \item \textbf{Invocation payload} --- 6 MB (synchronous invocation), 256 KB (asynchronous invocation) --- The invocation payload limit is related to the size of an event invoking the Lambda function. 
+    The synchronous invocation model requires the serverless function to return some value to the service triggering the function, for example the AWS API Gateway invoking the function based on user request, contrary to the asynchronous invocation, triggered for example by uploading some file to Amazon S3. 
+    The constraint prevents from passing larger amount of data in the event payload and requires the function to communicate with external components to retrieve or save the processing results if required.
+    \item \textbf{Temporary directory storage} --- 512 MB --- Each of the invoked function environment is assigned a temporary storage, enabling the function to retrieve some data and perform the required processing in the local file system, but due to the ephemeral nature of the function containers, it is firther deprovisioned. The results of the processing need to be preserved in some dedicated storage component, depending on the type of the data being stored. Alternatively, under some circumstances, AWS Lambda can utilise the larger storage space when integrated with Amazon Elastic File System, which is a fully managed, shared file system service \cite{AWSLambdaEFS}.
+\end{itemize}
 
-Reference to the use case with video processing - \cite{ServerlessArchitectureOnAWSSecondEdition} \label{chapter:serverless-processing-effortless-parallelisation}
+\subsubsection{Function runtime} \label{chapter:lambda-custom-runtimes}
 
-composition vs orchestration - function chain vs aws step function
+AWS Lambda supports natively several programming languages and their runtime environments including Node.js, Python, Java, C\#, Go and Ruby, with some of them including different versions of the runtime \cite{AWSLambdaRuntimes}. Most frequently the function code and it's dependencies is compressed and packed by the deployment tool into single zip archive and further stored by the cloud provider. When the Lambda function is invoked, the serverless platform allocates the resources to form the function environment, downloads the function code, bootstrap the language runtime with function dependencies and execute the function code. However, when the function has been recently triggered, the execution environment from a previous invocation can be reused, saving time required to prepare the environment and save some resources such as established connections with external services or the temporary files.
 
-% https://www.usenix.org/system/files/conference/hotcloud18/hotcloud18-paper-hong.pdf
-% https://www.researchgate.net/profile/Davide-Taibi/publication/340121613_Patterns_for_Serverless_Functions_Function-as-a-Service_A_Multivocal_Literature_Review/links/5e79f9fb92851c3091392bd4/Patterns-for-Serverless-Functions-Function-as-a-Service-A-Multivocal-Literature-Review.pdf
-% https://aws.amazon.com/lambda/resources/reference-architectures/
+Besides the standard function packing option and environment, the AWS Lambda enables to define Lambda Layers that enable to share dependencies independently, between several functions as well as custom Container Images which allows to run functions using custom runtimes based on the Runtime API. 
+Both of the approaches are described in more details below.
 
-\subsection{Serverless function as a compute resource}
+\paragraph{Lambda Container Image} 
 
-% https://betterdev.blog/aws-lambda-performance-optimization/
+With the growth of popularity, containers become a standard of application packing. AWS Lambda enables to deploy functions using custom Docker or OCI images, which enables to build serverless functions arbitrary from the programming languages and required dependencies \cite{AWSLambdaContainerImage}. Moreover, it enables to process other workloads depending on sizable dependencies such as machine learning or other data intensive workloads.
+Container images are limitted up to 10 GB in size, contrary to the aforementioned limit of the zipped artifact, which make containers suitable to include custom runtimes, binaries and libraries that can be used by the serverless function. 
+AWS provides set of base images for supported runtimes as well as supported linux based image, however the developers can use any container image if it supports the Lambda Runtime API, which is a simple HTTP-based protocol responsbile for invoking the function and retrieving its results. 
+The custom container images can be built using familiar tooling and later uploaded to Amazon Elastic Container Registry, from which the image will be retrieved once the function is invoked.
 
-internals
+Compared to other services enabling to run container-based workloads, the container image support allows to scale workloads on per request basis and scale to zero with no additional cost if there is no traffic, that provides more granular pricing model than other services. The Lambda function can be invoked from numerous event sources and it still needs to satisfy the aforementioned limitations other than artifact size \cite{RunningContainerImagesInAWSLambda}.
 
-using with other services - push/pull/stream models - SNS / SQS / DynamoDB
+\paragraph{Lambda Layer}
 
-optimising cold starts
+When taking into consideration the encapsulated nature of serverless, several Lambda function operating on the same part of the business logic can have some common methods, utilities and dependencies, effectively duplicating the same code in every deployed artifact. 
+Lambda layer is effectively an file archive including additional code, dependencies and libraries, that can be shared across multiple Lambda functions, reducing the overall size of deployed artifacts. 
+When including the layer in a function its content is extracted to the \textit{\textbackslash opt} directory, which can be further accessed by the function code, mitigating the problem of code duplication.
+Moreover, the Lambda layer can include other operating system specific libraries and binaries used by the function code as well as custom runtimes, enabling developers to add required dependencies and execute Lambda function written in any programming languages.
+The function can include up to 5 layers with the total size of the function code and layers summing up to 250 MB after decompressing \cite{AWSLambdaLayer}.
 
-patterns
+\subsubsection{Function optimisations}
 
-Lambda params power tunning
+The Function as a Service model, heavily utilised in the serverless paradigm as a compute resource, at a first glance seems to be limited with the ability to configure the function and possibilities to optimise its execution, because the cloud provider takes responsibility for provisioning the resources and executing the function. 
+However, the thorough design of the application architecture along with the proper composition of the function code and its configuration, regarding the event sources and underlying resources, has a significant impact on the performance of the executed function, which transfers directly to the cost of execution.
+The possible optimisations and configuration adjustment suggested by various practitioners for optimising the Lambda function execution and improving the configuration are discussed below:
 
-% proportionally to the amount of memory the other parameters such as CPU or network bandwidth are assigned
-% the latex compiling seems to be not su much memmory consuming, cause the logging most frequently indicate that no more than 200 MB of memory has not been used for the processing
+\paragraph{Lambda execution}
 
-custom - docker image, lambda layer \label{chapter:lambda-custom-runtimes}
+In terms of the Lambda function execution, the improvement possibilities can be divided between the cloud provider and the developers implementing the solution. Taking into consideration the function lifecycle, resource allocation along with the downloading function code is handled by the cloud provider, however the size of deployed artifact can have an impact on the cold start duration. Furthermore, the architecture of the funtion code can have an impact on initialising the function runtime along with required dependencies as well as executing the function code itself.
 
-% https://aws.amazon.com/blogs/aws/new-for-aws-lambda-container-image-support/
-% https://aws.amazon.com/blogs/compute/using-lambda-layers-to-simplify-your-development-process/
+\begin{itemize}
+    \item \textbf{Concise function logic} --- Focusing on developing functions with single purpose and well defined responsibility enables to create leaner functions with fever dependencies, which results with smaller package once bundler. 
+    On the contrary to the "monolithic" functions, that include some branching logic based on the invocation event to invoke the particular part of the application logic, which takes longer to initialise and extends the cold start duration \cite{BecomeAServerlessBlackBelt}.
+    \item \textbf{Reduce the function dependencies} --- Similarly to the previous point, the amount and size of dependencies transfers to the function initialisation time. 
+    Depending on the programming language, only selected modules or functions can be imported to incroporate only selected subcomponents of libraries or use techniques like treeshaking to remove unused parts of imported dependencies. 
+    It enables to obtain smaller function artifact with fewer dependencies impacting the function start and execution time \cite{OptimiseYourServerlessApplications}.
+    \item \textbf{Use function to transform data, not to transport it} --- Instead of using the Lambda function to transport the data between services, some serverless components from the AWS offering can be integrated to transfer the data directly between each other. 
+    Similarly, when retrieving the data from external services to the serverless function, it is beneficial to request only the required data instead of performing additional filtering in the function code. It reduces the time, when the function is waiting for an I/O operation, for example when reading the data from DynamoDB or files from S3, that directly reduces the function execution cost \cite{BecomeAServerlessBlackBelt}.
+    \item \textbf{Leverage container reuse} --- The conceptions of the serverless functions assumes that every function execution is stateless and should not assume any existing state from the previous execution. 
+    However, due to optimisations of the function executions, when the subsequent event triggers the function in a short time after the previous execution is finished, the container environment can be reused along with the initialised environment and its dependencies.
+    The prehandler logic can be used to initialise the connection with external services such as databases or obtain secrets required in the function handler logic, that can be performed once per runtime instead of for every function execution. 
+    Similarly, the function global state can be used as a cache rarely-changing data or lazy-load variables and dependencies, reducing the processing time for subsequent invocations \cite{AWSLambdaPerformanceOptimization}.
+\end{itemize}
+
+\paragraph{Lambda configuration}
+
+\begin{itemize}
+    \item \textbf{Configure function resources intentionally} --- As mentioned before, for eahc function the amount of memory can be configured, which transforms propotionally to the CPU and network bandwidth configuration. 
+    Depending on the type of workloads, the function performance can benefit from additional memory for computation, using multiple cores for multithread processing, when the memory is configured above the 1.8 GB threshold as well as from additional bandwidth for I/O bound processing. 
+    In terms of the cost the Lambda function is billed per function invocation and execution time, proportionally to the amount of configured memory. 
+    It is essential to consider, that the function can process the event faster when having more memory, having similar cost as the function with lower memory configuration that takes longer to finish the processing.
+    To better understand the function execution behaviour depending on configuration and take a data-driven approach the AWS Lambda Power Tuning can be used, which is an open-source tool invoking the AWS Step Function executing the function with a set of predefined configurations, measuring the execution time and the cost \cite{BecomeAServerlessBlackBelt}.
+    \item \textbf{Select appropriate event sources} --- When configuring the event trigger for the function it is beneficial to use the configuration options to discard the uninteresting events. For example the the message filter for SNS can distinguish only desired messages to invoke the function, while for S3 trigger can specify the action perfomed on the bucket as well as prefix and sufix for the object key, that can be sued to trigger the function based on operation for a file on particular path, filename or extension if applicable \cite{BecomeAServerlessBlackBelt}. 
+\end{itemize}
+
+\subsection{Serverless processing model}
+
+rb:TBD
+
+\subsubsection{Function execution model}
+
+invocation types: sync, async, stream
+
+\subsubsection{Serverless microservices}
+
+Frontend - API - API Gateway, ALB, AppSync
+
+Backend - if communicating with other services - go async - messaging servies SNS (topics), SQS (queues), Kinesis (streams) and EventBridge(event buses)
+
+\subsubsection{Function composition and orchestration}
+
+async compared to step function
+
+\subsubsection{Serverless concurrency} \label{chapter:serverless-processing-effortless-parallelisation}
+
+how async workloads can scale - Concurrency control
+video processing example
 
 \subsection{Case study - Generating interactive slideshow based on LaTeX files} \label{chapter:latex-processing-optimisation}
 
-% Raw data - https://docs.google.com/spreadsheets/d/1FuK-0jdcRfabTthrnyhck7Z5snExLgG4wPvu70EBpEw/edit?usp=sharing
-
 The following section describes in more details the optimisation process behind the second example implementation of the web application introduced in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}.
 The Step Function is used in the designed solution to coordinate the processing of several AWS Lambda instances that perform the processing of the individual stages in the entire flow.
-
-% TODO: more intro about why step function?
 
 In the presented research, the tests and measurements of the individual processing steps and their configurations are conducted based on the two examples of presentations prepared using the LaTeX typesetting system.
 The sample presentations, described in more details below,  resemble the exercises which could be used in the mentioned service and characterise with different levels of complexity due to their content.
@@ -1062,11 +1125,11 @@ Measurements preserve the preconditions listed below:
 
 \subsubsection{Lambda Container Image and Lambda Layer}
 
-As mentioned before, generating of the presentation based on the LaTeX file can be classified as a custom type of processing for the serverless function runtime, that goes beyond the standard set of its tasks. The section \ref{chapter:lambda-custom-runtimes} discusses in more details the possibilities of the serverless platform in terms of performing such custom tasks. The following section presents the results of generating the PDF file with presentation using both approaches.
+As mentioned before, generating of the presentation based on the LaTeX file can be classified as a custom type of processing for the serverless function runtime, that goes beyond the standard set of its tasks. The section \ref{chapter:lambda-custom-runtimes} discusses in more details the possibilities of the serverless platform in terms of performing such custom tasks. The following section presents the results of generating the PDF file with presentation using two approaches:
 
 \begin{itemize}
    \item Container Image --- uses the official Amazon container image for Node.js runtime with additional LaTeX distribution and other libraries required for the processing.
-   \item Lambda Layer --- includes the LaTeX distribution extracted from the aforementioned container image into the separate archive along with the additional Lambda Layer including the Perl interpreter.
+   \item Lambda Layer --- includes the LaTeX distribution extracted from the aforementioned container image into the separate archive along with the additional Lambda Layer including the Perl interpreter required for the file processing.
 \end{itemize}
 
 Both of the approaches execute the same function code running in the Node.js runtime, which uses the provided LaTeX distribution to generate the presentation.
@@ -1113,47 +1176,51 @@ Both of the approaches execute the same function code running in the Node.js run
 Key takeaways of the Container Image and Lambda Layer processing comparison:
 
 \begin{itemize}
-    \item Cold start times --- For the solution using the Lambda Layer, the cold start time for the Lambda instance performing the presentation generation task is equal on the average to 273 ms and 279 ms for Exercise 1 and Exercise 2 accordingly.
-   For the processing using the Container Image solution, the cold start time is on the average equal to 1108 ms and 810 ms, which has a visible impact on the overall processing time. Moreover, the cold start time of the solution based on the Container Image is additionally billed accordingly to AWS Lambda pricing, on the contrary to the approach using the Lambda Layer in which the cold start time is not included into the cost.
-   \item Warm start times --- When considering the prewarmed function environments, there is no visible difference in the overall processing time.
-   \item Step Function overhead --- The orchestration overhead computed as the overall processing time of the Step Function decreased by the time of particular tasks defined in the Step Function flow, ranges from 400 ms and 450 ms, for both cold and warm starts.    
-   However, when comparing the task duration from the Step Function logs and the logs related to the AWS Lambda executions for the presentation processing tasks, some additional overhead was noticed for the cold start invocations.
-   The additional time required to execute the function can be related to the resource provisioning and establishing the communication between the orchestrator and the serverless function itself.
-   The difference between the function execution time and task duration is negligible in the case of warm starts. The results are summarised in the tables \ref{table:overhead-of-the-presentation-processing-task-for-the-lambda-layer} and \ref{table:overhead-of-the-presentation-processing-task-for-the-lambda-container-image}.
+    % rb: new
+    \item Cold start times --- The significant processing time difference can be noticed when comparing the executions with cold and warm starts.
+    The cold start time can be further divided into two parts. The first one considers the overhead related with the resource allocation from the large resource poll hosted by the cloud provider, downloading the function code and starting new, ephemeral container to execute the function.
+    The second part is related to bootstrapping the function runtime as well as initialising dependencies required to execute the function handler.
+    The detailed results of the cold start analysis are presented in the Table \ref{table:impact-of-the-cold-start-on-the-presentation-processing-task-for-approach-using-lambda-layer} and \ref{table:impact-of-the-cold-start-on-the-presentation-processing-task-for-approach-using-lambda-container-image}.
 
     \begin{table}[h]
         \centering
         \begin{tabular}{ |c|c|c|c|c|c| } 
         \hline
-        Exercise & Execution & Task [ms] & Function [ms] & Cold start [ms] & Task overhead [ms] \\
+        Exercise & Execution & Function [ms] & Environment [ms] & Runtime [ms] & Execution [ms] \\
         \hline
-        \multirow{2}{*}{Exercise 1} & cold start & 3609 & 2422 & 273 & 914 \\
-        & warm start & 1614 & 1580 & 0 & 34 \\
+        \multirow{2}{*}{Exercise 1} & cold start & 3609 & 914 & 273 & 2422 \\
+        & warm start & 1614 & 34 & 0 & 1580 \\
         \hline
-        \multirow{2}{*}{Exercise 2} & cold start & 7802 & 7055 & 279 & 468 \\
-        & warm start & 4661 & 4609 & 0 & 52 \\
+        \multirow{2}{*}{Exercise 2} & cold start & 7802 & 468 & 279 & 7055 \\
+        & warm start & 4661 & 52 & 0 & 4609 \\
         \hline
         \end{tabular}
-        \caption{Overhead of the presentation processing task for approach using Lambda Layer}
-        \label{table:overhead-of-the-presentation-processing-task-for-the-lambda-layer}
+        \caption{Impact of the cold start on the presentation processing task for approach using Lambda Layer}
+        \label{table:impact-of-the-cold-start-on-the-presentation-processing-task-for-approach-using-lambda-layer}
     \end{table}
 
     \begin{table}[h]
         \centering
         \begin{tabular}{ |c|c|c|c|c|c| } 
         \hline
-        Exercise & Execution & Task [ms] & Function [ms] & Cold start [ms] & Task overhead [ms] \\
+        Exercise & Execution & Function [ms] & Environment [ms] & Runtime [ms] & Execution [ms] \\
         \hline
-        \multirow{2}{*}{Exercise 1} & cold start & 6548 & 4803 & 1108 & 637 \\
-        & warm start & 1638 & 1593 & 0 & 45 \\
+        \multirow{2}{*}{Exercise 1} & cold start & 6548 & 637 & 1108 & 4803 \\
+        & warm start & 1638 & 45 & 0 & 1593 \\
         \hline
-        \multirow{2}{*}{Exercise 2} & cold start & 8945 & 7819 & 810 & 316 \\
-        & warm start & 4614 & 4579 & 0 & 35 \\
+        \multirow{2}{*}{Exercise 2} & cold start & 8945 & 316 & 810 & 7819 \\
+        & warm start & 4614 & 35 & 0 & 4579 \\
         \hline
         \end{tabular}
-        \caption{Overhead of the presentation processing task for approach using Lambda Container Image}
-        \label{table:overhead-of-the-presentation-processing-task-for-the-lambda-container-image}
+        \caption{Impact of the cold start on the presentation processing task for approach using Lambda Container Image}
+        \label{table:impact-of-the-cold-start-on-the-presentation-processing-task-for-approach-using-lambda-container-image}
     \end{table}
+
+    The runtime initialisation time of the solution using Lambda Layer is comparable for both exercises and it is equal on the average to 273 ms and 279 ms for Exercise 1 and Exercise 2 accordingly. 
+    For the processing using the Container Image solution, the runtime initialisation time is on the average equal to 1108 ms and 810 ms, which has a visible impact on the overall processing time. Moreover, the cold start time of the solution based on the Container Image is additionally billed accordingly to AWS Lambda pricing, on the contrary to the approach using the Lambda Layer in which the cold start time is not included into the cost.
+    The processing performance evaluation of both approaches for the Exercise 1 preceeded the Exercise 2, which could explain the decrease of the time required to download the function code and allocate resources.
+    \item Warm start times --- When considering the prewarmed function environments, there is no visible difference in the overall processing time between both of the tested solutions.
+    \item Step Function overhead --- The orchestration overhead computed as the overall processing time of the Step Function decreased by the time of particular tasks defined in the Step Function flow, ranges from 400 ms and 450 ms, for both cold and warm starts.    
 \end{itemize}
 
 Based on the results of the comparison the Lambda Layer is selected as a more suitable solution for further workflow optimisation.
@@ -1291,11 +1358,11 @@ Key takeaways of the parallel processing compared to the single function executi
         & warm start & 4679 & 1313 & 71.94 \\
         \hline
         \end{tabular}
-        \caption{Overhead of the presentation processing task for the complete presentation and chunks including 5 slides}
+        \caption{Time reduction of the presentation processing task for the complete presentation and chunks including 5 slides}
         \label{table:overhead-of-the-presentation-processing-task-for-the-whole-presentation-and-chunks-including-5-slides}
     \end{table}
 
-    \item Orchestrating parallel processing brings overhead --- It is essential to consider the additional overhead related to the orchestration of several serverless functions processing the presentation chunks in parallel. In the following example, the orchestration overhead is calculated as the Step Function duration decreased by the average tasks duration. It is equal to 873 ms (cold start) and 890 ms (warm start) for Exercise 1 as well as 1765 ms (cold start) and 1745 (ms) for Exercise 2.
+   \item Orchestrating parallel processing brings overhead --- It is essential to consider the additional overhead related to the orchestration of several serverless functions processing the presentation chunks in parallel. In the following example, the orchestration overhead is calculated as the Step Function duration decreased by the average tasks duration. It is equal to 873 ms (cold start) and 890 ms (warm start) for Exercise 1 as well as 1765 ms (cold start) and 1745 ms (warm start) for Exercise 2.
    \item Cost of the parallel processing --- Besides the processing overhead, the parallel execution brings additional cost for each of the executed serverless functions and its execution time. Moreover, for the given example the processing cannot be effectively parallelised and some part of the processing and retrieving the file is repeated for each invoked function.
 \end{itemize}
 
@@ -1418,13 +1485,13 @@ Key takeaways of the proposed approach:
    Once it is received by the client, the user can start previewing the slideshow, while the second batch including the remaining data can be processed and received by the client later.
    Such a solution enables the user to start previewing the exercise quicker, while the processing time of the complete presentation is hidden from the user perspective.
    \item Increase of the Step Function overhead for the fine-grained workflow coordination --- In the second configuration that parallelises the chunk processing and splits it into more branches, the overhead of the Step Function responsible for the orchestration makes the processing significantly longer.
-   Moreover, the batch including 5 initial slides is frequently delivered as one of the last parts, significantly postponing the time when the user can start previewing the exercise as it is presented in the figure \ref{chart:step-function-batches}.
+   Moreover, the batch including 5 initial slides is frequently delivered as one of the last parts, significantly postponing the time when the user can start previewing the exercise as it is presented in the Figure \ref{chart:step-function-batches}.
 \end{itemize}
 
 \subsubsection{Comparing serverless solution with the traditional architecture}
 
 When deciding on the serverless architecture, there is always a question how the solution will perform compared to the solution implemented using the more traditional architectures.
-To answer that question for the given problem, a similar service based on a simple server running within the container was created and hosted on the AWS Fargate.
+To answer that question for the given problem, a similar service based on a simple server running within the container has been created and hosted on the AWS Fargate. 
 The server is executed in the Node.js runtime, similarly to the serverless functions from the previous steps of the study.
 Moreover, it is reusing a significant part of the logic responsible for the initial validation of the task, processing the LaTeX presentation to PDF and then extracting separate slides to the SVG files, using the same libraries as well as uploading the results to S3 once the processing is completed.
 The container is configured with the same amount of memory and CPU as the serverless function used for the processing in the serverless implementation.
@@ -1484,8 +1551,12 @@ Key takeaways of the serverless implementation comparison with the solution usin
 \begin{itemize}
    \item The performance of serverless implementation is comparable, when it is not affected by the cold starts --- The initial serverless solution orchestrating the flow and using single function to process the LaTeX file performs comparable when executed with warm start to the solution using the simple server hosted by AWS Fargate in the container. However, when the execution is affected by the cold starts, the response time is significantly longer as presented in Figure \ref{chart:step-function-compared-with-traditional-architecture}.
    It is beneficial to consider the interest in the service as well as the traffic pattern to estimate how often such a phenomenon may take place, when deciding on architecture selection or mitigating the negative influence by pre-warming the containers programmatically or by the service such as Provisioned Concurrency for AWS Lambda.
-   \item Re-designing the serverless processing to utilise its benefits can improve performance --- The presented configurations of the serverless solution confirms that remodeling the processing to use the benefits of the serverless paradigm can bring visible benefits in terms of the performance, compared to the solution using the traditional architecture.
-   One of the features of the serverless architecture is the possibility of almost instant and effortless processing parallelisation, that reduces the overall processing time in that case.
+   % rb: new
+   \item Re-designing the serverless processing to utilise its benefits can improve performance --- The presented configurations of the serverless solution confirms that remodeling the processing to use the benefits of the serverless paradigm can bring visible benefits in terms of the performance, compared to the solution using the more traditional architecture.
+   However, some aspects and tasks of the proposed flow are required for the serverless solution, such as uploading the results of processing to S3, which could be further accessed by the user.
+   The solution using the server could aggregate the results of processing locally, without the need to communicate with external component to store the files and return the results directly to the user, reducing the amount of work and cost.
+   % rb: new
+   \item Built-in scalability of the serverless architecture --- One of the features of the serverless architecture is the possibility of almost instant and effortless processing parallelisation, that reduces the overall processing time in that case.
    Further research could investigate in more details, how the implementations using both of the architectures are performing under the load resembling the behaviour of the potential users of the system.
    When considering the serverless solution, the impact could be visible by increased number of cold starts when the traffic pattern is changing or it is occasional. However, the solution using the simple server hosted in the container could note the performance decline similarly, when many subsequent requests would be submitted to a single worker instance or when the cluster of workers would need to scale to meet the demand.
 \end{itemize}
@@ -1563,7 +1634,7 @@ The usage of the services for both implementations and their cost is summarised 
     \multicolumn{1}{c|}{} & \textbf{Total} & 0,00771 \\
     \cline{2-3}
     \end{tabular}
-    \caption{Pricing summary for the approach using parallel presentation processing}
+    \caption{Cost summary for the approach using parallel presentation processing}
     \label{table:case-study-service-parallel-spending-summary}
 \end{table}
 
@@ -1595,27 +1666,22 @@ The usage of the services for both implementations and their cost is summarised 
     \multicolumn{1}{c|}{} & \textbf{Total} & 0,00671 \\
     \cline{2-3}
     \end{tabular}
-    \caption{Pricing summary for the approach delivering the update to the client in the separate batches}
+    \caption{Cost summary for the approach delivering the update to the client in the separate batches}
     \label{table:case-study-service-initial-batch-spending-summary}
 \end{table}
 
-% TODO:rb
+% rb: new
+Takeaways of the cost summary of designed solutions:
 
-% It's hard to calculate the cost of such a service, taking into account multiple components taking part in the entire processing flow.
-
-% possible improvements, trade-offs regarding the cost of the solution
-
-% \begin{enumerate}
-%     \item batching svg, mp3 files to reduce number of uploaded items to S3 - reducing the cost, but most probably increasing the time the 
-%     \item some heuristic or data driven approach - measuring the execution time - if it is below some threshold it is not worth it to run the processing in parallel or just pushin the initial batch, otherwise it should be executed in parallel to provide good UX for the cost of concurrent lambda execution
-% \end{enumerate}
-
-% parsing latex case
-
-% \begin{enumerate}
-%     \item latex hard to parallelise - most of the work related with compiling the presentation, slides chunked per 5, but due to the fact how the presentation was created, last chunks required the whole presentation to be compiled, smaller part of pdf -> svg + upload parallelized
-%     \item different approach - parse initial part quickly - respond to the user, later parse the remaining part that takes more time and repond to the user
-% \end{enumerate}
+\begin{itemize}
+   \item AWS Lambda processing is a small fraction of overall cost --- Cost summaries for both of the presented solutions indicate that the text-to-voice transcoding service takes a significant amount of the overall cost.
+   The usage of the AWS Lambda processing is greater for the solution using parallel processing.
+   Even though some part of the presentation processing is repeated in the serverless functions executed in parallel, the overall cost of the AWS Lambda related services barely exceeds 0.001\$ for the analysed example per single execution.
+   Moreover, it is crucial to consider the cost of other services incorporated in the processing as well as the data transfer.
+   For example, the summary of the second configuration indicates that the cost of uploading results to Amazon S3 and transferring them to the client exceeded the cost of the processing of the AWS Lambda.
+   \item Serverless pay-per-use billing model --- Considering the Exercise 2 which is a more demanding task in terms of the processing and the summaries listed above, the overall cost of the processing for a single presentation could be estimated as not exceeding 0.01\$ per execution.
+   Moreover, when taking into account the benefits of the serverless architecture, such as auto-scaling with granular billing model per usage and without paying for idle as well as the fact that the need for managing the infrastructure is handled by the cloud provider, the serverless solution with pay-per-use pricing can be an appealing alternative to more traditional architectures.
+\end{itemize}
 
 % Step Function 
 % - map task - https://youtu.be/w6cqUhSdy-M
