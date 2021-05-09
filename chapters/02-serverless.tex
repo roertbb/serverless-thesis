@@ -85,7 +85,7 @@ Looking closer from the application logic point of view, there are also repeatab
 
 Specific components and services that can be classified as Backend as a Services will be covered in more details in chapter \ref{chapter:serverless-service-providers} when analysing services provided by leading cloud vendors. All of the mentioned components enable developers to create fully fledged applications and services similar to the solutions built using self-hosted component equivalents. The difference is that mentioned components are characterized by capabilities of the serverless architecture. They are provided by cloud vendors, who take responsibility for managing, provisioning and scaling them depending on the demand. Moreover, the possibility to replace the repeatable application features by utilising third-party services enables developers to iterate faster and shorten the lead time.
 
-\subsection{Function as a Service}
+\subsection{Function as a Service} \label{chapter:serverless-faas}
 
 The second area refers to Function as a Service (FaaS) that serves as an environment for executing application code. It introduces a new architectural approach in terms of developing, structuring and deploying the application logic, which is oriented towards individual tasks and operations.
 
@@ -143,7 +143,7 @@ The serverless architecture utilises an event-driven processing model. The devel
 Various data sources can be divided into several categories among which we can distinguish:
 
 \begin{itemize}
-    \item Endpoint Services - Most of the time associated with API Gateway components, which introduces mapping between request coming from APIs, such as REST or Websocket and associate them with corresponding functions
+    \item Endpoint Services - Most of the time associated with API Gateway components, which introduces mapping between request coming from APIs, such as REST or WebSocket and associate them with corresponding functions
     \item Storage Services - Category includes numerous BaaS components provided by a cloud vendor like databases, file storage or cache services. Events can be emitted based on operations performed on the data such as creation, deletion or modification of it.
     \item Messaging Services - Services providing mechanisms for data streaming, message brokers or various services sending notifications.
     \item Scheduled events - That category include services capable of emitting events periodically at a given time or at a selected interval
