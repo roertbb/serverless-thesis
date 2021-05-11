@@ -873,6 +873,13 @@ Lastly, the serverless architecture encourage to adjust the architecture to curr
 
 \section{Example implementations}
 
+% rb: trzymanie się poprzedniego układu pracy - wybraliśmy takie apliakcje, które pokazuja różne problemy i przykłady  - wstęp, czemu dostajesz przykłady
+% usługi pokazują konkretne problemy i zastosowania - dalczego te przykłady zostały powybierane - dyskusja - problemy, plusy i minusy
+% don't write manual - wnioski - dlaczego servelrss
+% dlaczego problemy wybrane - różne problemy ze strony backendu - 
+% ten przykład bo to daje takie wyzwania
+% wyciąganie wniosków do podsumowaniea - myslniki
+
 The further research takes up two implementations of example web services implemented in the serverless architecture, to analyse in great detail how the serverless paradigm can be applied in the web application development field.
 The selected problems consider some of the existing web applications and tasks they perform, which are shortly introduced in the section below, along with the overview of the implemented serverless solutions.
 In the following sections, the provided examples are used to discuss some features of the serverless architecture along with the used patterns, when implementing the services using the serverless paradigm.
@@ -999,7 +1006,7 @@ When data sources dispatch an event, it creates a triggering call instantiating 
 Once the function environment is bootstrapped along with the language runtime and other required by function dependencies, the function handler is executed, receiving the event responsible for invoking the function.
 The lambda execution environment is ephemeral and deprovisioned shortly after function execution, which means that there is no ability to impact the environment in which the function will be invoked as well as the function state needs to be preserved in some external component \cite{BuildingMicroservicesWithAWSLambda}.
 
-\subsubsection*{Function limitations}
+\subsubsection{Function limitations}
 
 The AWS Lambda execution is constrained by quotas referring to the compute and storage resource that can be used by the serverless function.
 Some of the AWS Lambda restrictions have been already discussed in section \ref{chapter:serverless-processing-limitations-tunrime-and-data-restrictions}.
@@ -1561,6 +1568,8 @@ Key takeaways of the serverless implementation comparison with the solution usin
    When considering the serverless solution, the impact could be visible by increased number of cold starts when the traffic pattern is changing or it is occasional. However, the solution using the simple server hosted in the container could note the performance decline similarly, when many subsequent requests would be submitted to a single worker instance or when the cluster of workers would need to scale to meet the demand.
 \end{itemize}
 
+rb: todo - scaling serverless - worst case cold start - running for cold starts running in parallel - resembling the behaviour of real users
+
 \subsubsection{Cost of the designed solution}
 
 Another, frequently mentioned factor when deciding on the architecture choice is the maintenance and execution cost. The serverless architecture makes it more difficult to precisely measure the cost of the processing due to the number of components and the variety of granularity in billing for used services. However then cost can be effectively estimated, when the traffic pattern is known along with the execution cost of particular workflow.
@@ -1723,6 +1732,8 @@ request - response
 
 poll to push pattern
 
+% przepływ orkiestracja zapytań
+
 GraphQL subscriptions triggered by mutation
 
 \subsection{Hosting web clients}
@@ -1730,5 +1741,10 @@ GraphQL subscriptions triggered by mutation
 hosting static files
 
 server side rendering
+
+\subsection{Thick and thin client}
+
+% how serverless affects thicker/thinner client
+% direct access to service
 
 \section{Design patterns and best practices}
