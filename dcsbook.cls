@@ -178,7 +178,7 @@
   \titleformat{\section}{\secfont\LARGE\bfseries\color{seccolor}\filright}{\thesection}{1em}{}
   \titleformat{\subsection}{\secfont\Large\bfseries\color{seccolor}\filright}{\thesubsection}{1em}{}
   \titleformat{\subsubsection}{\secfont\large\bfseries\color{seccolor}\filright}{\thesubsubsection}{1em}{}
-  \titleformat{\paragraph}{\secfont\bfseries\filright}{}{0em}{}
+  \titleformat{\paragraph}{\secfont\bfseries\filright}{\theparagraph}{1em}{}
 
   \ExecuteOptions{dcstoc}
 }
@@ -233,7 +233,7 @@
   \titleformat{\section}{\secfont\LARGE\bfseries\filright}{\thesection}{1em}{}
   \titleformat{\subsection}{\secfont\Large\bfseries\filright}{\thesubsection}{1em}{}
   \titleformat{\subsubsection}{\secfont\large\bfseries\filright}{\thesubsubsection}{1em}{}
-  \titleformat{\paragraph}{\secfont\bfseries\filright}{}{0em}{}
+  \titleformat{\paragraph}{\secfont\bfseries\filright}{\theparagraph}{1em}{}
 
   \renewenvironment{abstract}
     {
@@ -327,7 +327,7 @@
   \titleformat{\section}{\secfont\LARGE\filright}{\thesection}{1em}{}
   \titleformat{\subsection}{\secfont\Large\filright}{\thesubsection}{1em}{}
   \titleformat{\subsubsection}{\secfont\large\filright}{\thesubsubsection}{1em}{}
-  \titleformat{\paragraph}{\secfont\bfseries\filright}{}{0em}{}
+  \titleformat{\paragraph}{\secfont\bfseries\filright}{\theparagraph}{1em}{}
   \titleformat{\subparagraph}[runin]{\secfont\bfseries}{}{0em}{}
 
   \ExecuteOptions{dcstoc}
