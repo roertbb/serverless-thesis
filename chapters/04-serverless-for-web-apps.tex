@@ -1162,30 +1162,22 @@ The function can include up to 5 layers, with the total size of the function cod
 \subsubsection{Function execution} \label{chapter:lambda-function-execution-model}
 
 The AWS Lambda is executed in an event-driven manner. 
-The serverless function can be invoked by each of the defined triggers configured based on the various event sources, including numerous services from the AWS cloud platform and their operations. 
+The serverless function can be invoked by each of the defined triggers, configured based on the various event sources, including numerous services from the AWS cloud platform and their operations. 
 The generic categorisation of data sources and invocation types for the serverless processing is described in section \ref{section:serverless-function-invocation}. 
-AWS Lambda execution model fits into the mentioned classification and distinguish the following types of function invocation \cite{OptimiseYourServerlessApplications}.
-
-rb: TBD
-% ref to the example - \label{chapter:examples-receipt-processing}
+AWS Lambda execution model fits into the mentioned classification and distinguish the following types of the function invocation \cite{OptimiseYourServerlessApplications}.
+All of the mentioned execution models are present in the example implementation of the receipt processing application, mentioned in section \ref{chapter:examples-receipt-processing}.
 
 \begin{itemize}
-    \item synchronous --- 
-    % push based
-    % API Gateway, making request to the API, which in turn invokes the lambda function, while lambda responds back to the API with some sort of response, passed back to the client
-
-    \item asynchronous --- 
-    % event based
-    % message put on the SNS topic or image is put in the S3 bucket
-    % create a request, going out to the lambda function
-    % consuming the event, no way to pass back the information to originated client or service if the work is done
-    % needs to be handled b by the application if we want to respond back to the user
-
-    \item stream --- 
-    % poll based model
-    % Amazon DynamoDB, Kinesis Datastreams, SQS
-    % Lambda service runs a poller which watches the service for new messages, takes the data out and passes to the Lambda functions via the asynchronous event
-
+    \item \textbf{synchronous (push based)} --- Most frequently refers to the components acting as an API Gateway, invoking the Lambda based on the request and while the function completes the execution, it returns the results to the API Gateway, which passes back the response to the client.
+    When Lambda fails during the event processing, the error is returned to the service calling the function.
+    In case of the receipt processing application, the AWS AppSync invokes the Lambda functions in a synchronous manner, when user performs query to obtain the presigned URL.
+    \item \textbf{asynchronous (event based)} --- Covers all cases in which the service makes a request to the Lambda function, which is consuming an event, but once the execution is completed it has no possibility to return the information to the event source. 
+    When the processing fails, the function is retried two more times by default.
+    After that the erroneous event can be placed in the Dead Letter Queue or it can be directed to other function, if configured.
+    The Lambda function, triggered after the receipt is uploaded to S3 bucket as well as the other one, invoked based on the notification from SNS topic, are the examples of the asynchronous function invocation.
+    \item \textbf{stream (poll based)} --- When assigning the stream based services as the data source, Lambda service runs a poller, that is watching for the messages and once they are available, the stream of events forming a batch, can be passed to the function via the asynchronous event.
+    If the processing fails for some reason, the whole batch can be retried based on maximum record age or maximum retry attempts, the malformed data can be extracted from the rest of the shard and retried separately from the correctly processed events. When the retry limit is reached, the shard can be sent to the separate SQS queue or SNS topic.
+    In the receipt processing application, the Lambda is polling the DynamoDB stream and based on received records, it is responsible for performing the mutation to push the update to the client.
 \end{itemize}
 
 \subsubsection{Function optimisations}
@@ -1233,9 +1225,18 @@ Frontend - API - API Gateway, ALB, AppSync
 
 Backend - if communicating with other services - go async - messaging services SNS (topics), SQS (queues), Kinesis (streams) and EventBridge(event buses)
 
+% https://youtu.be/TOn0xhev0Uk
+% https://d1.awsstatic.com/whitepapers/microservices-on-aws.pdf
+% https://youtu.be/d9Jb1WKCLd8
+% https://www.youtube.com/watch?v=8zysQqxgj0I - SNS, SQS
+
 \subsubsection{Function composition and orchestration} \label{chapter:serverless-processing-function-composition-and-orchestration}
 
 async compared to step function
+
+% ref to examples - composition (receipt) and orchestration (latex)
+% https://theburningmonk.com/2020/08/choreography-vs-orchestration-in-the-land-of-serverless/
+% https://www.youtube.com/watch?v=rDSWHNdYx6E
 
 \subsection{Case study - Generating interactive slideshow based on LaTeX files} \label{chapter:latex-processing-optimisation}
 
@@ -1836,6 +1837,11 @@ Takeaways of the cost summary of designed solutions:
 
 \subsection{Serverless databases}
 
+% https://youtu.be/hwnNbLXN4vA
+% https://thenewstack.io/what-front-end-developers-need-to-know-about-serverless-databases/
+% https://www.alexdebrie.com/posts/dynamodb-no-bad-queries/
+% https://www.alexdebrie.com/posts/dynamodb-patterns-serverless/
+
 DynamoDB - modeling for cost optimisation, increase performance, single table design
 
 Aurora
@@ -1847,6 +1853,11 @@ how they work? streams, handling reusing connections, RDS proxy
 \section{Client Tier}
 
 \subsection{Client communication patterns for serverless architecture}
+
+% https://youtu.be/yfJZc3sJZ8E - Gateway
+% https://serialized.net/2020/09/multiplayer/ - WebSocket applicability
+% https://youtu.be/XVU4pYeNfNo - AppSync
+% https://hackernoon.com/using-protocol-buffers-with-api-gateway-and-aws-lambda-22c3804f3e76 - Protobufs
 
 APIGateway - REST + websockets
 
@@ -1860,11 +1871,11 @@ calling the services from the client - presigned URLs / using client libs to hav
 
 \subsection{Serverless push based approach}
 
+% https://aws.amazon.com/blogs/compute/from-poll-to-push-transform-apis-using-amazon-api-gateway-rest-apis-and-websockets/
+
 request - response
 
 poll to push pattern
-
-% przepływ orkiestracja zapytań
 
 GraphQL subscriptions triggered by mutation
 
@@ -1878,5 +1889,3 @@ server side rendering
 
 % how serverless affects thicker/thinner client
 % direct access to service
-
-\section{Design patterns and best practices}
