@@ -1011,7 +1011,7 @@ Along with the simple heuristics retrieving the information based on the text ex
 The proposed solution presents the fully fledged web application built using the serverless architecture, including the serverless backend responsible for processing and storing the data along with the client application hosted in the cloud environment. 
 The presented architecture is also a good ilustration of different execution models of the AWS Lambda, covered in more details in section \ref{chapter:lambda-function-execution-model}, including synchronous execution to obtain the presigned URL, composing of the asynchronous processing of the receipts as well as polling the stream of updates from the DynamoDB.
 
-The asynchronous processing orchestration, described in more details in section \ref{chapter:serverless-processing-function-composition-and-orchestration}, is a common pattern in the serverless architecture and refers to composition of multiple components, responsible for particular chunks of the processing and forming effectively a distributed system.
+The asynchronous processing choreography, described in more details in section \ref{chapter:serverless-processing-function-composition-and-orchestration}, is a common pattern in the serverless architecture and refers to composition of multiple components, responsible for particular chunks of the processing and forming effectively a distributed system.
 The AWS Lambda is used to incorporate the business logic of the application, transforming the data when desired and using the other services to orchestrate the flow or handle the processing, without waiting idle for the results, but rather being triggered on a event-driven manner.
 
 The use of Amazon Textract brings new development opportunities, allowing to integrate the service in the processing flow with convenient billing per usage and eliminates the need to maintain similar self-hosted service.
@@ -1138,7 +1138,7 @@ The list below includes additional limitations along with explanation of their i
 
 AWS Lambda supports natively several programming languages and their runtime environments including Node.js, Python, Java, C\#, Go and Ruby, with some of them including different versions of the runtime \cite{AWSLambdaRuntimes}. Most frequently the function code and its dependencies are compressed and packed by the deployment tool into a single zip archive and further stored by the cloud provider. When the Lambda function is invoked, the serverless platform allocates the resources to form the function environment, downloads the function code, bootstrap the language runtime with function dependencies and execute the function code. However, when the function has been recently triggered, the execution environment from a previous invocation can be reused, saving time required to prepare the environment and reusing some resources, such as established connections with external services or the temporary files.
 
-Besides the standard function packing option and environment, the AWS Lambda enables to define Lambda layers, enabling to share dependencies independently, between several functions as well as custom container images.
+Besides the standard function packing option and environment, the AWS Lambda enables to define Lambda layers, enabling to share dependencies irrespectively, between several functions as well as custom container images.
 Both of the approaches are described in more details below.
 
 \paragraph{Lambda container image}
