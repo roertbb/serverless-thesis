@@ -1233,246 +1233,247 @@ Moreover, proper functions’ trigger configuration enables them to filter out u
 
 Having described the AWS Lambda as an example implementation of the Function as a Service model, it is essential to consider how the serverless function can be incorporated in the application logic.
 The event-driven architecture requires some components to trigger the serverless function and as a result receive the response or invoke other components, based on the configuration and code of the function.
-Moreover, the stateless and ephemeral nature of the serverless function, requires it to communicate with external services to preserve its state.
+Moreover, the stateless and ephemeral nature of the serverless function requires it to communicate with external services to preserve its state.
 The serverless architecture relies on various services provided by the cloud platform, which along with the serverless function, make up the application logic \cite{EvaluationOfServerlessApplicationProgrammingModel}.
-The simpler application can be composed from the handful of components configured to work together, however when the complexity of the system grows, the application architecture composed from numerous independent components, communicating with each other via message passing, creates more complex distributed system and benefits from the microservice architectural pattern, discussed in section \ref{section:web-apps-microservices}.
+The simpler application can be composed from the handful of components configured to work together. 
+However when the complexity of the system grows, the application architecture composed from numerous independent components, communicating with each in an event-driven manner, creates a more complex distributed system, that can benefit from adhering to microservice architecture patterns, discussed in section \ref{section:web-apps-microservices}.
 
 \subsubsection{Serverless microservices}
 
-The architecture of the web based services, built with the serverless architecture, can be divided into 2 distinctive categories based on their purpose \cite{AWSReinventBuildingMicroservicesWithAWSLambda}:
+The architecture of the web based services built with the serverless architecture can be divided into 2 distinctive categories based on their purpose \cite{AWSReinventBuildingMicroservicesWithAWSLambda}:
 
 \begin{itemize}
-    \item Public interface --- Responsible for exposing rich and flexible APIs, most frequently using HTTP protocol to communicate directly with the web based clients. It is using the API Gateway component or other services responsible for load balancing the requests, executing the serverless function in a synchronous manner and returning its results to the client.
-    \item Internal services --- Supporting the public interfaces and providing various application capabilities. Moreover, the underlying architecture can utilise the asynchronous processing, passing events with more opinionated structure, leveraging other components with simpler interfaces to decouple the components and exchange messages using intermediaries.
+   \item \textbf{Public interface} --- Responsible for exposing rich and flexible APIs, most frequently using HTTP protocol to communicate directly with the web based clients. It is using the API Gateway component or other services responsible for load balancing the requests, executing the serverless function, most frequently in a synchronous manner, and returning its results to the client.
+   \item \textbf{Internal services} --- Supporting the public interfaces by providing various application capabilities. Moreover, the underlying architecture can utilise the asynchronous processing, passing events with more opinionated structure, leveraging other serverless components with simpler interfaces to decouple the internal services and exchange messages using intermediaries.
 \end{itemize}
 
 \paragraph{Public interface} \label{chapter:public-interfaces}
 
-The simpler web services can effeectively use the first category to provide the basic functionalities. Components like API Gateway can trigger the Lambda function, which in turn communicate with the downstream service responsible for storing the data to perform certain operation and return back with the response, as presented in the Figure \ref{fig:simple-web-service-diagram}.
+The simpler web services can effectively be based on a handful of components to provide the basic functionalities. Services such as API Gateway can trigger the Lambda function, which in turn communicates with the downstream service, responsible for storing the data, performing certain operations and returning back with the response, as presented in the Figure \ref{fig:simple-web-service-diagram}.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{assets/04-serverless-for-web-apps/simpleWebService.png}
-    \caption{Architecture diagram of simple web service using API Gateway, Lambda and DynamoDB}
-    \label{fig:simple-web-service-diagram}
+   \centering
+   \includegraphics[width=0.7\textwidth]{assets/04-serverless-for-web-apps/simpleWebService.png}
+   \caption{Architecture diagram of simple web service using API Gateway, Lambda and DynamoDB}
+   \label{fig:simple-web-service-diagram}
 \end{figure}
 
-There are several components provided by the AWS, which can serve a role of the public, client-faced interface of the web application, and integrate with Lambda and other hosted components directly \cite{AWSReinventBuildingMicroservicesWithAWSLambda}. The services and their capabilities are listed below:
+There are several components provided by the AWS, which can serve a role of the public, client-faced interface of the web application, and integrate with Lambda and other hosted services directly \cite{AWSReinventBuildingMicroservicesWithAWSLambda}. The services and their capabilities are listed below:
 
 \begin{itemize}
-    \item Amazon API Gateway --- 
-    Fully managed service enabling developers to define APIs, serving as a front door to the application, integrating with various services hosted on the cloud platform. 
-    The service distinguished several types of the API including REST API (providing variety of additional features such as API caching, additional transformation and validation of requests, tighter integration with other services), WebSocket API as well as HTTP API (simpler and cheaper compared to REST APIs, providing only most common features). 
-    Moreover, The API Gateway can also provide additional capabilities such as caching, throttling requests, different usage tiers for specified clients, security control as well as integration with other services incorporating authentication and authorisation capabilities.
-    \item Application Load Balancer --- 
-    Belongs to the family of the load balancer offerings and it is supporting the HTTP traffic, regardless of the transmission protocol used on top of it. 
-    The requests are forwarded, based on the URL and HTTP method, to the Lambda or other services according to configuration. 
-    Using Application Load Balancer can be cost effective when the service is experiencing high throughput and the requests can be passed directly to the associated service.
-    \item AWS AppSync --- 
-    Managed service, providing the capabilities to define the GraphQL APIs, which can map the particular requests to various services, pulling the data from various data sources in a single request.
-    Moreover, it can incorporate caching on the service and client side to improve performance, leverage GraphQL subscriptions for real-time communication as well as integrate with other services to provide authentication and authorization capabilities.
+   \item Amazon API Gateway ---
+   Fully managed service enabling developers to define APIs, serving as a front door to the application, integrating with various services hosted in the cloud platform.
+   The service distinguished several types of the API including REST API (providing variety of additional features such as API caching, additional transformation and validation of requests, tighter integration with other services), WebSocket API as well as HTTP API (simpler and cheaper compared to REST APIs, providing only basic additional features).
+   Moreover, The API Gateway can also provide additional capabilities such as caching, request throttling, different usage tiers for specified clients, security control as well as integration with other services incorporating authentication and authorisation capabilities.
+   \item Application Load Balancer ---
+   Belongs to the family of the load balancer offerings and it is supporting the HTTP traffic, regardless of the transmission protocol used on top of it.
+   The requests are forwarded, based on the URL and HTTP method, to the Lambda or other services according to the configuration.
+   Using Application Load Balancer can be cost effective when the service is experiencing high throughput and the requests can be passed directly to the associated services.
+   \item AWS AppSync ---
+   Managed service, providing the capabilities to define GraphQL APIs, which can map the particular requests to various services, pulling the data from various data sources for a single request.
+   Moreover, it can incorporate caching on the server and client side to improve performance, leverage GraphQL subscriptions for real-time communication as well as integrate with other services to provide authentication and authorization capabilities.
 \end{itemize}
 
-All of the mentioned components provides the capabilities of exposing an API, which serves as an entrypoint for the application logic.
-Besides accepting the user requests and redirecting them to specified components, some of the services provides additional capabilities such as caching, traffic management, request filtering and transformation, authentication and authorization as well as throttling the requests to protect the backend services. 
-The definition of an API can be generated along with the documentation, when using tool like Swagger \cite{ImplementingMicroservicesOnAWS}.
-The additinal capabilities of mentioned components are covered in more details in section \ref{chapter:serverless-client-communication-patterns-for-serverless-architecture}.
+All of the mentioned components provide the capabilities of exposing an API, which serves as an entrypoint for the application logic.
+Besides accepting the user requests and redirecting them to specified components, some of the services enable additional capabilities such as caching, traffic management, request filtering and transformation, authentication and authorization as well as throttling the requests to protect the backend services.
+The definition of an API can be generated along with the documentation, when using tools like Swagger \cite{ImplementingMicroservicesOnAWS}.
+The additional capabilities of mentioned components are covered in more detail in section \ref{chapter:serverless-client-communication-patterns-for-serverless-architecture}.
 
-Another frequently considered topic, when using the services like API Gateway, is where to perform the routing of the request. 
-The Lambda code can effectively use one of the frameworks to provide some additional routing inside the handler logic, granting better portability. 
-However, such approach introduces several challenges, which include applying the security constructs and performance configuration to the whole function as well as making the proper logging, monitoring and debugging more difficult to implement in the monolithic function \cite{AWSReinventBuildingMicroservicesWithAWSLambda}.
+Another frequently considered topic, when using the services like API Gateway, is where to perform the routing of the request.
+The Lambda code can effectively use one of the frameworks to provide some additional routing inside the handler logic, granting better portability.
+However, such approach introduces several challenges, which include applying the security constructs and performance configuration to the whole monolithic function as well as making the proper logging, monitoring and debugging more difficult to implement \cite{AWSReinventBuildingMicroservicesWithAWSLambda}.
 
 \paragraph{Internal services} \label{chapter:interal-services}
 
-The synchronous model of the public interface can work effectively with simpler services, communicating with other serverless components and returning the reponse back ot the client. 
+The synchronous model of the public interface can work effectively with simpler services, communicating with other serverless components and returning the response back to the client.
 However, when the communication is more complex and it includes several services, passing messages to each other, there are several places when the errors can occur, making some of the components waiting for response \cite{AWSReinventBuildingMicroservicesWithAWSLambda}.
-When the application is experiencing heavier load, the services built in a synchronous manner and leveraging the serveless technologies can observe timeouts and throttling as well as increased cost related with the Lambda functions executing longer and waiting for responses from polled services.
+When the application is experiencing heavier load, the services communicating in a synchronous manner and leveraging the serverless technologies can observe timeouts and throttling as well as increased cost related with the Lambda functions executing longer and waiting for responses from the polled services.
 The API Gateway is configured with maximum integration timeout for synchronous function invocation equal to 29 seconds, after which it returns an error to the client.
 Moreover, the function execution time limited to 15 minutes along with its rapid scalability, can be more challenging when communicating with some external or legacy services, that are not capable to scale accordingly, which requires to manage the number of active connections \cite{ServerlessAtScaleDesignPatternsAndOptimizations}.
 
-One of the solutions for mentioned problem, is to rethink how the communication between components works and redesign it to incorporate asynchronous workflows.
-It introduces similar approach as with microservice architecture, making the components decoupled by using some intermediaries like message brokers to exchange and preserve the events occuring in the system in a reliable way.
-The API Gateway request can trigger the AWS Lambda, which in turn communicates with some other service, starting the asynchronous processing and after that returning the status to the API Gateway, responding to the user.
-The processing flow can further get through several services, responsible for processing the application logic and preserving the state accordingly, using some of the components of the serverless platform to exchange the messages reliably, without tight coupling of services and serverless functions.
+One of the solutions for the mentioned problem, is to rethink how the communication between components works and redesign it to incorporate asynchronous workflows.
+It introduces a similar approach as with microservice architecture, making the components decoupled by using some intermediaries like message brokers to exchange and preserve the events occuring in the system in a reliable way.
+The API Gateway request can trigger the AWS Lambda, which in turn communicates with some other service, starting the asynchronous processing and returning the invocation status to the API Gateway, responding to the user.
+The processing flow can further get through several services, responsible for processing the application logic and preserving the state accordingly, using some of the serverless platform components to exchange the messages reliably, without tight coupling between services and serverless functions.
 The communication with external or legacy systems can be appropriately buffered and throttled to prevent from losing events and affecting their performance \cite{ServerlessAtScaleDesignPatternsAndOptimizations}.
-Some of the more complex workflows may benefit from the orchestration of the processing using services such asa AWS Step Function, which is described in more details in section \ref{chapter:serverless-processing-function-composition-and-orchestration}. \\
+Some of the more complex workflows may benefit from the orchestration of the processing using services such as AWS Step Function, which is described in more detail in section \ref{chapter:serverless-processing-function-composition-and-orchestration}. \\
 
-Components provided by AWS, serving the role of queues, message brokers and message buses as well as services streaming the events, enabling the developers to decouple the services and redesign the flow to embrace reliable asynchronous processing, are described below:
+Components provided by AWS, serving the role of queues, message brokers and message buses as well as services streaming the events, enables the developers to decouple the services and redesign the flow to embrace reliable asynchronous processing, are described below:
 
 \begin{itemize}
-    \item Simple Notification Service (SNS) --- 
-    Managed publish-subscribe messaging service with an ability to reliably exchange messages with low latency, publishing them to a topic, pushing and delivering the messages to other components subscribing to a topic.
-    SNS provides high throughput with autoscaling capabilities, allowing to fanout the messages, storing them durably across multiple Availability Zones, but providing no additional persistance beyond retry logic, tracking failures when lambda is not available.
-    The events can be filtered based on the message attributes, pushing the event only to selected subscribers.    
-    The messages can trigger Lambda function or be published to HTTPS endpoints, services such as Amazon SQS or Amazon Kinesis Data Firehose, email, SMS or mobile push \cite{ChoosingEventsQueuesTopicsAndStreamsInYourServerlessApplication}.
-    In case of serverless functions, each of the published messages translates to single Lambda execution, however its concurrency can be limited as well as additional configuration can be applied to expose parameters allowing to ensure the FIFO ordering and deduplication of events, however by default the SNS does not provide such quarantees.
-    SNS is designed for unidirectional and fanout communication, targeted primarily to Lambda function or HTTP based endpoints.
+   \item Simple Notification Service (SNS) ---
+   Managed publish-subscribe messaging service with an ability to reliably exchange messages with low latency, pushing and delivering the messages to other components subscribing to a predefined topic.
+   SNS provides high throughput with autoscaling capabilities, allowing to fanout the messages, storing them durably across multiple Availability Zones, but providing no additional persistence beyond retry logic, tracking failures when lambda is not available.
+   The events can be filtered based on the message attributes, pushing the event only to selected subscribers.   
+   The messages can trigger Lambda function or be published to HTTP endpoints, services such as Amazon SQS or Amazon Kinesis Data Firehose, email, SMS or mobile push \cite{ChoosingEventsQueuesTopicsAndStreamsInYourServerlessApplication}.
+   In case of serverless functions, each of the published messages translates to single Lambda execution, however its concurrency can be limited as well as additional configuration can be applied to expose parameters allowing to ensure the FIFO ordering and deduplication of events, however by default the SNS does not provide such guarantees.
+   SNS is designed for unidirectional and fanout communication, targeted primarily to Lambda function or HTTP based endpoints.
 
-    \item Simple Queue Service (SQS) --- 
-    Managed message queue service, storing and exchanging the messages between various software components, reliably preserving them without requiring the service to be available.
-    SQS is scaling automatically with configurable batch size, storing the messages durably across multiple Availability Zones with an ability to persist them from 60 seconds to 14 days.
-    The batch of messages is polled by the consumer, becoming unavailable for other consumers. Once the message the whole batch is successfully processed, the messages are removed from the queue, otherwise they are available to be picked up again after the visibility timeout expires.
-    It enables the queue to buffer and rate limit the incoming events, securing the connected downstream services from bursty traffic.
-    With standard configuration the SQS provides best effor mesage ordering with at least once delivery, guaranting high throughput with lower cost, however the service can be configured to expose additional information, enabling downstream services to order and deduplicate the incoming events.
-    SQS finds applicability when the incoming traffic needs to be stored in a reliable way and buffered to be further consumed by downstream services \cite{AWSReinventScalableServerlessEventDrivenArchitecturesWithSNSSQSLambda}.
+   \item Simple Queue Service (SQS) ---
+   Managed message queue service, storing and exchanging the messages between various software components, reliably preserving them without requiring the service to be available.
+   SQS is scaling automatically with configurable batch size, storing the messages durably across multiple Availability Zones with an ability to persist them from 60 seconds to 14 days.
+   The batch of messages is polled by one of the consumers, becoming unavailable for others. Once the messages from the whole batch are successfully processed, they are removed from the queue, otherwise they become available to be picked up again after the visibility timeout expires.
+   It enables the queue to buffer and rate limit the incoming events, securing the connected downstream services from bursty traffic.
+   With standard configuration the SQS provides best effort message ordering, with at least once delivery, guaranteeing high throughput with lower cost. However the service can be configured to expose additional information, enabling downstream services to order and deduplicate the incoming events.
+   SQS finds applicability when the incoming traffic needs to be stored in a reliable way and buffered to be further consumed by downstream services \cite{AWSReinventScalableServerlessEventDrivenArchitecturesWithSNSSQSLambda}.
 
-    \item Amazon Kinesis Streams --- 
-    Highly scalable, managed services responsible for collecting and processing real-time streams of data coming from various sources, including data and video streams, enabling the application preserve the data or analyse it.
-    The data stream is split into multiple shards based on defined buffer capacity and time interval, passing the payload to the Lambda functions polling the stream, providing the data to multiple services.
-    The data throughtput can be limited by batch size or Lambda concurrency, durably storing the messages across multiple Availability Zones and persisting them up to 7 days if configured.
-    The processing failures can be handled by retrying the events in order from a shard, based on a checkpoints. 
-    The shard is processed until successful completion or it can be split to extract the erroneous records, handled separately \cite{ChoosingEventsQueuesTopicsAndStreamsInYourServerlessApplication}.
-    Amazon Kinesis Stream are frequently used for real-time processing with massive throughput of data, tracking the order of records and gathering the data stream from multiple consumers, suhc as logs, sensor data or financial transactions.
-    
-    \item Amazon EventBridge --- 
-    Serving a role of serverless event bus, observing the events from various data sources, including AWS services, developed applications and integrated SaaS providers. The events are further filtered out based on defined rules and routed to the downstream consumers, which receive the events reliably, while their producers can remain decoupled.
-    EventBridge enables to connect the application components together by ingesting and routing the data across application, underlying infrastructure as well as external services.
-    The messages are stored durably across multiple Availability Zones, however the service does not provide additional events persistancy.
-    The service finds applicability when the application requires to connect a lot of different services including external integrations, while providing granular target rules to filter out the traffic \cite{ChoosingEventsQueuesTopicsAndStreamsInYourServerlessApplication}.
+   \item Amazon Kinesis Streams ---
+   Highly scalable, managed services responsible for collecting and processing real-time streams of data coming from various sources, including data and video streams, enabling the application to preserve the data and analyse it.
+   The data stream is split into multiple shards, based on defined buffer capacity and time interval, passing the payload to the Lambda functions which are polling the stream, providing the data to multiple services.
+   The data throughput can be limited by batch size or Lambda concurrency, durably storing the messages across multiple Availability Zones and persisting them up to 7 days if configured.
+   The processing failures can be handled by retrying the events in order from a shard based on a checkpoints.
+   The shard is processed until successful completion or it can be split to extract the erroneous records, handled separately \cite{ChoosingEventsQueuesTopicsAndStreamsInYourServerlessApplication}.
+   Amazon Kinesis Streams are frequently used for real-time processing with massive throughput of data, tracking the order of records and gathering the data stream from multiple consumers, such as logs, sensor data or financial transactions.
+  
+   \item Amazon EventBridge ---
+   Serving a role of serverless event bus, observing the events from various data sources, including AWS services, developed applications and integrated SaaS providers. The events can be further filtered out based on defined rules and routed to the downstream consumers, which receive the events reliably, while their producers can remain decoupled.
+   EventBridge enables the application components to exchange messages together by ingesting and routing the data across underlying infrastructure, applications as well as external services.
+   The messages are stored durably across multiple Availability Zones, however the service does not provide additional events persistence.
+   EventBridge finds applicability when the application requires to connect a lot of different services, including external integrations, while providing granular target rules to filter out the traffic \cite{ChoosingEventsQueuesTopicsAndStreamsInYourServerlessApplication}.
 \end{itemize}
 
-The mentioned services are not mutually exclusive and can be combined together to utilise their features and provide desired capabilities to the web application architecture as well as enable effective communication between serverless functions. 
+The mentioned services are not mutually exclusive and can be combined together to utilise their features and provide desired capabilities to the web application architecture as well as enable effective communication by invoking serverless functions in an event-driven manner.
 Some of the patterns including described components and leveraging their capabilities are covered below:
 
 \begin{itemize}
-    \item Throttling and buffering --- The autoscaling capabilities of the Lambda function can be a problem for the downstream services, including for example the hosted relational databases, which may not be able to scale accordingly or exhaust the available connections to the data store.
-    SQS and Kinesis Data Streams can be used to persist and batch the incoming events.
-    Both of the mentioned approaches can limit the concurrency of incoming traffic, serving a role of buffer, aggregating the incoming requests and executing the function with a single batch or shard, leading to lower cost per function invocation.
-    DLQ can be configured to store failed records or leverage Lambda Destination to execute another Lambda function with the request including context of the failure \cite{ServerlessArchitecturalPatternsAndBestPractices}.
-    
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/buffer.png}
-        \caption{Architecture diagram of service using Kinesis Data Streams to throttle and buffer the incoming data}
-        \label{fig:throttling-and-buffering-diagram}
-    \end{figure}
+   \item Throttling and buffering --- The autoscaling capabilities of the Lambda function can be a problem for the downstream services, including for example the hosted relational databases, which may not be able to scale accordingly or exhaust the available connections pool.
+   SQS and Kinesis Data Streams can be used to persist and batch the incoming events.
+   Both of the mentioned approaches can limit the concurrency of incoming traffic, serving a role of buffer, aggregating the incoming requests and executing the function with a single batch or shard, leading to lower cost per function invocation.
+   DLQ can be configured to store failed records. Alternatively, Lambda Destination can be leveraged to execute another Lambda function with an event including context of the failure \cite{ServerlessArchitecturalPatternsAndBestPractices}.
+  
+   \begin{figure}[H]
+       \centering
+       \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/buffer.png}
+       \caption{Architecture diagram of service using Kinesis Data Streams to throttle and buffer the incoming data}
+       \label{fig:throttling-and-buffering-diagram}
+   \end{figure}
 
-    \item Fan-Out --- When the payload does not require additional prcessing, the event can be send directly to SNS, that pushes the message to subscribers based on the configured filtering. SQS can be configured to subscribe for the events published by SNS, batch the incoming data and share it further with connected Lambda function or other services.
-    Alternatively, for the traffic characterized with high, consistent throughput and large payloads, Kinesis Data Stream can be a more cost efficient solution \cite{ServerlessArchitecturalPatternsAndBestPractices}.
+   \item Fan-Out --- When the payload does not require additional processing, the event can be sent directly to SNS, which pushes the message to subscribers based on the configured filtering. SQS can be configured to subscribe for the events published by SNS, batch the incoming data and share it further with connected Lambda functions or other services.
+   Alternatively, for the traffic characterized with high, consistent throughput and large payloads, Kinesis Data Stream can be a more cost efficient solution \cite{ServerlessArchitecturalPatternsAndBestPractices}.
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/fanout.png}
-        \caption{Architecture diagram of the Fanout pattern including SNS and SQS to reliably send out events}
-        \label{fig:fanout-diagram}
-    \end{figure}
-    \item Streaming --- The data coming from various data sources can be effectively processed and stored for further analytical purpose. SNS can be used to discard unwanted events and filter the incoming events based on the different business areas and pass the data to Kinesis Firehose to preserve the data, for example in S3 \cite{ServerlessArchitecturalPatternsAndBestPractices}.
-    % https://aws.amazon.com/blogs/compute/introducing-message-archiving-and-analytics-for-amazon-sns/
-    
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/streamer.png}
-        \caption{Architecture diagram of SNS and Kinesis Firehose preserving the incoming stream of events in S3 bucket}
-        \label{fig:streaming-diagram}
-    \end{figure}
+   \begin{figure}[H]
+       \centering
+       \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/fanout.png}
+       \caption{Architecture diagram of the Fanout pattern including SNS and SQS to reliably send out events}
+       \label{fig:fanout-diagram}
+   \end{figure}
+   \item Streaming --- The data coming from various data sources can be effectively processed and stored for further analytical purposes. SNS can be used to discard unwanted events, filter the incoming events based on the different business areas and pass the data to Kinesis Firehose to preserve the data, for example in S3 \cite{ServerlessArchitecturalPatternsAndBestPractices}.
+   % https://aws.amazon.com/blogs/compute/introducing-message-archiving-and-analytics-for-amazon-sns/
+  
+   \begin{figure}[H]
+       \centering
+       \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/streamer.png}
+       \caption{Architecture diagram of SNS and Kinesis Firehose preserving the incoming stream of events in S3 bucket}
+       \label{fig:streaming-diagram}
+   \end{figure}
 \end{itemize}
 
 \paragraph{Serverless microservices}
 
-Besides the components serving the role of the entrypoint for the web application and the internal services, responsible for messaging between application components, there are also other components taking an integral role of the applications built in the serverless paradigm as well as shaping its architecture.
-The databases capable of preserving the data and reacting to its changes by streaming the updates to polling services are described in more details in section \ref{chapter:serverless-datastores}.
-Moreover, numerous services hosted in the cloud provides various capabilities including for example image processing, video transcoding or natural language processing, which can be easily integrated in the developed web applications.
+Besides the components serving the role of the entrypoint to the web application and the internal services, responsible for messaging between application components, there are also other components taking an integral role in the applications built in the serverless paradigm as well as shaping its architecture.
+The databases capable of preserving the data and reacting to its changes by streaming the updates to polling services are described in more detail in section \ref{chapter:serverless-datastores}.
+Moreover, numerous services hosted in the cloud provide various capabilities, including for example image processing, video transcoding or natural language processing, which can be easily integrated in the developed web applications.
 
 The first of the described examples, presented in section \ref{chapter:examples-receipt-processing}, shows how the S3 and DynamoDB are incorporated in the application logic to preserve the images and results of the processing as well as notifying other components about data changes.
-Textract is incorporated in the asynchronous processing flow to analyze the uploaded receipt and later publish the results to SNS, fitting into the asynchronous event-driven processing.
+Textract is incorporated in the asynchronous processing flow to analyze the uploaded receipts and later publish the results to SNS, fitting into the asynchronous event-driven processing.
 
 When the serverless solution evolves and grows in complexity, it is beneficial to split the application logic into separate domains with well-defined boundaries based on the business capabilities.
-It resembles the microservice architectural pattern, described in section \ref{section:web-apps-microservices}, which refers to set of small services running on its own, communicating via message passing and focused around specific business capabilities.
+It resembles the microservice architectural pattern, described in section \ref{section:web-apps-microservices}, which refers to a set of small services running on its own, communicating via message passing and focused around specific business capabilities.
 
-The serverless microservices are going a step further, splitting the business logic across several serverless functions. 
-Each of them is responsible for handling and responding to specific events, with the application logic isolated for particular workflow and granular configuration in terms of access to external services, underlying resource configuration as well as individual selection of technology, libraries to serve its role effectively.
-However, most frequently the serverless functions working within the same service boundary and using the same data sources, define some shared library of methods, extracting the business logic from the function handler responsible for executing it and abstracting away the communication with underlying resources.
-Each of the serverless function include the required methods from the shared library to perform the processing, which are packed before the deployment process along the function handler, reducing the functionalities duplication.
+The serverless microservices are going a step further, splitting the business logic across several serverless functions.
+Each of them is responsible for handling and responding to specific events, with the application logic isolated for particular workflow along with granular configuration in terms of access to external services, underlying resource configuration as well as individual selection of technology and libraries to serve its role effectively.
+However, most frequently the serverless functions working within the same service boundary and using the same data sources, define some shared library of methods, extracting the business logic from the function handler, responsible for executing the function, and abstracting away the communication with underlying resources.
+Each of the serverless functions include the required methods from the shared library to perform the processing, which are packed along the function handler in the deployment process, reducing the functionalities duplication.
 
-Each of the microservices can operate on its own domain and communicate with others via message passing. 
+Each of the microservices can operate on its own domain and communicate with others via message passing.
 To achieve that, each service should expose an interface to make other services retrieve information or perform defined actions.
 Moreover, if the operation in one of the services should affect others, it can publish a message to some intermediaries, notifying other components subscribing for changes to react for them appropriately.
-Some serverless functions can be designed to serve as an router, providing the API for other services to communicate with as well as receiver, subscribing for the messages from other components, such as SNS or EventBridge, to trigger the furhter processing.
-It enables the serverless microservices to preserve the loose coupling between different microservices, making the services know as little as possible about the implementation of others and communicating via well-defined interface, as well as maintain high cohesion within the same service to effectively manage the business domains \cite{AnIntroductionToServerlessMicroservices}. \\
+Some serverless functions can be designed to serve as a router, providing the API for other services to communicate with as well as receiver, subscribing for the messages from other components, such as SNS or EventBridge, to trigger the further processing.
+It enables the serverless microservices to preserve the loose coupling between different microservices, making the services know as little as possible about the implementation of others, communicate via well-defined interfaces, as well as maintain high cohesion within the same service to effectively manage the business domains \cite{AnIntroductionToServerlessMicroservices}. \\
 
 The described serverless microservice architecture enables developers to leverage the benefits mentioned for the microservice architecture itself.
-By decomposing and separating the systems into independent components, it is easier to maintain it over time, introduce required changes and evolve the application. Different teams can manage and develop different parts of the application, focusing on desired capabilities of the services, deciding on programming languages, libraries, data stores to meet the service requirements as well as deploying, configuring and scaling the services independently.
+By decomposing and separating the systems into independent components, it is easier to maintain the system over time, introduce required changes and evolve the application. Different teams can manage and develop different parts of the application, focusing on desired capabilities of the services, deciding on programming languages, libraries, data stores to meet the service requirements as well as deploying, configuring and scaling the services independently.
 
 Moreover, various processes and design principles from the microservices architectural pattern can be also applied to the application built using the serverless paradigm.
-The decentralized data management allows services to preserve their state independently, but propagating the more demanding operations in an asynchronous way, requires more sophisticated coordination mechanisms to reliably process the transactions, handle failures and retries, utilising the eventual consistency within such as distributed system.
-Decoupling components make it easier to develop services independently, however such distributed system requires some communication mechanisms between its elements.
-Exchanging messages via intermediaries, valuability of service contracts as well as design for failure, including various patterns, are necessary to make the serverless web application work properly.
-Lastly, the automation that is set up properly, providing continuous integration and deployment, is necessary to make the development process managable. 
-Automated end to end testing on the deployed environment is essential to give enough confidence, that the system works properly as well as proper logging, monitoring and observability are required to track the system capabilities and trigger alarms in case of inconsistencies. \\
+The decentralized data management allows services to preserve their state independently, but propagating the more demanding operations in an asynchronous way, requires more sophisticated coordination mechanisms to reliably process the transactions, handle failures and retries, utilising the eventual consistency.
+Decoupling components make it easier to develop services independently, however such a distributed system requires some communication mechanisms between its elements.
+Exchanging messages via intermediaries, service contracts as well as designing for failure, are necessary to make the serverless web application work properly.
+Lastly, the automation that is set up properly, providing continuous integration and deployment, is necessary to make the development process manageable.
+Automated end to end testing on the deployed environment is essential to give enough confidence that the system works properly as well as proper logging, monitoring and observability are required to track the system capabilities and trigger alarms in case of inconsistencies. \\
 
 Summarising, according to Jeremy Daly in his article describing the various serverless patterns \cite{ServerlessMicroservicePatternsForAWS}, the serverless microservices benefits from adhering the following principles:
 
 \begin{itemize}
-    \item \textbf{Ownership on the service private data} --- Each of the serveless microservices should owns its data. If another service requires the same data, it should be replicated or it is an indication that the services should be combined together or the application architecture should be rethought.
-    \item \textbf{Independent deployments} --- The microservices should be independent and self contained. The dependencies and communication should be based on well defined interfaces and handled by intermediaries to ensure the services are loosely coupled.
-    \item \textbf{Utilising eventual consistency} --- The data replication and denormalisation are commonly used in the microservice architecture and the same solution can be applied in the serveless architecture.
-    \item \textbf{Using asynchronous workloads} --- 
-    With the Lambda function billed for the processing time, it is cost efficient to consider the asynchronous processing, instead of making the function wait idle or making the processing to reach the timeout.
-    Frequently, the processing can be redesigned to hand off the task, which is reliably processed in the background in an asynchronous manner.
-    For use cases that require more complicated coordination, the services provided by the cloud platform can be used, keeping the serverless function small, having single and well-defined purpose.
-    \item \textbf{Keeping the service small, but valuable} --- 
-    With the granularity and elasticity of the serverless architectures, it is applicable to create even some smaller microservices including only a few functions, if they serve their role well and deliver business value.
-    Based on the changing requirements and evolution of the application these can be easily relocated to suits the need.
+   \item \textbf{Ownership of the service private data} --- Each of the serverless microservices should own its data. If another service requires the same data, it should be replicated or it is an indication that the services should be combined together or the application architecture should be rethought.
+   \item \textbf{Independent deployments} --- The microservices should be independent and self contained. The dependencies and communication should be based on well defined interfaces and handled by intermediaries to ensure the services are loosely coupled. Maintaining this capability allows developers to independently develop, evolve and deploy the services.
+   \item \textbf{Utilising eventual consistency} --- The data replication and denormalisation are commonly used in the microservice architecture and the same solution can be applied in the serverless architecture.
+   \item \textbf{Using asynchronous workloads} ---
+   With the Lambda function billed for the processing time, it is cost effective to consider the asynchronous processing, instead of making the function wait idle or making the processing to reach the timeout.
+   Frequently, the processing can be redesigned to hand off the task, which is reliably processed in the background in an asynchronous manner.
+   For use cases that require more complicated coordination, the services provided by the cloud platform can be used, keeping the serverless function small, having a single and well-defined purpose.
+   \item \textbf{Keeping the service small, but valuable} ---
+   With the granularity and elasticity of the serverless architectures, it is applicable to create even some smaller microservices including only a few functions, if they serve their role well and deliver business value.
+   Based on the changing requirements and evolution of the application these can be easily relocated to suit the need.
 \end{itemize}
 
 \subsubsection{Function choreography and orchestration} \label{chapter:serverless-processing-function-composition-and-orchestration}
 
-The serverless function is suitable for the event-driven workflows in which communication between subsequent components, such as SNS, SQS and EventBridge, is asynchronous and loosely coupled. 
-However, some of the operations require more fine-grained orchestration approach, with capability of preserving the state between subsequent invocations and giving more insight into the business context of performed operations. 
+The architecture of the serverless function is suitable for the event-driven workflows, in which communication between subsequent components is managed by services such as SNS, SQS and EventBridge, is asynchronous and loosely coupled.
+However, some of the operations require a more fine-grained orchestration approach, with capability to preserve the state between subsequent invocations and give more insight into the business context of performed operations.
 
-AWS Step Function is an example of a service providing capabilities of orchestrating the workflow and managing its state. 
-Step Function enables to define a state machine, responsible for resembling the business workflow and trigger individual components and Lambda functions to avoid additional coordination in the code of the services.
-It provides abstraction to define sequential and parallel tasks, branching logic, mapping over a set of tasks as well as error handling and retry logic.
-Moreover, the service allows developers to reason about the state of executed workflow by visualising the components of the orchestrated flow along their state at individual stages of processing \cite{ImplementingMicroservicesOnAWS}.
+AWS Step Function is an example of a service providing capabilities of orchestrating the workflow and managing its state.
+Step Function enables to define a state machine, responsible for resembling the business workflow as well as triggering individual components and Lambda functions to avoid additional coordination in the code of the services.
+It provides necessary abstraction to define sequential and parallel tasks, branching logic, mapping over a set of tasks as well as handling errors and retry logic.
+Moreover, the service allows developers to reason about the state of the executed workflow by visualising the components of the orchestrated flow along their state at individual stages of processing \cite{ImplementingMicroservicesOnAWS}.
 
-In the sections below, the choreography and orchestration of the workflows are described in more details, as two frequently distinguished modes of the interaction in the serverless microservices architecture.
+In the sections below, the choreography and orchestration of the workflows are described in more detail, as two frequently distinguished modes of the interaction in the serverless microservices architecture.
 
 \paragraph{Choreography}
 
-The choreography refers to an asynchronous, event-driven processing, in which services work independently, using intermediaries in form of message brokers and queues to pass the events to other components invoked further, forming the chain of components performing the business logic.
-The interaction model is suitable for simpler operations, when services are not closely related and most frequently within separate business domains.
+The choreography refers to an asynchronous, event-driven processing, in which services work independently, using intermediaries in form of message brokers and queues to pass the events to other components invoked further, forming the chain of component invocation performing the business logic.
+The interaction model is suitable for simpler operations, when services are not closely related and most frequently belong to separate business domains.
 The choreography approach is used in the receipt processing flow, presented in section \ref{chapter:examples-receipt-processing}.
 
-The benefits of such approach include loose coupling of the services, which can be changed and scaled independently. There is no single point of failure in the system, in which the events can bring additional business value, when processed in the business inteligence reports.
-On the other hand, monitoring and reporting in the choreography approach si more challenging, along handling errors, retry mechanisms and timeouts. The business flow is not captured explicitly, instead it is spread across several loosely coupled services \cite{ChoreographyVsOrchestrationInServerlessMicroservices}.
+The benefits of such an approach include loose coupling of the services, which can be changed and scaled independently. There is no single point of failure in the system, in which the events can bring additional business value, when processed in the business intelligence reports.
+On the other hand, monitoring and reporting in the choreography approach is more challenging, along handling errors, retry mechanisms and timeouts. The business flow is not captured explicitly, instead it is spread across several loosely coupled services \cite{ChoreographyVsOrchestrationInServerlessMicroservices}.
 
-An example of the food ordering workflow, modeled in the choreography approach based on the article written by Yan Cui \cite{ChoreographyVsOrchestrationInTheLandOfServerless}, is presented in Figure \ref{fig:choreography-diagram}.
+An example architecture diagram of the food ordering workflow, modeled in the choreography approach based on the article written by Yan Cui \cite{ChoreographyVsOrchestrationInTheLandOfServerless}, is presented in Figure \ref{fig:choreography-diagram}.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/choreography.png}
-    \caption{The food delivery workflow modeled using the choreography approach}
-    \label{fig:choreography-diagram}
+   \centering
+   \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/choreography.png}
+   \caption{The food delivery workflow modeled using the choreography approach}
+   \label{fig:choreography-diagram}
 \end{figure}
 
 \paragraph{Orchestration}
 
 Instead of configuring services to call each other, the orchestration approach refers to using some dedicated orchestrator component, serving a central role in the processing, coordinating the execution of components, handling interactions between them and maintaining state of the processing, along with handling retries and failures.
-Workflow orchestration finds applicability in more complex operations, that require sophisticated flow control, aggregation of the results and handling the cooperation between microservices in a reliable way, granting additional visibility.
-The orchestration approach is used in the second example implementation, considering the instrumentation of generating interactive slideshow, covered in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}.
+Workflow orchestration finds applicability in more complex operations, that require sophisticated flow control, aggregation of resources from different sources and handling the cooperation between microservices in a reliable way.
+The orchestration approach is used in the second example implementation, considering the orchestration of generating interactive slideshows, covered in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}.
 
-The orchestration approach enables to capture the business flow of the process, apply error handling and retry policies, removing the need to provide additional logic to handle it in the services.
+The orchestration approach enables the developers to capture the business flow of the process, apply error handling and retry policies, along with removing the need to provide additional logic to handle it in the services.
 The workflow logic is contained in one place, providing additional monitoring and visualising capabilities to reason about the status of the processing.
-The downside of orchestration include additional cost related with work of orchestrator, which is a single point of failure in the processing, making the incorporated components more tightly coupled \cite{ChoreographyVsOrchestrationInServerlessMicroservices}.
+The downside of orchestration include additional cost related with work of the orchestrator, which is a single point of failure in the processing and makes the incorporated components more tightly coupled \cite{ChoreographyVsOrchestrationInServerlessMicroservices}.
 
-Aforementioned example of the food ordering workflow, modeleted in the orchestration, is presented in Figure \ref{fig:orchestration-diagram}.
+Aforementioned example of the food ordering workflow, modeleted in the orchestration approach, is presented in Figure \ref{fig:orchestration-diagram}.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/orchestration.png}
-    \caption{The food delivery workflow modeled using the orchestration approach}
-    \label{fig:orchestration-diagram}
+   \centering
+   \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/orchestration.png}
+   \caption{The food delivery workflow modeled using the orchestration approach}
+   \label{fig:orchestration-diagram}
 \end{figure}
 
-Moreover, the orchestration approach using the Step Function is suitable for using the distributed saga pattern \cite{SagaPattern} to coordinate the distributed transactions across multiple microservices including independent databases. 
-It can be applied to coordinate some more complex processes including multiple operations, which can fail during the processing and require to orchestrate a series of compensating transactions, reverting the executed operations and cleaning up the state.
+Moreover, the orchestration approach using the Step Function is suitable for using the distributed saga pattern \cite{SagaPattern} to coordinate the distributed transactions across multiple microservices including independent datastores.
+It can be applied to coordinate some more complex processes including multiple operations, which can fail during the processing and require orchestrating a series of compensating transactions, reverting the executed operations and cleaning up the state.
 An example of such orchestration workflow is presented in the Figure \ref{fig:saga-orchestration-diagram}, covering the multistep booking process.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{assets/04-serverless-for-web-apps/saga.png}
-    \caption{The multistep booking workflow using the distributed saga pattern}
-    \label{fig:saga-orchestration-diagram}
+   \centering
+   \includegraphics[width=0.5\textwidth]{assets/04-serverless-for-web-apps/saga.png}
+   \caption{The multistep booking workflow using the distributed saga pattern}
+   \label{fig:saga-orchestration-diagram}
 \end{figure}
 
 \subsection{Case study - Generating interactive slideshow based on LaTeX files} \label{chapter:latex-processing-optimisation}
@@ -2060,12 +2061,6 @@ Takeaways of the cost summary of designed solutions:
    \item \textbf{Serverless pay-per-use billing model} --- Considering the Exercise 2, which is a more demanding task in terms of the processing and the summaries listed above, the overall cost of the processing for a single presentation could be estimated as not exceeding 0.01\$ per execution.
    Moreover, when taking into account the benefits of the serverless architecture, such as autoscaling with granular billing model based on usage and without paying for idle as well as the fact that the infrastructure management is handled by the cloud provider, the serverless solution with pay-per-use pricing can be an appealing alternative to more traditional architectures.
 \end{itemize}
-
-% Step Function 
-% - map task - https://youtu.be/w6cqUhSdy-M
-% - local dev - https://youtu.be/lKbeBBV1gyc?t=1996
-% - architecturing serverless parallel computing - https://livebook.manning.com/book/serverless-architectures-on-aws-second-edition/chapter-8/v-7/1
-% - https://serverlessland.com/patterns
 
 \section{Data Tier} \label{chapter:serverless-datastores}
 
