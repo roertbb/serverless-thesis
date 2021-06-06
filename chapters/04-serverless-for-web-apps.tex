@@ -2064,39 +2064,280 @@ Takeaways of the cost summary of designed solutions:
 
 \section{Data Tier} \label{chapter:serverless-datastores}
 
+The perspective of data tier in the modern web application is discussed in more detail in section \ref{chapter:database-paradigms}.
+Despite the fact that the relational database management systems established their posiiton over the years, the scale of modern web applciation showed that the relational model reaches some limitation in terms of scaling while at the same time maintaining satisfactory lelve of availability.
+NoSQL databases emerged as a response to the needs of the Internet scale applications, handling scaling and the increased data volumes more efficiently when running in clusters, offering satisfactory performance and availability, while sacrificing other capabilities such as operations consistency and query flexibility.
+
+The developer's task is to ensure that the architected web application will meet defined requirements and scale effectively. 
+Database selection for newly developed application is one of such design choices. 
+With the growth of popularity of microservice architecture patterns, presented in section \ref{section:web-apps-microservices}, when the web applications are broken down into smaller services, each of them should manage its own data.
+It allows developers to make a decision about choosing the suitable database for the service independently from the rest of the system, providing favourable data model fulfilling the assumed requirements \cite{AOneSizeFitsAllDatabaseDoesntFitAnyone}.
+The serverless microservices can leveradge such approach as well, drawing on the rich offer of the cloud providers to select the database which will fulfill the requirements as well as ensure high-performance and scalability, handing off the need to manage the datastore to the cloud provider.
+
+The offering of cloud providers is presented in the section \ref{chapter:serverless-service-providers}, including the database components suitable for the serverless workloads.
+Nevertheless, the portfolio of the cloud providers is much broader, covering numerous database categories and their diverse data models, which are suitable for various use cases in the web application field.
+The extended list of the available database components provided by AWS along their applicability is presented below, according to current offering \cite{DatabasesOnAWS}.
+
+\begin{itemize}
+    \item Amazon Relational Database Service (RDS) --- relational database, with several database instance types optimized for memory, performance or I/O operations, supporting six familiar database engines, including Amazon Aurora, PostgreSQL, MySQL, MariaDB, Oracle Database and SQL Server
+    \item Amazon Aurora --- relational database, compatible with MySQL and PostgreSQL, fully managed by Amazon RDS, including on-demand and autoscaling configuration suitable ofr serverless workloads
+    \item Amazon Redshift --- relational database, designed for data warehousing
+    \item Amazon DynamoDB --- key-value database, supporting wide column structure for attributes, which can be simple types as well as more complex documents, heavily used for the serverless workloads with autoscaling and granular billing model based on number of operations and data transfer
+    \item Amazon ElastiCache --- key-value, in-memory datastore with sub-millisecond latency, compatible with Redis and Memcached
+    \item Amazon DocumentDB --- MongoDB-compatible, document database service
+    \item Amazon Keyspaces --- wide-column, managed Cassandra-compatible database
+    \item Amazon Neptune --- graph database
+    \item Amazon Teamstream --- time series database
+    \item Amazon QLDB --- managed ledger database, providing immutable and cryptographically verifiable transaction log
+    \item Amazon Elasticsearch Service - search engine, running Elasticsearch service
+\end{itemize}
+
+Most of the mentioned components can be also incorporated in the web application developed in the serverless paradigm, providing desired capabilities fulfilling the requirements of various services. 
+For example the web application serving a role of bookstore can use DynamoDB to store information about books, using simple lookups for known key identifying the book. 
+When the data about available product is updated, the DynamoDB Streams can replicate the data to Amazon Elasticsearch Service, providing the fulltext search capabilities.
+The leaderboard, including most frequently purchased items, can be implemented using Redis and its sorted set data structure, when hosted on Amazon ElastiCache.
+Lastly, the graph database in form of Amazon Neptune can be utilised to provide recommendation engine, when traversing the underlying graph of connections \cite{DatabasesOnAWSTheRightToolForTheRightJob}.
+
+However, the serverless paradigm heavily relies on the ephemeral compute in form of Function as a Service, which leads to some complications when used with long-lived, TCP-based connection model of more traditional databases. 
+Moreover, most of the databases do not fulfill the serverless assumption about autoscaling capabilities to meet the demand as well as granular per-per-use billing model, requiring to scale and configure databases on per instance basis.
+
 \subsection{Issues when integrating traditional databases with serverless}
+
+RDBMS not designed for hyper-ephemeral compute - connection model
+
+solutions
+
+\begin{itemize}
+    \item manage db connections - configuration
+    \item caching strategires
+    \item async - buffer events for throttling and durability
+    \item utilise a proxy service - Amazon RDS
+    \item manage conenctions by ourselves - serverless-mysql
+\end{itemize}
+
+% \cite{WhyThePIETheoremIsMoreRelevantThanTheCAPTheorem}
+% Why the PIE theorem is more relevant than the CAP theorem - https://www.alexdebrie.com/posts/choosing-a-database-with-pie/
+
+% PIE 
+% - Pattern Flexibility - freedom to ask various queries
+% - Efficiency - basic performance characteristics
+% - Infinite Scale - numebr of users, operations db should scale to
+
+% PE - traditional choice - answers fast enough, query flexibility when evolving the app, covering additional use cases, good for online, analytic queries, normalization of the data 
+% IE - PE pains - impossible to sore all host data on a single machine, relational JOINs inefficient at scale due to additional I/O, computation required, NoSQL optimized for read simpliicty instead of write - data organized for simple fast lookup, denormalized nature of data - makes it easier to horizontaly shard your data, each query can hit the specific node that contains the relevant data, tradeoff pattern flexibility and infinite scale - with denormalized data you're loosing pattern flexibility you hadwith normalization, new access apttern may require to rewrite the data, however being specific with your access patterns - easier to scale your datastore
+% PI - data warehouse - move from relational databases (PE) to NoSQL (IE) due to scale, lost the ability to run ad-hoc queries over the data - copying data from IE system to PI system gives you back the flexibility you want for analytical queries
+
+% serverless
+% - Most databases weren’t designed for a world of hyper-ephemeral compute.
+% - database connections with traditional relational systems - connection limit, relational databases built for a world long-running compute, compute intances initialize connection pool to the relational database, reuse these conenctions across requests, in the world of ephemeral functions it does not work, each function is logically and often physically separate from others, so the connection pooling is impossible at the application layer, some solution is to separate connection pool as some sort of intermediary between the function and database
+% - such solution are difficult ot do - DynamoDB has a HTTP-based conenction model rather than a persistent TCP connection like relational databases
+% - in early stages of the project more flexible model can be more beneficial
+
+% \cite{BuildingResilientServerlessSystemsWithNonServerlessComponents}
+% Building Resilient Serverless Systems with “Non-Serverless” Components - Jeremy Daly - https://www.youtube.com/watch?v=coygxBg2wTY
+
+% - RDBMS and Faas don't play together nicely 
+%     - concurrency model doeasn't allow connection pooling directly from lambda, 
+%     - limited number of DB connections available
+%     - recycled containers create zombies, lambda connection may go away but not necessary teardown the connection
+% manage dbs connections
+%     - increase max_connections - spike memory, spike conenctions
+%     - limit concurrent connections - consumers are throttled and angry
+%     - lower connection timeout - cross your finger strategy
+%     - limit connection per username - roll the die
+%     - close connections before the function ends - additional time, 100ms overhead + database time
+%     better ways
+%     - implement a good caching strategy
+%         - use services as Elasticache - Redis can handle 60k concurrent connections, if you're using RDS you need to be in the VPC anyway, make request for cache first - make RDS connection only on cache miss, set low TTL, include some way to invalidate the cache
+%     - buffer events for throttling and durability
+%         - do you really need an immediate feedback? 
+%         - sync - services invoked by othe rservices must wait for a reply, blocking request
+%         - async - non-blocking request, service can invoke another service directly, use another type of connection channel to queue information, calling service only needs to wait for confirmation (ack) that the request was received
+%         - buffering and adding layer of reliability - put SQS queue in fron of the RDS, SQS taking event, Lambda responding to the client, after SQS is throttled Lambda, limit the ocncurrency to match the RDS throughput
+%         - RDS cluster is down? take the data and wirte it to SQS DLQ- adding durability, throttling the lambda, reduce downstream presure, failed events are further stored for inspection
+%         - if not transforming the data from user, the API Gateway can be connected directly with the SQS - API Gateway service integration
+%     - utilize a proxy service
+%         - pgBouncer - run on fargate
+%         - AWS RDS Proxy
+%     - manage connections by ourselves
+%         - serverless-mysql - Jeremy Daly - count open connections by process list, look at connection ratio, calculate timeouts and if there are some connections that could be removed (kill zombie connections), query process list for killing the zombie conenctions, retry policy with expotential backoff, scattered retries - Aurora cluster with 2 ACUs, 90 connection, 1GB of memory, 500users/sec, awg response 41ms - https://github.com/jeremydaly/serverless-mysql
+%         - but we shouldn't do this!
+%         - Aurora sErverless doesn't solve max_connection issues
+%         - Aurora serverless data api - kind of slow, not quite ready for synchronous workloads
+%         - Amazon RDS Proxy - added service on top of your database, still doesn't address the scalability issues
+
+% "Everything fails all the time" ~ Werner Vogels
+
+% Managing MySQL at Serverless Scale - https://www.jeremydaly.com/serverless-mysql-at-scale/
+
+% \cite{ServerlessAuroraWhatItMeansAndWhyItsTheFutureOfData}
+% Serverless Aurora: What it means and why it's the future of data - https://www.serverless.com/blog/serverless-aurora-future-of-data
+
+% architectural evolution - technology evolution driving changes in development perspective - faster network and better serailization protocols enables compute to be distributed, enables API-driven architecture pattern - using managed services, splitting monolith into microservices
+% - compared to relational databases, NoSQL provide simple but extremely cost effective, highly available, scalable databases with low latency
+
+% server-full databases - using instance based solution suhc as MySQL, Postgres, MongoDB - can tell how many instances you have running and their hostname, but these designed for pre-serverless world, with long running compute instances, following problems:
+% - connection limits - Postgres, Mongo - limits number of active connections you can have at once, can cause problems when spiky traffic causes number of lambda to rise
+% - networking issues - db instances often have strict firewall rules, which IPs can access them, problematic for ephemeral compute, adding custom network interface adds latency for compute to initialize
+% - provisioning resources - serverless fits into IaC, harder to fit postgres role (users) and configuration, harder to script with CloudFormation and Terraform - spread configuration across multiple tools...
+% - scaling issues - instance based databases aren't distinguished to scale up and down quickly, variable traffic during the week - may need to overprovision, for peek traffic
+
+% serveless databases - paying for throughput rather than particular number of instances and size of instances
+% - Firebase, FaunaDB, most common DynamoDB
+% - no conenction limits, just the general throughput limits from provisioned capacity, easy to scale up and down, networking and provisioning issues imtigated, access is over HTTP and authentication/authorization is handled via IAM permissions, much easier to use in a world with ephemeral compute
+% - querying is not as elastic as with relational databases, there is no that same flexibility for dynamoDB, developers agility is one of the benefits of serverless - having to migrate and rewrite data is a major blocker to this agility
+
+% - trully serverless - compute should not exists when not handling the data, hypher ephemeral compute requires new type of database, highly-scalable, automation-friendly, global, flexible data model
+% - distributed databases are hard, NoSQL movement, descirbes principles of DynamoDB and other influenced cousings (Cassandra, Riak), describe database revolution
+
+% - Aurora supporting multi master, allowing instances to have master that accept writes in different AZs
+% - dynamoDB global tables - sync data from dynamoDB across different regions
+
+% Aurora - Easy scaling, pay-per-use, accessible over HTTP, authentication and authorization over IAM roles rather than dataabse roles, flexible relational data model
+
+% aurora design paper - how changed the relational database for cloud native world
+
+% \cite{UsingRelationalDatabasesWithAWSLambdaEasyConnectionPooling}
+% Using Relational Databases with AWS Lambda - Easy Connection Pooling - https://www.youtube.com/watch?v=dgj9cvqgYYs
+
+% Amaozn RDS - managed relational database services
+% - easy to deploy relational databases, handling maintaining and scaling the databases, monitoring
+% - builtin availability - automatic multiple A-Z replication, backup, snapshots
+
+% - serverless apss needs large number of opne db conenctions and high conenction open/close rate
+
+% common solutions
+% - caching in serivce such as Amazon ElastiCache - in memory kv sotrage
+
+% RDS Proxy - preview 
+% - fully managed, database proxy feature for Amaozn RDS, manages warm connection pool on behalf of app, shared the connection between client calls
+% - proxy scaling in reponse to the increase in traffic itself
+% - can use AWS Secret Manager will handle the conenctivity details about the conenction to the database and the Lambda function will use only the IAM to RDS Proxy
+% - currently in preview, available only in set of defined regions
+
+% - sits between appplication and RDS database, reduces the need to handle the database connection in the Lambda itself, makes it simpler to write Lambda
+% - scalable - connections multiplexing features, maintains warm connection pool, enables sharing the conenctions between functions
+
+% security options:
+% 1. use native database credentials - the same way as connection to the databases today
+% 2. use IAM to connect with database
+
+% https://aws.amazon.com/blogs/compute/using-amazon-rds-proxy-with-aws-lambda/
 
 \subsection{Serverless databases}
 
+desired features
 
-% https://youtu.be/hwnNbLXN4vA
-% https://thenewstack.io/what-front-end-developers-need-to-know-about-serverless-databases/
-% https://www.alexdebrie.com/posts/dynamodb-no-bad-queries/
-% https://www.alexdebrie.com/posts/dynamodb-patterns-serverless/
-% https://www.trek10.com/blog/dynamodb-single-table-relational-modeling/?sc_channel=sm&sc_campaign=DB_Blog&sc_publisher=TWITTER&sc_country=DynamoDB&sc_geo=GLOBAL&sc_outcome=awareness&trk=ddbfromrelationaldbto_082720_TWITTER&sc_category=Amazon+DynamoDB&linkId=97421072
+\begin{itemize}
+    \item accessible via HTTP
+    \item fine-grained-access control with IAM
+    \item usage based on pricing model - pay-per-use
+    \item stream based actiity log - fits event-driven architecture
+    \item provisioning using IaC - no additional configuration required
+    \item autoscaling
+    \item global low latency - replication
+    \item no management
+\end{itemize}
 
-% Leadership session: AWS purpose-built databases - https://youtu.be/q81TVuV5u28
-% Data modeling with Amazon DynamoDB - https://youtu.be/DIQVJqiSUkE
-% Amazon DynamoDB Under the Hood: How We Built a Hyper-Scale Database - https://youtu.be/yvBR71D0nAQ
-% Databases on AWS: The Right Tool for the Right Job - https://youtu.be/-pb-DkD6cWg
+% \cite{FauxSQLOrNoSQLExaminingFourDynamoDBPatternsInServerlessApplications}
+% Faux-SQL or NoSQL? Examining four DynamoDB Patterns in Serverless Applications - https://www.alexdebrie.com/posts/dynamodb-patterns-serverless/
 
-DynamoDB - modeling for cost optimisation, increase performance, single table design
+% dynamodb serverless-friendly:
+% - accessible via HTTP
+% - fine-grained access control with IAM
+% - usage based pricing model
+% - stream based activity log for updating secondary data stores - dynamodb streams, capturing time-ordered sequence of item-level modification in any dynamodb table, storing this infroamtion in log up to 24h, accps can access the log and view the data before/after the modification
 
-Aurora
+% good fit for using dynamodb - use with lambda, non-lambda based solution such as step function, appsync
 
-S3
+% \cite{PickingDatabaseForYourServerlessApplicationIn2021}
+% Picking a database for your serverless application in 2021 - https://www.youtube.com/watch?v=pGXR2vy9BJ0
 
-how they work? streams, handling reusing connections, RDS proxy
+% choosing a database for serverless application
 
----
+% overview of data model
+% - SQL - relational database
+%     - pros: familiarity, query flexibility - data access patterns cahnge or are not fully known
+%     - cons: harder to horizontally scale, scaling points are less predictable - many different parameters and query optimisations
+%     - propriatery - Amazon Aurora (speaks MySQL and PostgreSQL), Oracle, Microsoft servers via the RDS
+% - NoSQL
+%     - pros: schemaless - don't need to know the datashcema in the beginning, horizontal scaling, scaling is easier to comprehend
+%     - const: schemaless - could be a footgun, learning curve, harder OLAP queries - smaller queries capabilities
 
-RDS Proxy
+% how the database is managed
+% - failover, recovery, serverless - it is handled by me
+% - automatic updates when new versions of service are deployed
+% - autoscaling and pay per use
 
-% \cite{ServerlessAtScaleDesignPatternsAndOptimizations}
-- pool and share database connection of the RDS databases
-- lambda connects to proxy and proxy connects to database
-- preserves connections during DB failover
-- Proxy manages credentials with Secret Manager and IAM - proxy can manage credentials, lambda can have access only to the proxy
+% serverless integration
+% - IaC - provisioning databases in declarative way as a code, for serverless apps - infra is part of the app, compared to container world, 
+%     - full provisioning vs partial provisioning - do need to create users, roles etc. - needs to create beyond the IaC
+% - Auth - how to conenct and talk with the databases - where to store credentials, need to rotate them? attaching role to Lambda function - prefer using IAM over credentials
+% - connection model - how to connect to the database, 
+%     - in traditional database long-lived TCP connections, great in world of instances and containers, but for short living lambda, spinning all over the place in event-driven compute - takes additional time, can reach the connection limit, partially oslver by AWS RDS Proxy - conenction pooling instance, managing connection to the database, needs to consider VPC, security groups
+%     - new databases - DynamoDB - HTTP connection based, don't need to worry about hte connection limits, frontend addds proxy to the dynamo, can handle request and make as many as you want, security provided by IAM, no need to worry about networking stuff etc. - more suitable connection model for serverless
+
+% pricing model - pay-per-use pricing more preffered
+% - instance based - RDS, Document DB - harder to scale up, and much harder to scale down - overpaying for capacity
+% - aurora serverless - in the middle
+% - pay per use - DynamoDB, fauna
+% most suitable for the serverless model - DynamoDB - connection model, scaling, pricing, IAM as the security mechanism
+
+% \cite{WhatFrontEndDevelopersNeedToKnowAboutServerlessDatabases}
+% What Front-End Developers Need to Know about Serverless Databases - https://thenewstack.io/what-front-end-developers-need-to-know-about-serverless-databases/
+
+% - every major provider have some serverless database to offer
+% - FaundaDB as self standing offering
+
+% consumption based billing - don't want subscription to pay fixed amount of money per month
+% - creating init app with lower traffic fits into the free tier of the to test capabilities
+% - serverless pricing based on storage and compute - how much and how long we store the data in the database, how long we use coputing to read and write data, granularity of pricing, some providers allow users to switch to provisioned capacity if needed - save significant amount of money when the traffic is known and predictable
+
+% autoscaling
+% - ability to accomodate changes in utilisation quickly and without human intervention
+% - no need to choose servers, right size of the hard discs, CPU, memory - if don't buy enough, the db would run out of service, degrading the performance when increasing the amoun of users - problems with over and under provisioning
+% - serverless autoscaling is a next step in the evolution - scale to virtually infinite disk space and compute in seconds, when traffic spikes
+% - autoscaling with consumption based billing can be double edged sword when not handled properly - significant 
+
+% no cold starts
+% - cold start happening when the resource accessed for the first time or after it wasn't accessed for more extended period, very high latency, more of an issue for the serverless functions, but worth it to consider the fact of establishing connections
+
+% no operations
+% - not thinking about the operations is a serverless thing, handing off the work to the cloud provider
+% - no need to manage, update, fix issues with databases, many services provide backups of the data, 
+
+% global low latency
+% - some sort of global deployment offering, replication in different geographical data centers
+% - global Availability Zones may not be essential when starting, but later it may be desired, serverless databases allow to keep the data where it's needed from the beginning
+
+% secure by default - serverless databases secure by default, come with encryption at rest and in transit
+% direct client access- Firebase
+% schemaless - most frequently aren't relational
+% FaaS integration - databases of big cloud providers are integrated into their FaaS ecosystem, AWS DynamoDB, Firebase Cloud Firestore can trigger backend functions,
+
+\subsubsection{Amazon DynamoDB}
+
+\subsubsection{Amazon Aurora}
+
+% ---
+
+% DynamoDB - modeling for cost optimisation, increase performance, single table design
+
+% Aurora
+
+% S3
+
+% how they work? streams, handling reusing connections, RDS proxy
+
+% ---
+
+% RDS Proxy
+
+% % \cite{ServerlessAtScaleDesignPatternsAndOptimizations}
+% - pool and share database connection of the RDS databases
+% - lambda connects to proxy and proxy connects to database
+% - preserves connections during DB failover
+% - Proxy manages credentials with Secret Manager and IAM - proxy can manage credentials, lambda can have access only to the proxy
 
 \section{Client Tier}
 

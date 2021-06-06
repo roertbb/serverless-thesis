@@ -173,7 +173,7 @@ Most frequently, such simple key-value storage persist the data in memory, which
 
 \paragraph{Document-oriented databases}
 
-Document databases enable to store documents that are containers for key-value pairs, which form semi-structured documents that are most frequently stored in formats such as JSON. The documents are grouped together in collections that form hierarchical structure, and can be indexed for faster queries. The documents' data schema is implicit and it's interpreted when the documents are read, which grants better flexibility and possibility to store arbitrary keys and values in the documents. On the other hand, it does not guarantee any document structure and attribute possesion.
+Document databases enable to store documents that are containers for key-value pairs, which form semi-structured documents that are most frequently stored in formats such as JSON. The documents are grouped together in collections that form hierarchical structure, and can be indexed for faster queries. The documents' data schema is implicit and it is interpreted when the documents are read, which grants better flexibility and possibility to store arbitrary keys and values in the documents. On the other hand, it does not guarantee any document structure and attribute possesion.
 
 Instead of normalising the data and encoding the relations, the document model prefers to embed the data into single document, which is a tradeoff, granting faster reads due to data locality, but on the other hand it can introduce data duplication. It makes the writing and updating documents more complex, which may be not suitable for the relational data to form connected structures. Nevertheless, discussed approach enables developers to query the documents by matching semi-structured data, selecting parts of them or performing aggregation tasks on the underlying data. 
 The disadvantage of the model is the fact that the whole document need to be retreived when selecting only part of it and the entire documents need to be rewritten on updates \cite{DesignDataIntensiveApplications}.
@@ -192,9 +192,9 @@ The wide-column database design is sufficient for operations requiring frequent 
 
 When the data is characterized by many relations between modeled entities and connections are becoming more and more complex, it can be beneficial to start modeling the data as a graph built from vertices (modeled entities) and edges (relationships between the entities) that contains additional information about the relations. 
 
-Graph databases are designed to store and efficiently query the data persisted in such graph representation. Along with many algorithms capable of various computations on the graph structure, it can be suitable for modeling social network problems, web graphs, communication related networks or building knowledge graph. It can be also beneficial to use graph-like structure in problems related with knowledge discovery, because the underlying design allows to easily add new connections when the data model evolves and changes frequently.
+Graph databases are designed to store and efficiently query the data persisted in such graph representation. Along with many algorithms capable of various computations on the graph structure, it can be suitable for modeling social network problems, web graphs, communication related networks or building knowledge graph. It can be also beneficial to use graph-like structure in problems related with knowledge discovery, because the underlying design allows to easily add new connections when the data model evolves and changes frequently \cite{DesignDataIntensiveApplications}.
 
-Along the graph representations, databases provide also a declarative query languages to create and traverse the information preserved in graph representations that frees developers from specifying the execution details and make the optimizer choose the most efficient strategy to retrieve the data. Cypher is one of such graph query languages, and it is created for Neo4j \cite{Neo4j} graph database. \cite{DesignDataIntensiveApplications}.
+Along the graph representations, databases provide also a declarative query languages to create and traverse the information preserved in graph representations that frees developers from specifying the execution details and make the optimizer choose the most efficient strategy to retrieve the data. Cypher is one of such graph query languages, and it is created for Neo4j \cite{Neo4j} graph database.
 
 \paragraph{Search engines}
 
@@ -202,7 +202,7 @@ Search engines enable the possibility to perform a full-text search of the docum
 
 The most popular databases in that category, such as Elasticsearch \cite{Elasticsearch} and Apache Solr \cite{ApacheSolr} are build on top of the Apache Lucene project.
 
-\subsubsection{Data management tradeoffs}
+\subsubsection{Data management tradeoffs} \label{chapter:database-management-tradeoffs}
 
 % \cite{PerspectivesOnArchitectureEvolution}
 
@@ -210,7 +210,7 @@ The most popular databases in that category, such as Elasticsearch \cite{Elastic
 % - in order to make the suggested system work, 3 requirements: incremental scalability and overflow growth provisioning, 24x7 availability through fault masking, cost effectiveness
 % - highly scalable network services should scale linearly with the amount of hardware in use - high availability, cost effectiveness, relatively cheaper than forklift upgrades, making deliberate tradeoffs around consistency
 
-\paragraph{Strong consistency vs. high availability} \label{chapter:database-management-tradeoffs}
+\paragraph{Strong consistency vs. high availability}
 
 As described in chapter \ref{chapter:database-paradigms} the offering of available database management systems is diverse. Before selecting one of the options, it is essential to understand the requirements that the database needs to fulfil, based on the business problem definition and guarantees of the suitable data model for it. 
 
