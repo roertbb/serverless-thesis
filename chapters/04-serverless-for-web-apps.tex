@@ -2216,7 +2216,7 @@ DynamoDB is suitable for serverless based workloads, ensuring consistent perform
 It shows the power of NoSQL databases in terms of the scalability and performance aspects, however it comes with a cost affecting the data model and query capabilities.
 DynamoDB does not allow to perform joins on data tables and force to segment the data, which allows easier, horizontal scaling as well as bounds the queries by limiting the results of data retrieved with pagination capabilities, which enables to ensure predictable performance.
 On the other hand, it requires developers to think about the data model up front, by analysing the access patterns which are required to design the data accordingly, most frequently in a denormalized way.
-It requires a shift in the mental model from the relational modeling to approaches such as single-table design to store multiple, heterogenous item types in one table to query and retrieve them with prejoined data in one request \cite{SQLNoSQLandScaleHowDynamoDBScalesWhereRelationalDatabasesDont}.
+It requires a shift in the mental model from the relational modeling to approaches such as single-table design to store multiple, heterogeneous item types in one table to query and retrieve them with prejoined data in one request \cite{SQLNoSQLandScaleHowDynamoDBScalesWhereRelationalDatabasesDont}.
 Moreover, the data duplication requires to to propagate the changes across the tables to maintain the consistent data model. \\
 
 Both of the example implementations covered in section \ref{chapter:example-implementations} use the DynamoDB for storing simple data models, which effectively suits the key-value lookup access pattern.
