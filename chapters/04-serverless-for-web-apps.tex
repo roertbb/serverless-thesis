@@ -2220,7 +2220,7 @@ It requires a shift in the mental model from the relational modeling to approach
 Moreover, the data duplication requires to to propagate the changes across the tables to maintain the consistent data model. \\
 
 Both of the example implementations covered in section \ref{chapter:example-implementations} use the DynamoDB for storing simple data models, which effectively suits the key-value lookup access pattern.
-The web application performing the receipt processing, defines the Partition Key based on the username to effectively partition the items and Sort Key to sort the results in the order they were added, which makes it possible to query all of them for a particular user.
+The web application performing the receipt processing, defines the Partition Key based on the username to effectively partition the items and Sort Key as insert date to order the results, which makes it convenient to query all of them for a particular user.
 Moreover, the DynamoDB Stream is used to trigger the Lambda function, responsible for notifying the user about the processing results, utilising the GraphQL subscription.
 
 \subsubsection{Amazon Aurora}
