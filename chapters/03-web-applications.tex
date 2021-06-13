@@ -326,7 +326,7 @@ Based on this, the stubs code for the client and server can be generated, allowi
 
 The binary encoding provided by Protocol Buffers allows to achieve better performance compared to other serialisation techniques, which is an appealing feature along with the benefits of HTTP/2 used underneath, enabling bidirectional streaming capabilities and real-time communication between the client and server.
 gRPC allows for four kinds of service methods, the basic one utilise a regular request-response call. It can be enhanced with the streaming capabilities, in which sequence of messages can be sent from the server to the client, the opposite way or in both directions simultaneously.
-The remote procedure execution is not only limited to the synchronous invocation, but can also be invoked asynchronously or terminated after a specified time, when the deadline is defined. Moreover, it supports tracing, load-balancing, health-checking and fully pluggable authentication.
+The remote procedure execution is not only limited to the synchronous invocation, but can also be invoked asynchronously or terminated after a specified time, when the deadline is defined. Moreover, it supports tracing, load balancing, health-checking and fully pluggable authentication.
 
 Most frequently, the gRPC is used in the microservice architecture for efficient communication between services within the same organisation \cite{DesignDataIntensiveApplications}.
 

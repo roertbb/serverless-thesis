@@ -748,7 +748,7 @@ From the application examples covered in section \ref{chapter:serverless-suitabi
 
 Considering the serverless as the outsourcing technology, the significant amount of the overhead and responsibility required to manage the system and ensure it is running properly, is handed off to the cloud provider, as described in section \ref{chapter:serverless-suitability-vendor-dependence}. Having the knowledge, experience and qualified staff, the cloud provider is able to ensure the reliability level exceeding the services client could guarantee by itself. Nevertheless as mentioned in section \ref{chapter:serverless-suitability-vendor-dependence}, unpredictable events or human errors happen and the disruption and outages are inevitable. To prevent the service downtimes, the serverless solution can be deployed and replicated into multiple availability zones managed by the cloud provider. Each of the datacenters is independently supplied with the electricity and network access, which gives a possibility to redirect the traffic between them when some disruption happens.
 
-The section \ref{section:serverless-definition} describing the serverless components characteristics, mentions that the services are designed with implicit high availability. Multiple serverless components provide various retry mechanics in case of errors occurring during the processing, related to issues with the application logic or hardware faults. For example, by default the AWS Lambda invoked asynchronously retries the event processing 2 times upon processing failure. If the processing is not completed after retries, based on the configuration the event can be placed in Dead Letter Queue, which is a dedicated SQS instance for handling failed messages.
+The section \ref{section:serverless-definition} describing the serverless components characteristics, mentions that the services are designed with implicit high availability. Multiple serverless components provide various retry mechanics in case of errors occurring during the processing, related to issues with the application logic or hardware faults. For example, by default the AWS Lambda invoked asynchronously retries the event processing 2 times upon processing failure. If the processing is not completed successfully after retries, based on the configuration the event can be placed in Dead Letter Queue (DLQ), which is a dedicated SQS instance for handling failed messages.
 
 Along with the programmatic solutions, establishing processes including proper monitoring, observability and triggering alarms in case of the undesired components behaviour could be beneficial, mitigating further administrator intervention or even restoring the system automatically to the appropriate state.
 For the production running application, the solutions similar to discussed in the section \ref{section:web-apps-microservices} considering the microservices architecture as well as all of the efforts required to ensure proper monitoring and observability described in more details in section \ref{chapter:serverless-monitoring-and-observability} could be applied.
@@ -1017,7 +1017,7 @@ The AWS Lambda is used to incorporate the business logic of the application, tra
 The use of Amazon Textract brings new development opportunities, allowing to integrate the service in the processing flow with convenient billing per usage and eliminates the need to maintain similar self-hosted service.
 
 AWS AppSync serves as a feature-rich gateway of the application backend, triggering Lambda functions or directly communicating with other services to retrieve the data, but also it allows to update the client in real-time using the subscriptions, which is a beneficial feature for the asynchronous processing.
-All of the processing is performed in a secure and compliant way, thanks to the authentication and authorization capabilities introduced by the integration of AWS AppSync with the Amazon Cognito, along with the presigned URL mechanism, enabling it to safely store and retrieve the files from Amazon S3 bucket.
+All of the processing is performed in a secure and compliant way, thanks to the authentication and authorization capabilities introduced by the integrating AWS AppSync with the Amazon Cognito, along with the presigned URL mechanism, enabling application to safely store and retrieve the files from Amazon S3 bucket.
 
 \subsection{Generating interactive slideshow based on LaTeX files} \label{chapter:examples-generating-interactive-slideshow-based-on-latex-files}
 
@@ -1103,7 +1103,7 @@ However, the size of accumulated state in the AWS Step Function is strictly limi
 
 Similarly to the previous example, the processing is performed in an asynchronous manner and requires some additional solution to update the client once the results are ready. The proposed solution invokes the AWS Step Function using the REST API and later connects via the WebSocket API to receive notification when the slideshow is available.
 
-Another challenge with the proposed processing flow is related with the LaTeX files processing. The use of Lambda layer, including the additional dependencies, makes it possible to perform such custom tasks and enhance the Lambda runtime with numerous capabilities.
+Another challenge with the proposed processing flow is related with the LaTeX files processing. The use of Lambda layer, including the additional dependencies, makes it possible to perform such custom tasks and enhance the Lambda runtime with additional capabilities.
 
 Lastly, the use of the AWS Polly provided another development opportunity, enabling to easily enhance the slideshow with the audio commentary, without the need to host similar service or incorporate some other third party service, running outside of the cloud platform.
 
@@ -1112,7 +1112,7 @@ Lastly, the use of the AWS Polly provided another development opportunity, enabl
 \subsection{Lambda function as a compute resource} \label{chapter:lambda-function-as-a-compute-resource}
 
 The idea of Function as a Service has been already introduced in section \ref{chapter:serverless-faas}.
-An example of such FaaS offering is AWS Lambda \cite{AWSLambda}, which is described as a compute service that requires no resource management. It provides the autoscaling capabilities, high-availability built-in and pay-per-use billing model, based on the function execution and the processing time with a granularity of milliseconds. 
+An example of such FaaS offering is AWS Lambda \cite{AWSLambda}, which is described as a compute service that requires no resource management. It provides the autoscaling capabilities, built-in high-availability and pay-per-use billing model, based on the function execution and the processing time with a granularity of milliseconds. 
 
 The following section analyses in more details the FaaS capabilities, considering the AWS Lambda as one of the implementations of this model, taking into account its limitations, runtime possibilities, execution models and possible optimisations.
 Based on the overview of the AWS Lambda functionalities, the intuition of FaaS model capabilities as an execution environment can be established.
@@ -1336,7 +1336,7 @@ The mentioned services are not mutually exclusive and can be combined together t
 Some of the patterns including described components and leveraging their capabilities are covered below:
 
 \begin{itemize}
-   \item Throttling and buffering --- The autoscaling capabilities of the Lambda function can be a problem for the downstream services, including for example the hosted relational databases, which may not be able to scale accordingly or exhaust the available connections pool.
+   \item \textbf{Throttling and buffering} --- The autoscaling capabilities of the Lambda function can be a problem for the downstream services, including for example the hosted relational databases, which may not be able to scale accordingly or exhaust the available connections pool.
    SQS and Kinesis Data Streams can be used to persist and batch the incoming events.
    Both of the mentioned approaches can limit the concurrency of incoming traffic, serving a role of buffer, aggregating the incoming requests and executing the function with a single batch or shard, leading to lower cost per function invocation.
    DLQ can be configured to store failed records. Alternatively, Lambda Destination can be leveraged to execute another Lambda function with an event including context of the failure \cite{ServerlessArchitecturalPatternsAndBestPractices}.
@@ -1348,7 +1348,7 @@ Some of the patterns including described components and leveraging their capabil
        \label{fig:throttling-and-buffering-diagram}
    \end{figure}
 
-   \item Fan-Out --- When the payload does not require additional processing, the event can be sent directly to SNS, which pushes the message to subscribers based on the configured filtering. SQS can be configured to subscribe for the events published by SNS, batch the incoming data and share it further with connected Lambda functions or other services.
+   \item \textbf{Fan-Out} --- When the payload does not require additional processing, the event can be sent directly to SNS, which pushes the message to subscribers based on the configured filtering. SQS can be configured to subscribe for the events published by SNS, batch the incoming data and share it further with connected Lambda functions or other services.
    Alternatively, for the traffic characterized with high, consistent throughput and large payloads, Kinesis Data Stream can be a more cost efficient solution \cite{ServerlessArchitecturalPatternsAndBestPractices}.
 
    \begin{figure}[H]
@@ -1357,7 +1357,7 @@ Some of the patterns including described components and leveraging their capabil
        \caption{Architecture diagram of the Fanout pattern including SNS and SQS to reliably send out events}
        \label{fig:fanout-diagram}
    \end{figure}
-   \item Streaming --- The data coming from various data sources can be effectively processed and stored for further analytical purposes. SNS can be used to discard unwanted events, filter the incoming events based on the different business areas and pass the data to Kinesis Firehose to preserve the data, for example in S3 \cite{ServerlessArchitecturalPatternsAndBestPractices}.
+   \item \textbf{Streaming} --- The data coming from various data sources can be effectively processed and stored for further analytical purposes. SNS can be used to discard unwanted events, filter the incoming events based on the different business areas and pass the data to Kinesis Firehose to preserve the data, for example in S3 \cite{ServerlessArchitecturalPatternsAndBestPractices}.
    % https://aws.amazon.com/blogs/compute/introducing-message-archiving-and-analytics-for-amazon-sns/
   
    \begin{figure}[H]
@@ -2213,7 +2213,7 @@ To integrate with the event-driven serverless architecture, the DynamoDB Streams
 \paragraph{DynamoDB suitability for serverless based workloads}
 
 DynamoDB is suitable for serverless based workloads, ensuring consistent performance by design, even when running with large datasets as well as providing integrations with other services such as AWS Lambda or AWS AppSync.
-It shows the power of NoSQL databases in terms of the scalability and performance aspects, however it comes with a cost affecting the data model and query capabilities.
+It shows the power of NoSQL databases in terms of the scalability and performance aspects, however it comes with a cost, affecting the data model and query capabilities.
 DynamoDB does not allow to perform joins on data tables and force to segment the data, which allows easier, horizontal scaling as well as bounds the queries by limiting the results of data retrieved with pagination capabilities, which enables to ensure predictable performance.
 On the other hand, it requires developers to think about the data model up front, by analysing the access patterns which are required to design the data accordingly, most frequently in a denormalized way.
 It requires a shift in the mental model from the relational modeling to approaches such as single-table design to store multiple, heterogeneous item types in one table to query and retrieve them with prejoined data in one request \cite{SQLNoSQLandScaleHowDynamoDBScalesWhereRelationalDatabasesDont}.
@@ -2259,62 +2259,158 @@ Currently, Amazon Aurora is under ongoing development, including the second vers
 
 \section{Client Tier}
 
-\subsection{Client communication patterns for serverless architecture} \label{chapter:serverless-client-communication-patterns-for-serverless-architecture}
+Building the web applications using the serverless architecture has a significant impact on the architecture of the compute and storage layer.
+The use of ephemeral and short-lived functions executed in an event-driven manner affects the client-server communication, creating the need to use dedicated components, serving the role of publicly available interfaces of a web application.
+Embracing the notion of asynchronous communication for more sophisticated compute workloads, introduces additional challenges for the interactive web clients, which are required to work beyond the request-response cycle and receive the updates from the application backend in real-time, once the underlying data is changed or when the operation is completed.
+Moreover, the cloud platforms introduce various ways to host the web application clients as well as allow them to incorporate additional client libraries to cooperate with the services hosted in the cloud more tightly.
+The section below includes an overview of all of the mentioned topics discussed in more detail.
 
-% https://youtu.be/yfJZc3sJZ8E - Gateway
-% https://serialized.net/2020/09/multiplayer/ - WebSocket applicability
-% https://youtu.be/XVU4pYeNfNo - AppSync
-% https://hackernoon.com/using-protocol-buffers-with-api-gateway-and-aws-lambda-22c3804f3e76 - Protobufs
-% https://www.alexdebrie.com/posts/api-gateway-elements/#!newthread
+\subsection{Serverless API services} \label{chapter:serverless-client-communication-patterns-for-serverless-architecture}
 
-APIGateway - REST + websockets
+As mentioned in section \ref{chapter:public-interfaces}, the architecture of web based services requires dedicated components, serving a role of public interfaces, responsible for exposing an API, which will be consumed by the web application clients as well as forwarding requests to the Lambda function or other hosted services.
+Amazon API Gateway and AWS AppSync belong to the most frequently used services used along other serverless components, introducing numerous capabilities which can be integrated when developing the web applications in the serverless architecture.
+Both services and their features are covered in more detail below.
 
-AppSync - GraphQL - data aggregation from different resources
+\subsubsection{Amazon API Gateway}
 
-gatekeeper - authentication
+Amazon API Gateway \cite{ApiGateway} is a fully managed service, enabling developers to create APIs, serving the role of public web application interfaces as well as integrate directly with other components of the cloud platform and developed backend services.
+It handles tasks related with maintaining, monitoring and securing APIs, integrating them with other services, providing authentication and authorization capabilities, traffic management and throttling and versioning management.
 
-direct resolvers to particular services with/without the lambda, pipeline resolvers (nested nodes in graph) - overhead comparison
+The API endpoint can be configured as one of the mentioned type, depending on the traffic origin:
 
-calling the services from the client - presigned URLs / using client libs to have access to resources
+\begin{itemize}
+   \item Regional --- recommended for general usage and built for clients in the same region
+   \item Edge-optimized --- utilising Amazon CloudFront distribution, designed for globally distributed set of clients
+   \item Private --- accessible from within Virtual Private Cloud (VPC) and designed for internal APIs and private microservices
+\end{itemize}
 
-\subsection{Serverless push based approach}
+Amazon API Gateway supports three types of APIs, including HTTP API, REST API as well as WebSocket API, which are described in more details below:
 
-pipeline resolvers
-% https://aws.amazon.com/blogs/mobile/appsync-pipeline-resolvers-2/?sc_channel=sm&sc_campaign=Mobile_Campaign,DB_Blog&sc_publisher=TWITTER&sc_country=DynamoDB&sc_geo=GLOBAL&sc_outcome=awareness&trk=ddbawsappsyncpipelineresolvers_061021_TWITTER&sc_category=Amazon+DynamoDB&linkId=117305496
+\begin{itemize}
+   \item REST API ---
+   Defines a mapping between REST resources according to appropriate HTTP methods to integrate with Lambda functions, AWS services or other HTTP endpoints.
+   REST APIs allow developers to use additional capabilities, such as defining usage plans with API keys, caching responses, transforming requests as well as providing validation for the data being sent and received.
+   \item HTTP API ---
+   Suitable for defining mapping for routes and HTTP methods, forwarding the requests to configured services of the cloud platform.
+   HTTP APIs are more lightweight and designed to proxy the requests to the downstream services, introducing less network overhead and being considerably cheaper than the REST APIs, however the number of additional capabilities related with operating on the requests is limited.
+   \item WebSocket API ---
+   Enables developers to define real-time, full-duplex communication between clients and servers, while maintaining and persisting the connection state as well as handling the data transfer between web clients and backend services.
+\end{itemize}
 
-- API Gateway authorizers
-% - Power modern serverless applications with GraphQL and AWS AppSync - https://youtu.be/IcrrsbYhZoQ
-% - API patterns and architectures: RESTful vs. GraphQL APIs - https://youtu.be/pBFStsa0h-4
+API Gateway can be configured to provide authentication and authorization capabilities based on IAM policies and AWS credentials, when integrating with Amazon Cognito Pool or using Lambda authorizers to validate the tokens or request parameters, granting access to the backend services \cite{IDidntKnowAmazonAPIGatewayDidThat}.
+Moreover, it can be integrated with AWS Web Application Firewall (WAF) to secure the API from common vulnerabilities, blocking attacks from specified IP ranges, matching particular requests based on the content or user agent.
+Proper logging, monitoring and usage metrics are granted by Amazon CloudWatch, based on the client interactions.
+The API definition can be described in OpenAPI format, including custom integration which allows to configure the routes with AWS services, and used further by the Infrastructure as a Code tools to deploy the API Gateway configuration \cite{ApiGatewayFeatures}.
 
-% https://youtu.be/08AjVGGQaKQ?t=817
-- Lambda authorizers
+API Gateway is billed based on the number of API calls and transferred data as well as the connection duration when using the WebSocket APIs.
 
-% https://aws.amazon.com/blogs/compute/from-poll-to-push-transform-apis-using-amazon-api-gateway-rest-apis-and-websockets/
+The second example implementation, covered in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}, uses API Gateway to provide simple REST API, integrating directly with AWS Step Function to start the presentation generation workflow and transform the response from the service to obtain the execution identifier.
+It is later used when connecting via the WebSocket API to subscribe for notification, once the particular processing flow is completed and the slideshow is available for the user preview.
 
-% Backend-less URL shortener
-% https://aws.amazon.com/blogs/compute/building-a-serverless-url-shortener-app-without-lambda-part-1/
+\subsubsection{AWS AppSync}
 
-However, for the particular services, the communication can be simplified and the API Gateway can communicate directly with various services, alleviating the need to use Lambda.
+AWS AppSync \cite{AppSync} is a fully managed GraphQL service, responsible for processing requests and mapping their different parts to appropriate resolvers, which query the data from multiple data sources, including databases, microservices or other HTTP endpoints, and aggregate it in one response.
+The GraphQL schema allows web clients to define strongly-typed queries, granting greater elasticity by defining desired fields, preventing from overfetching and multiple round-trips to the server. \\
 
+Resolvers can integrate directly with other components hosted on the cloud platform, including DynamoDB, Aurora Serverless, Elasticsearch Service as well as use HTTP requests to invoke other services, such as AWS Step Function, or bridge with regional API Gateway endpoints, forming a facade to AWS services.
+The resolvers can use mappings, defined in Apache Velocity Language, when requesting the data and receiving the response, forming simple unit resolvers.
+Unit resolvers can be composed into pipeline resolvers, performing a more advanced sequence of operations as well as using Lambda resolvers for processing more complex application logic.
+
+The GraphQL subscriptions allow clients to receive updates in real-time. AppSync manages the WebSocket connections, scaling according to usage and delivering the messages to subscribing clients.
+The subscription can be triggered based on the client operation as well as one of the cloud platform services, broadcasting the update to subscribing clients, which can additionally filter the message based on its content. \\
+
+AppSync provides additional authentication and authorization capabilities when performing operations or querying the data.
+It can use API keys, IAM permissions, integrate with Cognito User Pool to manage users and groups as well as incorporate any identity provider, which is compliant with OpenID Connect protocol.
+
+Moreover, results of resolver processing can be cached, based on defined caching policy including caching keys and authenticated user parameters.
+The feature is based on the ElastiCache instances, serving the role of cache with predefined Time To Live (TTL) values, reducing the compute cost for slowly changing data.
+
+AppSync integrates with other services to bring additional capabilities.
+AWS Web Application Firewall (WAF) can be configured to enable additional protection, Amazon CloudWatch gathers logs and metrics, while AWS X-Ray grants greater observability for the processed requests \cite{DevelopServerlessGraphQLArchitecturesUsingAWSAppSync}.
+
+The AppSync can be integrated with the web and mobile applications, using the Amplify DataStore to preserve the data on the client devices and make it available for working offline, synchronising the state when the device will be reconnected to the network \cite{AppSyncFeatures}. \\
+
+AppSync pricing is based on data transfer and the number of performed queries, mutations and subscriptions, with additional billing per time when the clients use WebSocket connections as well as depending on the caching configuration.
+
+The first example implementation performing the receipt processing, described in section \ref{chapter:examples-receipt-processing}, uses AppSync to provide GraphQL API for the client application. It uses Lambda functions to resolve some of the queries along with communicating directly with other services to retrieve the data.
+Moreover, the communication is enhanced by the real-time subscriptions, which allow applications to update the clients, once the asynchronous processing flow is completed and the state in the database is updated.
+The integration with Amazon Cognito allows the application to handle user identities and ensure the returned data belongs to the particular user.
+The DynamoDB Stream triggers the Lambda function, which performs the appropriate mutation, resulting in sending an update to the particular client, selecting subscription based on the identity.
+
+\subsection{Client communication patterns for serverless architecture}
+
+% depending on the application type and workflows it needs to perform, the proessing may differ from simple requests based on a handful of services as well as more complex setup, hiding a group of microservices working together to perform the application logic
+
+\subsubsection{Synchronous requests}
+% works for simple cases when the lambda can make a request to downstream service and return back, mentioned in section ...
+% for more complex workflows the processing should go async - lambda can invoke the processing, return with the status to client, polling for the status/results periodically once they are finished
+% using rest, similarly to the other
+
+\subsubsection{GraphQL API}
+% \cite{ServerlessArchitecturalPatternsAndBestPractices}
+% use AppSync to host the GraphQL APIs
+% - simpler logic can be handled by resolvers directly communicating with the data sources such as DynamoDB to query the data - insert, listing - simple VTL to connect to the datasource
+% - for more complex business logic use lambda functions, perform the processing and return the value to the client
+% - pipeline resolvers - performing chainy actions - call service number 1, call service number 2, invokes some processing, booking - pipeline resovlers can do that, but are not prepared for handling the errors and retries effectively
+% - use Step Functions for more complex processing, when handling errors and retries is required
+% - Cognito / any JWT - appsync allows to set the auth rules per field level - some users/groups can have access to fields, while others not
+% \cite{DevelopServerlessGraphQLArchitecturesUsingAWSAppSync}
+% - beneficial when working on larger products in a team when multiple teams developing multiple microservices - the logic can be extracted and merge on the GraphQL API level in one place, serving as the routing layer
+% - teams can swap the underlying implementation of the services, change the data stores, but as long as the API contract is maintained, it will work - change and evolve the underlying architecture until the requirements are not clarified
+% - moreover, leveraging the subscriptions enable developers to update the clients in real time, based on the interactions of other users, change in the underlying data or anything triggered from the backend
+
+\subsubsection{Working with files securely --- S3 presigned URLs}
 % \cite{ServerlessAtScaleDesignPatternsAndOptimizations}
-% https://youtu.be/dzU_WjobaRA?t=2391
+% use IAM user/role permissions to create the URL to get/post for a given S3 object
+% URL valid for ss long as credentials are valid, or specified expiration time is exceeded
+% it can be used for the clients to operate directly with S3 to upload the files or get the files in a secure way, when the access is authenticated/authorized
+% Lambda invocation payload (request and response) - 6 MB for synchronous requests
+% API Gateway has a payload limit up to 10 MB 
 
-% cherry pick - GraphQL API
-% https://youtu.be/9IYpGTS7Jy0?t=961
+\subsubsection{Webhooks}
+% \cite{ServerlessAtScaleDesignPatternsAndOptimizations}
+% callback pattern, calling back to http endpoint posted by the caller, to let them know that the work is done
+% the client is trusted - verifying some API key or validated some other way
+% the client request is submitted to the queue to be processed asynchronously
+% api gateway returns as soon as the request is put into the SQS, durably stored
+% lambda does it work
+% the backend service calls back to the client when work os completed - sns topic/subscription filters to notify the client further
+% no need to pooling, but host needs to host a webhook, document retry policy, for untrusted client
 
-request - response
+\subsubsection{From poll to push --- WebSockets}
+% \cite{ServerlessAtScaleDesignPatternsAndOptimizations}
+% using both api gateways - rest and websockets
+% client submits a request, starting the step function execution, performing some more sophisticated workflow, obtains execution id
+% later reaches out to the websocket endpoint, with step function ARN and execution id (or token), establish the connection on websocket
+% once step function completes - when the work is done and the client is listening - then we'll let them know once the processing is completed (parallel step - work and connectiong - to make sure that when the work ends quickly, we'll wait until the client connects), once both steps are done we're dsending response back to the client
+% similar approach was used in the \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files} example implementation to notify the client once the processing is done, additionally using the dynamodb to store the executionId/connectionId pair to be lated used by the step function
+% open connection to the clients - we can notify them using the open conenctions, richer eventing for web and mobile clients
+% requires the knowledge of WebSocketsAPI, 500 new connection per second limit
 
-poll to push pattern
-
-GraphQL subscriptions triggered by mutation
+% use cases made by the community including
+% - url shortener without lambda functions, performing the logic with direct integration between API Gateway and S3
+% - simple, turn based games based on the WebSocket connection
+% - incorporate protocol buffers to reduce the bandwidth
 
 \subsection{Hosting web clients}
 
-hosting static files
+\subsubsection{Hosting static clients}
 
-server side rendering
+\subsubsection{Server side rendering}
+
+% https://aws.amazon.com/websites/
+% https://aws.amazon.com/blogs/compute/building-server-side-rendering-for-react-in-aws-lambda/
+% https://aws.amazon.com/blogs/mobile/host-a-next-js-ssr-app-with-real-time-data-on-aws-amplify/
 
 \subsection{Thick and thin client}
 
 % how serverless affects thicker/thinner client
 % direct access to service
+
+% \begin{itemize}
+%     \item direct access to the cloud services - Firebase, Amplify
+%     \item sometimes it is the only way, however the receipt processing application client is built in an agnostic way, underlying implementation could be replaced with traditional GraphQL server
+%     \item the presentation processing flow includes additinal logic, handling the websocket, performing some orchestration/coordination of the application logic
+% \end{itemize}
+
+% https://acloudguru.com/blog/engineering/serverless-the-future-of-software-architecture
