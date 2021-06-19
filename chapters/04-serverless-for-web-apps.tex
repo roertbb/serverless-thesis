@@ -1,26 +1,26 @@
 \chapter{Serverless architecture for web applications}
 
-The growth of cloud computing influenced the way how the applications are developed and managed nowadays by outsourcing the resource management to cloud providers and scaling the services within minutes by allocating new machines with proportional billing. The serverless paradigm can be perceived as a next step in the cloud computing progression, introducing significant mindshift from thinking about servers to building the services from loosely coupled services, configured to work together to perform the processing.
+The growth of cloud computing influenced the way how the applications are developed and managed nowadays by outsourcing the resource management to the cloud providers as well as scaling the services within minutes by allocating new machines with proportional billing. The serverless paradigm can be perceived as a next step in the cloud computing progression, introducing significant mindshift from thinking about servers to building the services from loosely coupled services, configured to work together to perform the processing.
 
-There is no clear definition of serverless as described in section \ref{section:serverless-definition}, however many sources describes the features of the serverless architecture, including among the others no need to manage infrastructure, which is handled by the cloud platform, responsible for provisioning resources, executing and scaling the components to meet the demand, with granular billing according to resource usage. Moreover, the architecture of the solution consists of multiple components configured to work together, running entirely in the cloud environment and introducing fine grained development and deployment model.
-The idea of Function as a Service is used to execute code in an event-driven manner, inside ephemeral and staeless execution environment, within strictly limitted time. Alongside the serverless functions, the Backend as a Service components are heavily used to provide various functionalities or replace parts of existing application logic in a matter of integration with their API, as discussed in section \ref{section:serverless-components}. 
+There is no clear definition of serverless as described in section \ref{section:serverless-definition}, however many sources describes the features of the serverless architecture, including among the others no need to manage infrastructure, which is handed off to the cloud platform, responsible for provisioning resources, executing and scaling the components to meet the demand with granular billing according to resource usage. Moreover, the architecture of the solution consists of multiple components configured to work together, running entirely in the cloud environment and introducing a fine grained development and deployment model.
+The idea of Function as a Service is used to execute code in an event-driven manner, inside an ephemeral and stateless execution environment, within strictly limited time. Alongside the serverless functions, the Backend as a Service components are heavily used to provide various functionalities or replace parts of existing application logic by integrating with their API, as discussed in section \ref{section:serverless-components}.
 
-Although the serverless is considered as not fully matured technology, it is already adopted by various companies and organisations, tht noticed numerous advantage in using the technology, as noticed in section \ref{chapter:serverless-benefits-and-challenges}. 
-The development and operational cost reduction along the scaling capabilities with billing proportional to resource usage as well as gaining agility and reducing time to market are mentioned as a desireable faetures of the serverless paradigm. 
-Nevertheless, the serverless technology is not free from downsides. The stateless and anonymous nature of FaaS allows the platform to scale, but requires communication with external components to preserve the state and exchange messages as well as initiates discussions about performance. The outsourcing of the infrastructure, handed off to the cloud providers, reduces the amount of work, but on the other hand integrates tightly with the platform, relying on it entirely in terms of reliability and security. The new architecture requires to make mindshft accordingly when developing and modeling the solution along with testing and monitoring its behaviour in the cloud environment.
+Although the serverless is considered as not fully matured technology, it is already adopted by various companies and organisations that noticed numerous advantages in using the technology, as covered in section \ref{chapter:serverless-benefits-and-challenges}.
+The development and operational cost reduction, along the scaling capabilities with billing proportional to resource usage as well as gaining agility and reducing time to market, are mentioned as desirable features of the serverless paradigm.
+Nevertheless, the serverless technology is not free from downsides. The stateless and anonymous nature of FaaS allows the platform to scale, but requires communication with external components to preserve the state and exchange messages as well as initiates discussions about performance. The outsourcing of the infrastructure, handed off to the cloud providers, reduces the amount of work, but on the other hand it integrates tightly with the platform, relying on it entirely in terms of reliability and security. The serverless architecture requires to make a mind shift accordingly, when developing and modeling the solution along with testing and monitoring its behaviour in the cloud environment.
 
-Many cloud providers noticed the interest in the serverless technology and introduced numerous services in their portfolio as described in section \ref{chapter:serverless-service-providers}, enabling developers to build the serverless applications using their platform.
-It lead to developing numerous production grade implementations, covering vast range of use cases and serverless platform capabilities, as briefly presented in section \ref{chapter:serverless-example-use-cases}.
+Many cloud providers noticed the interest in the serverless technology and introduced numerous services in their portfolio, as described in section \ref{chapter:serverless-service-providers}, enabling developers to build the serverless applications using their platform.
+It led to developing numerous production grade implementations, covering a vast range of use cases and serverless platform capabilities, as briefly presented in section \ref{chapter:serverless-example-use-cases}.
 
-The second of the topics discussed, describes the evolution of web applications and their change over the years, introducing various architectural and development patterns to meet the requirements put on them.
-The idea of web application is difficult to clearly present due to numerous purposes they may serve, as mentioned in \ref{chapter:web-apps-definition}. However, the overall view can be summarised and include any client-server application, using the HTTP protocol, with the client running in the browser environment, while the server can be any complex system by itself.
+The second of the fields discussed, describes the evolution of web applications over the years, introducing various architectural and development patterns to meet the requirements put on them.
+The idea of web application is difficult to clearly present due to numerous purposes they may serve and various architectures they implement, as mentioned in \ref{chapter:web-apps-definition}. However, the overall view can be summarised and include any client-server application, using the HTTP protocol, with the client running in the web browser environment, while the server can be any complex system by itself.
 
-Despite the diversity in the perspective of the web applications, some of the the defined requirements can be shared by the majority of them with applicability extent based on use case, as noticed in section \ref{chapter:web-apps-requirements}. 
-It is desired for the web application to scale according to the workload demands, without noticeable performance degradation, preserving availability and characterising with resileincy and fault-tolerance, because failures are inevitable in a more complex systems. Moreover, with the increase in the data volumes processed along with the growth of their importance and confidentiality, the system should remain safe and compliant with various regulations. Last but not least, the maintainability of the web application is important, covering the monitoring, observability and deployemnt processes from the operational point of view along with the ease of development by removing complexity, inconsistencies and preserving good modularity to ensure proper agility level for developing new features.
+Despite the diversity in the perspective of the web applications, some of the defined requirements can be shared by the majority of them, with applicability extent based on the use case, as noticed in section \ref{chapter:web-apps-requirements}.
+It is desired for the web application to scale according to the workload demands, without noticeable performance degradation, preserving availability and characterising with resiliency and fault-tolerance, because failures are inevitable in more complex systems. Moreover, with the increase in the data volumes processed along with the growth of their importance and confidentiality, the system should remain safe and compliant with various regulations. Last but not least, the maintainability of the web application is important, covering the monitoring, observability and deployment processes from the operational point of view, along with the ease of development by removing complexity, inconsistencies and preserving good modularity to ensure a satisfying agility level when developing new features.
 
-To fulfill the specified requirements, various approaches, patterns and architectures have been introduced, as covered briefly in section \ref{section:web-apps-modern-web-application-architecture}.
-With the server application becoming more complex, they started to be split into several smaller and decoupled services, communicating with each other, leveraging microservice architecture and using event-driven approaches to model the problems and process them more effectively.
-It introduced the need for various message intermediaries, such as message brokers and message buses along with the new paradigms of the database management systems to meet the requirements of the large volumes of data being stored and characterise with performance, availability and reliability, introducing tradeoffs in other areas.
+To fulfill the specified requirements, various approaches and architectural patterns have been introduced, as covered briefly in section \ref{section:web-apps-modern-web-application-architecture}.
+With the server applications becoming more complex, they started to be split into several smaller and decoupled services, communicating with each other, leveraging microservice architecture and using event-driven approaches to model the problems and process them more effectively.
+It introduced the need for various message intermediaries, such as message brokers and message buses along with the new models of the database management systems to meet the requirements of the large volumes of data being stored and characterise with performance, availability and reliability, leading to further tradeoffs in other areas.
 Simultaneously, the client application architectures evolved, providing more complex and interactive clients, communicating with the server application using the benefits of various communication protocols to fulfill the requirements and exchange information effectively.
 
 % ---
@@ -40,31 +40,31 @@ Simultaneously, the client application architectures evolved, providing more com
 
 \section{Research}
 
-The aim of the thesis is to analyse the applicability of the serverless processing and the FaaS model in the web application development. Chapter \ref{chapter:serverless-computing} provides the context of the serverless computing, while the chapter \ref{chapter:web-apps} describes briefly the topic of web applications and its architectures used nowadays. 
+The aim of the thesis is to analyse the applicability of the serverless processing and the FaaS model in the field of web application development. Chapter \ref{chapter:serverless-computing} provides the context of the serverless computing, while chapter \ref{chapter:web-apps} describes briefly the topic of web applications and its architectures used nowadays. 
 
 \subsection{Research questions}
 
-To understand how the serverless architecture and Function as a Service model can be applied in the web application development the following research questions are defined and are a subject of further research.
+To understand how the serverless architecture and Function as a Service model can be applied in the web application development, the following research questions are defined and are a subject of further research.
 
 \begin{enumerate}
-    \item Is serverless paradigm suitable technology for building web applications?
+    \item Is serverless paradigm a suitable technology for building web applications?
     % Server tier --- 
     \item How the serverless computing and FaaS model can be applied to process the web application workloads?
     % Data tier --- 
     \item What are the characteristics of the storage components used in the web applications built in the serverless paradigm?
     % Client tier --- 
-    \item How the web application clients operate with the services based on the serverless architecture?
+    \item How the serverless architecture affects the communication with web application clients?
 \end{enumerate}
 
 \subsection{Research approach}
 
 To answer the defined questions, further analysis of the literature, reference architectures and articles provided by various practitioners is conducted.
-Based on the gathered information, the example implementations are provided and analysed, to reason about different features of the serverless architecture and its applicability in the field of web application development.
+Based on the gathered information, the example implementations are provided to reason about different capabilities of the serverless architecture and its applicability in the field of web application development.
 Detailed description of the examples and the proposed solutions can be found in section \ref{chapter:example-implementations}.
 
 The research focus mainly on the services provided by the Amazon Web Services to narrow the scope and provide more in depth analysis of the AWS cloud platform capabilities.
 The solution has been selected due to high quality of services and development-friendly tooling provided by the cloud vendor along with numerous undergoing innovations in the field of the serverless computing, setting new standards in terms of the platform possibilites.
-Moreover, the detailed documentation along with reference architectures and broad community of practitioners, provide sufficient area to investigate in more details.
+Moreover, the detailed documentation along with reference architectures and broad community of practitioners, provide sufficient area to investigate the topic of serverless architecture.
 Nevertheless, the portfolio of other cloud providers, mentioned in section \ref{chapter:serverless-service-providers}, present similar services with comparable capabilities, which should meet the characteristics of the offerings provided by AWS in the near future to maintain the market competitiveness.
 
 \section{Serverless suitability for web applications} \label{chapter:serverless-suitability}
@@ -430,11 +430,11 @@ Working on smaller units of the system allowed an increase in the number of prod
 
 \paragraph{CloudGuru} \label{chapter:serverless-suitability-cloudguru}
 
-The CloudGuru educational platform is an example of a fully-fledged web application, serving the role of the scalable application backend, including numerous workloads with different characteristics, as described in more details in section \ref{chapter:serverless-example-application-backend}.
+The CloudGuru educational platform is an example of a fully-fledged web application, serving the role of a scalable application backend, including numerous workloads with different characteristics, as described in more details in section \ref{chapter:serverless-example-application-backend}.
 
 The simpler tasks include API calls, triggering the AWS Lambda to execute the code responsible for business logic, communicating with external BaaS services to perform some action or preserve the state in the database.
 The video processing task is an example of a more complex workflow, initiated after uploading the video directly to S3 bucket, preceded by obtaining the presigned URL granting secure access.
-The instructor, who uploaded the video can be further notified, when the asynchronous action is completed, following with the transcoded video being uplaoded to the S3 bucket along with the update of its status in the database, which makes the video available for students.
+The instructor, who uploaded the video can be further notified, when the asynchronous action is completed, following with the transcoded video being uploaded to the S3 bucket along with the update of its status in the database, which makes the video available for students.
 The real-time communication capabilities of Firebase are a convenient solution, enabling users to exchange messages, while the background jobs are further managed to index the forum entries for search purpose.
 
 What is interesting, is the fact that the described architecture includes services from multiple providers --- Netlify as a host for the static web application, Auth0 as identity provider, responsible for authenticating and authorizing users and Firebase as a main database, directly accessed from the client. Nevertheless, all of the largest cloud providers, covered in more details in section \ref{chapter:serverless-service-providers}, include in their portfolio similar services, allowing developers to build the complete, production ready application using resources from a single platform.
@@ -449,7 +449,7 @@ Making some changes to a single, primary Firebase database most frequently affec
 
 The company decided to split the monolithic, serverless architecture into multiple parts resembling the microservices approach, based on different parts of the product, in which each service ensured proper boundaries and owned its data for particular business context.
 The GraphQL has been used to prevent from overfetching and multiple round trips, when accessing the data by the clients.
-The backend for frontend pattern enabled engineers to expose different endpoints for web and mobile clients, running custom GraphQL servers in AWS Lambda and combining the response from multiple microservices.
+The Backend for Frontend pattern enabled engineers to expose different endpoints for web and mobile clients, running custom GraphQL servers in AWS Lambda and combining the response from multiple microservices.
 Each serverless microservices has been split into stateless components (API Gateway, AWS Lambda) and stateful components (DynamoDB, S3) deployed independently.
 Common services, such as AWS Virtual Private Cloud, AWS Web Application Firewall and Amazon Redshift serving as data warehouse, have been extracted and loosely coupled with specific microservices.
 
@@ -691,7 +691,7 @@ The section covers in more details how the serverless paradigm is applicable for
 
 \subsubsection{Performance and scalability} \label{chapter:serverless-suitability-performance-and-scalability}
 
-The stateless and short-lived design of the serverless function makes it convenient for horizontal scaling, however the performance from the point of view of the single request is still debatable, considering the cold start phenomenon as described in sections  \ref{chapter:serverless-startup-latency-and-platform-improvements} and \ref{chapter:serverless-suitability-processing-time}.
+The stateless and short-lived design of the serverless function makes it convenient for horizontal scaling, however the performance from the point of view of the single request is still debatable, considering the ''cold start'' phenomenon as described in sections  \ref{chapter:serverless-startup-latency-and-platform-improvements} and \ref{chapter:serverless-suitability-processing-time}.
 Moreover, the ephemeral nature of processing and lack of addressability requires the use of external components to preserve the state and communicate with other services as noticed in section \ref{chapter:serverless-challenges-related-to-the-nature-of-serverless-architecture}.
 The time required to allocate the resources and bootstrap the runtime of the function, along with the communication overhead between the components that make up the workload processing, can significantly impact the overall processing time.
 However, the architects and developers with the thoroughly designed application architecture can partially alleviate the undesired latency to make it acceptable for the developed web application.
@@ -746,7 +746,7 @@ From the application examples covered in section \ref{chapter:serverless-suitabi
 
 \subsubsection{Reliability} \label{chapter:serverless-suitability-reliability}
 
-Considering the serverless as the outsourcing technology, the significant amount of the overhead and responsibility required to manage the system and ensure it is running properly, is handed off to the cloud provider, as described in section \ref{chapter:serverless-suitability-vendor-dependence}. Having the knowledge, experience and qualified staff, the cloud provider is able to ensure the reliability level exceeding the services client could guarantee by itself. Nevertheless as mentioned in section \ref{chapter:serverless-suitability-vendor-dependence}, unpredictable events or human errors happen and the disruption and outages are inevitable. To prevent the service downtimes, the serverless solution can be deployed and replicated into multiple availability zones managed by the cloud provider. Each of the datacenters is independently supplied with the electricity and network access, which gives a possibility to redirect the traffic between them when some disruption happens.
+Considering the serverless as the outsourcing technology, the significant amount of the overhead and responsibility required to manage the system and ensure it is running properly, is handed off to the cloud provider, as described in section \ref{chapter:serverless-suitability-vendor-dependence}. Having the knowledge, experience and qualified staff, the cloud provider is able to ensure the reliability level exceeding the services client could guarantee by itself. Nevertheless as mentioned in section \ref{chapter:serverless-suitability-vendor-dependence}, unpredictable events or human errors happen and the disruption and outages are inevitable. To prevent the service downtimes, the serverless solution can be deployed and replicated into multiple Availability Zones managed by the cloud provider. Each of the datacenters is independently supplied with the electricity and network access, which gives a possibility to redirect the traffic between them when some disruption happens.
 
 The section \ref{section:serverless-definition} describing the serverless components characteristics, mentions that the services are designed with implicit high availability. Multiple serverless components provide various retry mechanics in case of errors occurring during the processing, related to issues with the application logic or hardware faults. For example, by default the AWS Lambda invoked asynchronously retries the event processing 2 times upon processing failure. If the processing is not completed successfully after retries, based on the configuration the event can be placed in Dead Letter Queue (DLQ), which is a dedicated SQS instance for handling failed messages.
 
@@ -1117,7 +1117,7 @@ An example of such FaaS offering is AWS Lambda \cite{AWSLambda}, which is descri
 The following section analyses in more details the FaaS capabilities, considering the AWS Lambda as one of the implementations of this model, taking into account its limitations, runtime possibilities, execution models and possible optimisations.
 Based on the overview of the AWS Lambda functionalities, the intuition of FaaS model capabilities as an execution environment can be established.
 
-\subsubsection{Function limitations}
+\subsubsection{Function limitations} \label{chapter:lambda-function-limitations}
 
 The AWS Lambda execution is constrained by quotas referring to the compute and storage resource that can be used by the serverless function.
 Some of the AWS Lambda restrictions have been already discussed in section \ref{chapter:serverless-processing-limitations-runtime-and-data-restrictions}.
@@ -1368,7 +1368,7 @@ Some of the patterns including described components and leveraging their capabil
    \end{figure}
 \end{itemize}
 
-\paragraph{Serverless microservices}
+\paragraph{Serverless microservice principles}
 
 Besides the components serving the role of the entrypoint to the web application and the internal services, responsible for messaging between application components, there are also other components taking an integral role in the applications built in the serverless paradigm as well as shaping its architecture.
 The databases capable of preserving the data and reacting to its changes by streaming the updates to polling services are described in more detail in section \ref{chapter:serverless-datastores}.
@@ -2164,7 +2164,7 @@ The list of features of the serverless databases is listed below:
    It alleviates the issues related with networking and managing connections to the database as well as integrates well with other services of the serverless platform \cite{PickingDatabaseForYourServerlessApplicationIn2021}.
    Moreover, some of the serverless databases such as Firebase, mentioned in section \ref{chapter:serverless-reduced-development-and-operational-cost}, allow web and mobile clients to communicate directly with the database and access or modify the data as well as to receive updates in real time, based on the data changes.
   
-   \item \textbf{Autoscaling with no management} ---
+   \item \textbf{Autoscaling with no infrastructure management} ---
    With the growth of the data volumes or the requirements for processing operations, the serverless database should scale automatically to meet the demand, similarly to other serverless components.
    It also frees from estimating the proper instance size along with overprovisioning resources to meet the peak traffic \cite{WhatFrontEndDevelopersNeedToKnowAboutServerlessDatabases}.
   
@@ -2337,80 +2337,191 @@ Moreover, the communication is enhanced by the real-time subscriptions, which al
 The integration with Amazon Cognito allows the application to handle user identities and ensure the returned data belongs to the particular user.
 The DynamoDB Stream triggers the Lambda function, which performs the appropriate mutation, resulting in sending an update to the particular client, selecting subscription based on the identity.
 
-\subsection{Client communication patterns for serverless architecture}
+\subsection{Client communication patterns for serverless architecture} \label{chapter:client-communication-patterns-for-serverless-architecture}
 
-% depending on the application type and workflows it needs to perform, the proessing may differ from simple requests based on a handful of services as well as more complex setup, hiding a group of microservices working together to perform the application logic
+Depending on the application requirements and the workflow types it incorporates, the communication with the client can range from simple, synchronous requests with one of the backend services, to more complex setup, which requires additional coordination of the asynchronous application logic from the client side.
+Section \ref{chapter:serverless-client-communication-patterns-for-serverless-architecture} covers the components frequently used with the serverless architecture and their capabilities.
+The section below describes in more detail, some of the use cases of the discussed components along with the suggested communication patterns used in the web application implementations utilising the serverless architecture.
 
-\subsubsection{Synchronous requests}
-% works for simple cases when the lambda can make a request to downstream service and return back, mentioned in section ...
-% for more complex workflows the processing should go async - lambda can invoke the processing, return with the status to client, polling for the status/results periodically once they are finished
-% using rest, similarly to the other
+\subsubsection{Synchronous requests} \label{chapter:client-synchronous-requests}
 
-\subsubsection{GraphQL API}
-% \cite{ServerlessArchitecturalPatternsAndBestPractices}
-% use AppSync to host the GraphQL APIs
-% - simpler logic can be handled by resolvers directly communicating with the data sources such as DynamoDB to query the data - insert, listing - simple VTL to connect to the datasource
-% - for more complex business logic use lambda functions, perform the processing and return the value to the client
-% - pipeline resolvers - performing chainy actions - call service number 1, call service number 2, invokes some processing, booking - pipeline resovlers can do that, but are not prepared for handling the errors and retries effectively
-% - use Step Functions for more complex processing, when handling errors and retries is required
-% - Cognito / any JWT - appsync allows to set the auth rules per field level - some users/groups can have access to fields, while others not
-% \cite{DevelopServerlessGraphQLArchitecturesUsingAWSAppSync}
-% - beneficial when working on larger products in a team when multiple teams developing multiple microservices - the logic can be extracted and merge on the GraphQL API level in one place, serving as the routing layer
-% - teams can swap the underlying implementation of the services, change the data stores, but as long as the API contract is maintained, it will work - change and evolve the underlying architecture until the requirements are not clarified
-% - moreover, leveraging the subscriptions enable developers to update the clients in real time, based on the interactions of other users, change in the underlying data or anything triggered from the backend
+For simple use cases the synchronous communication with the serverless application backend is applicable, as mentioned in section \ref{chapter:public-interfaces}.
+Figure \ref{fig:pattern-synchronous-request} shows, how the API Gateway can be applied to integrate directly with DynamoDB to retrieve the data along with AWS Step Function to trigger some more advanced workflows in an asynchronous manner, returning with the response to the client to confirm the invocation.
+Similarly, the API Gateway can invoke the Lambda function in a synchronous manner, as covered in section \ref{chapter:lambda-function-execution-model}, to process some more complex business logic.
+It is essential to be aware that the more sophisticated workflows may be restricted by the time limits of the components serving a role of the public interfaces.
+In that case, the processing can be redesigned to use the asynchronous processing, while the periodic, synchronous requests can poll for the status or results of the processing.
 
-\subsubsection{Working with files securely --- S3 presigned URLs}
-% \cite{ServerlessAtScaleDesignPatternsAndOptimizations}
-% use IAM user/role permissions to create the URL to get/post for a given S3 object
-% URL valid for ss long as credentials are valid, or specified expiration time is exceeded
-% it can be used for the clients to operate directly with S3 to upload the files or get the files in a secure way, when the access is authenticated/authorized
-% Lambda invocation payload (request and response) - 6 MB for synchronous requests
-% API Gateway has a payload limit up to 10 MB 
+In the application covering the receipt processing, covered in section \ref{chapter:examples-receipt-processing}, AWS AppSync resolves the queries by retrieving the data from DynamoDB as well as by triggering the Lambda function to obtain the presigned URL to S3 bucket.
+The second example, described in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}, shows how the API Gateway can be used to trigger the asynchronous processing of the AWS Step Function, while returning the response with the invocation details immediately to the client.
 
-\subsubsection{Webhooks}
-% \cite{ServerlessAtScaleDesignPatternsAndOptimizations}
-% callback pattern, calling back to http endpoint posted by the caller, to let them know that the work is done
-% the client is trusted - verifying some API key or validated some other way
-% the client request is submitted to the queue to be processed asynchronously
-% api gateway returns as soon as the request is put into the SQS, durably stored
-% lambda does it work
-% the backend service calls back to the client when work os completed - sns topic/subscription filters to notify the client further
-% no need to pooling, but host needs to host a webhook, document retry policy, for untrusted client
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.7\textwidth]{assets/04-serverless-for-web-apps/synchronousRequest.png}
+   \caption{Example of synchronous communication with Lambda function, DynamoDB and AWS Step Function using API Gateway}
+   \label{fig:pattern-synchronous-request}
+\end{figure}
 
-\subsubsection{From poll to push --- WebSockets}
-% \cite{ServerlessAtScaleDesignPatternsAndOptimizations}
-% using both api gateways - rest and websockets
-% client submits a request, starting the step function execution, performing some more sophisticated workflow, obtains execution id
-% later reaches out to the websocket endpoint, with step function ARN and execution id (or token), establish the connection on websocket
-% once step function completes - when the work is done and the client is listening - then we'll let them know once the processing is completed (parallel step - work and connectiong - to make sure that when the work ends quickly, we'll wait until the client connects), once both steps are done we're dsending response back to the client
-% similar approach was used in the \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files} example implementation to notify the client once the processing is done, additionally using the dynamodb to store the executionId/connectionId pair to be lated used by the step function
-% open connection to the clients - we can notify them using the open conenctions, richer eventing for web and mobile clients
-% requires the knowledge of WebSocketsAPI, 500 new connection per second limit
+\subsubsection{GraphQL APIs} \label{chapter:client-graphql-apis}
 
-% use cases made by the community including
-% - url shortener without lambda functions, performing the logic with direct integration between API Gateway and S3
-% - simple, turn based games based on the WebSocket connection
-% - incorporate protocol buffers to reduce the bandwidth
+The AWS AppSync, which hosts the GraphQL API, can be effectively used to aggregate the data from multiple data sources in a single response.
+Simpler logic can be handled by resolvers written using Apache’s Velocity Template Language and communicating directly with the data sources, including for example querying, inserting or modifying items in DynamoDB or communicating with Elasticsearch Service.
+For more complex logic, Lambda function can be configured as a datasource to perform the function code, when requesting a particular field from the GraphQL schema, returning the data back to the client.
+The request including communication with several datasources can be obtained when using pipeline resolvers, performing a chain action, involving a sequence of calls to multiple services and aggregating the responses.
+However, for more complex mutations, the AWS Step Function can be a better choice if it comes to handling errors and retries more effectively, compared to pipeline resolvers \cite{ServerlessArchitecturalPatternsAndBestPractices}.
+
+The GraphQL APIs are beneficial when working on larger applications, including several independent services to provide the API layer in one place, calling configured services accordingly.
+The underlying implementation of the services can be changed, as long as the API contract based on the GraphQL schema is maintained, enabling developers to evolve the application architecture effectively.
+Moreover, AWS AppSync handled and manages the WebSocket connection, allowing users to leverage the GraphQL subscriptions to receive the updates in real-time, based on the changes of the underlying data \cite{DevelopServerlessGraphQLArchitecturesUsingAWSAppSync}.
+
+The application responsible for receipt processing, covered in section \ref{chapter:examples-receipt-processing}, uses the GraphQL API hosted using AWS AppSync to communicate with various services to perform queries and mutations as well as utilise subscriptions to notify the users when the asynchronous processing flow is finished.
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/graphql.png}
+   \caption{Example usage of AWS AppSync for hosting GraphQL API using various services as data sources}
+   \label{fig:pattern-graphql-api}
+\end{figure}
+
+\subsubsection{Working with files securely --- presigned URL} \label{chapter:client-presigned-urls}
+
+The limitations of the AWS Lambda invocation payload to 6 MB (when invoked synchronously, as mentioned in section \ref{chapter:lambda-function-limitations}) along with the API Gateway payload restriction to 10 MB, makes it unsuitable to upload the larger files using this serverless components.
+The solution for such a constraint is to upload the files directly from the client to Amazon S3 bucket.
+To perform this operation securely, having the control over accessing the objects in the bucket, the mechanism of presigned URLs can be used.
+The Lambda function can be configured to obtain the presigned URL for a given bucket, enabling clients to obtain the particular file or put it into under predefined path, making the URL additionally validated based on credentials or until specified expiration time is not exceeded \cite{ServerlessAtScaleDesignPatternsAndOptimizations}.
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.5\textwidth]{assets/04-serverless-for-web-apps/presignedURL.png}
+   \caption{Example usage of presigned URL when uploading files to Amazon S3}
+   \label{fig:pattern-presigned-url}
+\end{figure}
+
+\subsubsection{Webhooks} \label{chapter:client-webhooks}
+
+For the asynchronous workflow invocations, the client needs to be notified when the operation finishes or the results of the processing are available.
+Webhook pattern can be applied when operating with clients, which are external services capable of exposing an endpoint to receive the callback, once the processing is completed.
+Example implementation of such a pattern is covered in Figure \ref{fig:pattern-webhook}.
+The client calls the API Gateway and receives the confirmation of submitting the call as soon as the request is inserted and stored durably in SQS.
+Once the Lambda or some other service performs the processing, the message is sent to SNS which is responsible for performing the HTTP call to the endpoint, defined during the initial request.
+It removes the need for the client to poll for the processing status.
+Additionally, some mechanism can be incorporated to ensure the communication with the client is trusted by verifying API key or performing authentication in a different way \cite{ServerlessAtScaleDesignPatternsAndOptimizations}.
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.5\textwidth]{assets/04-serverless-for-web-apps/webhook.png}
+   \caption{Example webhook implementation}
+   \label{fig:pattern-webhook}
+\end{figure}
+
+\subsubsection{Pushing updates to clients using WebSockets} \label{chapter:client-websockets}
+
+Nevertheless, not all clients have a possibility to expose an endpoint and receive a callback once the asynchronous processing is completed.
+For the web clients the WebSocket communication can be established to receive the notification in real-time, containing the state of the processing.
+Figure \ref{fig:pattern-async-step-function} shows how the update can be pushed to the client, when the asynchronous workflow of an AWS Step Function is completed.
+The example depicted on the diagram uses AWS API Gateway with two types of API - REST and WebSocket API.
+Clients use the REST API to invoke the AWS Step Function and obtain in response the execution identifier or some other token.
+It is later used to connect to the WebSocket API, calling one of the tasks involved in the orchestration workflow.
+When the client is connected as well as the processing is finished, the Step Function invokes the last step of the processing, responsible for sending the message to the client, notifying that the asynchronous processing is completed \cite{ServerlessAtScaleDesignPatternsAndOptimizations}.
+
+Similar approach is used in the example of interactive presentation processing, covered in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}.
+The provided implementation uses DynamoDB additionally to store the association between connected client identifier and the function execution identifier, reading the stored value for each of the chunks of parallel execution.
+The opened, bidirectional communication connection can be applied for richer eventing between the backend of the application and the web or mobile clients.
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.7\textwidth]{assets/04-serverless-for-web-apps/asyncStepFunction.png}
+   \caption{Example diagram showing Step Function invocation responding to client using WebSocket once processing is finished}
+   \label{fig:pattern-async-step-function}
+\end{figure}
 
 \subsection{Hosting web clients}
 
-\subsubsection{Hosting static clients}
+Amazon Web Services along with other cloud vendors provide various ways to host the web application clients.
+Depending on the type of web clients, which are covered in section \ref{chapter:client-application-tier}, a different approach can be applied.
+Along with hosting static assets, Lambda function can be effectively utilised to render the client interfaces on the server side.
+Both approaches are discussed in more detail in sections below.
 
-\subsubsection{Server side rendering}
+\subsubsection{Hosting static assets}
 
-% https://aws.amazon.com/websites/
-% https://aws.amazon.com/blogs/compute/building-server-side-rendering-for-react-in-aws-lambda/
-% https://aws.amazon.com/blogs/mobile/host-a-next-js-ssr-app-with-real-time-data-on-aws-amplify/
+Majority of cloud vendors provide a possibility to host static files and distribute them to the end users, leveraging the worldwide datacenter network with additional locations serving the role of Content Delivery Network (CDN), hosting the assets from the locations closer to the users.
+AWS enables customers to host the files using Amazon S3 buckets, using additionally the Amazon CloudFront Distribution as a Content Delivery Network  \cite{AWSWebHosting}.
+
+It provides necessary capabilities to host the Single Page Applications as well as the static websites.
+Single Page Applications, described in detail in section \ref{chapter:client-application-tier-single-page-app}, are dynamically rendered in the web browsers and communicating with the web application backend in an asynchronous manner, providing rich and interactive user experience.
+During the build process, such applications are effectively processed into the resulting artifact, which is a set of static files, including mostly JavaScript scripts, but also stylesheets and other static assets.
+In terms of statically generated pages, covered in section \ref{chapter:client-application-tier-static-site-generators}, the results of the processing in form of the static files can be similarly hosted in the cloud environment, using automation to update the content of the S3 bucket once the generation process is completed.
+
+An example diagram, describing how the Single Page Application can be hosted in the cloud environment along with communication with the backend services, is presented in the Figure \ref{fig:pattern-client-hosted}.
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.7\textwidth]{assets/04-serverless-for-web-apps/hostedClient.png}
+   \caption{Example diagram presenting Single Page Application hosted in the cloud environment}
+   \label{fig:pattern-client-hosted}
+\end{figure}
+
+An example implementation of receipt processing application, described in section \ref{chapter:examples-receipt-processing}, uses this approach to host the Single Page Application in the Amazon S3 bucket, leveraging additionally the CloudFront Distribution as a CDN.
+The build process incorporate the Github Actions \cite{GithubAction}, serving the role of processes automation which configures the continuous deployment pipelines, during which the client application is built and deployed in the cloud environment, once the change is merged to the main branch of the repository in which the application code is stored.
+
+\subsubsection{Server-side rendering}
+
+Nevertheless, hosting the static sites is not the only possible solution for hosting web clients.
+Lambda function can be used to render the web pages on the server side, utilising the benefits of server-side rendering, discussed in section \ref{chapter:client-application-tier-server-side-rendering}.
+When using the reliable connection and efficient processing, the web page can be rendered and sent back to the client, reducing the overhead required to load the whole Single Page Application as well as optimising the website for search engines.
+
+An example implementation of the server-side rendering using the Lambda function is presented in Figure \ref{fig:pattern-client-server-side-rendering}.
+Amazon CloudFront is configured to forward the requests to the API Gateway endpoint, which is invoking the Lambda function, responsible for rendering the web page on the server side.
+It can additionally call the underlying backend services to request the additional data, required to render content of the page.
+When the web page is generated, API Gateway returns the resulting file, utilising additionally CloudFront caching to optimize the client-server communication for the subsequent requests.
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=1\textwidth]{assets/04-serverless-for-web-apps/serverSideRendering.png}
+   \caption{Example diagram presenting the server-side rendering of web pages using Lambda function}
+   \label{fig:pattern-client-server-side-rendering}
+\end{figure}
+
+Moreover, the Lambda@Edge can be utilised to generate the static content at the edge locations closer to the users to reduce the communication latency \cite{BuildingServerSideRenderingForReactInAwsLambda}.
+Diagram presenting the usage of Lambda@Edge is presented in Figure \ref{fig:pattern-client-server-side-rendering-edge}.
+
+\begin{figure}[H]
+   \centering
+   \includegraphics[width=0.9\textwidth]{assets/04-serverless-for-web-apps/serverSideRenderingEdge.png}
+   \caption{Example diagram presenting the server-side rendering of web pages using Lambda@Edge}
+   \label{fig:pattern-client-server-side-rendering-edge}
+\end{figure}
 
 \subsection{Thick and thin client}
 
-% how serverless affects thicker/thinner client
-% direct access to service
+The notion of thin clients refers to the application clients, which serve as a thin presentation layer, communicating with the underlying services, which handles the significant part of the application logic.
+Contrary to that, the richer and more interactive thick clients can incorporate some part of the business logic on the client side, making the backend services a thinner layer, responsible for validating the performed actions as well as communicating with the database to preserve the changes durably.
 
-% \begin{itemize}
-%     \item direct access to the cloud services - Firebase, Amplify
-%     \item sometimes it is the only way, however the receipt processing application client is built in an agnostic way, underlying implementation could be replaced with traditional GraphQL server
-%     \item the presentation processing flow includes additinal logic, handling the websocket, performing some orchestration/coordination of the application logic
-% \end{itemize}
+At the first glance the web application client's architecture should not be significantly affected by the changes of the underlying server and storage architecture to use the serverless architecture.
+However, when taking into consideration the possibility of direct communication with cloud-based services and changes in the workflows processing, gearing towards asynchronous pipelines, it makes the application clients include more complex logic, including additional integrations with serverless components to access them securely as well as moving some part of the orchestration logic to the client in terms of handling the communication with the serverless infrastructure.
 
-% https://acloudguru.com/blog/engineering/serverless-the-future-of-software-architecture
+The initial architecture of the CloudGuru learning platform is an example of such rich and thick client web application client, communicating directly with various third-party services as well as smaller, cloud based services, as described in sections \ref{chapter:serverless-example-application-backend} and \ref{chapter:serverless-suitability-cloudguru}.
+The web application client integrates directly with the Firebase, querying for the data, performing updates as well as receiving the messages in real-time, when the underlying data model changes.
+Moreover, the integration with Auth0 as an identity provider, responsible for handling authentication and authorization, is performed on the client side, incorporating additional part of the logic into the web application client. \\
+
+It reduces the role of the server application as a middleware between the client and datastores or other application modules, making the communication directly.
+The amount of code responsible for handling the application logic in the server layer is smaller, while some part of it is pushed to the clients, for orchestrating even some more complex workflows including communication with several components.
+
+However, not all logic is suitable for processing on the client and some part of the logic, including working with the sensitive data or requiring additional validation from the security standpoint needs to be implemented outside of the client application logic, because the actions executed in the user's browser cannot be fully trusted for such operations.
+For example when finalising the transactions, granting users access to the course or when validating if the user has permissions to access the resources, the additional application logic incorporated in Lambda function is required to protect the underlying resources.
+In that case the client application performs certain operations, orchestrating the whole flow, while communicating with the application logic incorporated in the Lambda functions, which validates the privileges.
+Similarly, when triggering emails to the groups of users, the processing needs to be performed in the cloud platform, because the emails may include sensitive user data such as emails or their personal data. 
+
+Such a shift is possible thanks to the desktop and mobile hardware improvements, making the devices more powerful to handle the tasks of feature-rich and interactive web application clients.
+Moreover, the wide range of third-party services exposing various capabilities, including the identity management, protected operations on the files, notifications and real-time data streaming with the offline synchronisation, makes them an appealing solution to incorporate into the interactive and thick clients.
+The integration is possible thanks to numerous programming frameworks, enabling developers to write larger and more complex web application clients, incorporating additional libraries to integrate with services or communicating with cloud-based components, using the HTTP protocol with additional token to grant access to predefined resources in a secure manner \cite{ServerlessTheFutureOfSoftwareArchitecture}. \\
+
+The serverless architecture encourages developers to build more interactive and thick clients, handling the direct communication with external services as well as performing some orchestration of the processing, reducing the amount of application logic, which needs to be handled in the serverless functions.
+However, some types of the processing needs to be executed in the cloud environment, especially when working with sensitive data, when the operation needs to be additionally validated against the application logic or external services, granting access or authorising the operation when appropriate credentials are provided.
+It is possible to build a thin client and incorporate most of the application logic in the server layer of the application, however it may be not suitable with the serverless paradigm, reaching various limitations of the serverless components as well as most frequently resulting with additional cost, when handling the logic and orchestrating the communication using the serverless platform. \\
+
+Similar conclusions can be formed when considering the example implementations.
+The application responsible for receipt processing, covered in section \ref{chapter:examples-receipt-processing}, incorporates an additional library to integrate with Amazon Cognito, incorporating the authentication and authorization mechanism in the application.
+Moreover, it uses the presigned URL to communicate directly with the Amazon S3, to retrieve and upload the files directly, after the user is authenticated when querying for the URL.
+In terms of the application generating the interactive slideshows, described in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}, it incorporates additional logic responsible for orchestrating the processing and obtaining the results of the generation process.
+Initially, it invokes the AWS Step Function to trigger the workflow, however later it needs to establish the WebSocket connection, receiving the updates and retrieving the assets from Amazon S3 once the processing of the serverless workflow is completed.
+In both cases, the web application client is enhanced with some additional logic, incorporating it with the cloud platform and adjusting the client application logic to overcome some limitations and make it more suitable for the serverless processing model.
