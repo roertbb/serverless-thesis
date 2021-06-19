@@ -25,7 +25,7 @@ The client applications became detached, self-sufficient and more interactive, t
 
 To ensure the scalability and performance of the server application in face of the business logic complexity, the systems have begun to be broken down into smaller, independent components that communicate with each other, leveraging the microservice and event-driven architectures. To ensure reliable communication within such a decoupled and distributed system, message brokers have started to be used more frequently.
 
-Along with the increase in the amount of data being processed and stored, the new approaches and paradigms of database management systems have been introduced, to meet the expectations of high performance, scalability and resilience. However, to fulfil aforementioned requirements, other constraints needed to be weakened, introducing another area of tradeoffs in the data management systems.
+Along with the increase in the amount of data being processed and stored, the new approaches and models of database management systems have been introduced, to meet the expectations of high performance, scalability and resilience. However, to fulfil aforementioned requirements, other constraints needed to be weakened, introducing another area of tradeoffs in the data management systems.
 
 \section{Defining web application} \label{chapter:web-apps-definition}
 
@@ -147,7 +147,7 @@ Despite the advantages, event sourcing and CQRS comes with a cost. They increase
 
 \subsection{Data Tier}
 
-\subsubsection{Database paradigms} \label{chapter:database-paradigms}
+\subsubsection{Database models} \label{chapter:database-paradigms}
 
 Over the years, traditional relational database managements systems \cite{RDBMS} established their position and proved to be a mature and stable solution for storing and quering the structured data. Nevertheless, with the growth of Internet and data volumes transferred over the network for example by social media or streamed from various sources, the relational model has shown some limitations related with scaling to handle such large amounts of data efficiently and at the same time maintain high-availability and fault tolerance. NoSQL \cite{FowlerNoSQLDefinition} has emerged as a response to the needs of scalable database management systems, handling increasing data volumes and offering higher availability, but at the same time sacrificing consistency quarantees or quering capabilities as a tradeoff. Various NoSQL database management systems have some common characteristics, including among the others, less restrictive and more dynamic data model, support for running within the clusters and providing greater availability and performance metrics, which are desired capabilities for the services running in the Internet nowadays. As with many tools, NoSQL databases are not free from downsides and other undesired properties in regards to some classes of problems. Relational databases are still playing a significant role and provide a specific combination of desired properties for other types of applications and they will be used alongside NoSQL solutions, depending on the problems and requirements that the system needs to fulfill \cite{FowlerNoSQLGOTO}.
 
@@ -248,11 +248,11 @@ Moreover, various message distribution patterns can be utilised. The most common
 
 The message brokers are frequently utilised in the systems built based on the microservice architecture, that can benefit from greater flexibility and scalability due to intermediate communication middleware. Each component of the system can be independently scaled, dynamically increasing the number of publishers and consumers of messages as well as redeployed and restarted without affecting other services, improving resiliency and fault tolerance of the system. Message brokers find applications in various systems, whenever reliable, inter-process communication and message delivery is required, such as financial transaction and online payment processing or e-commerce order fulfillment services \cite{MessageBrokers}.
 
-\subsection{Client Application Tier}
+\subsection{Client Application Tier} \label{chapter:client-application-tier}
 
 \subsubsection{Client application architectures}
 
-\paragraph{Single Page Applications}
+\paragraph{Single Page Applications} \label{chapter:client-application-tier-single-page-app}
 
 The idea of the Single Page Application \cite{SPA} refers to the web application, clients running within the web browsers, rendering the web page content dynamically, based on the user interactions and the data received from the asynchronous communication with the server. The content of web applications can be highly interactive and contain significant part of the application business logic, thanks to the JavaScript code listening to the user-triggered events and the responses from the server.
 Contrary to the static pages, the user interactions does not require to reload the view of the application, which enhances the user experience and makes it similar to the mobile and desktop clients \cite{PerspectivesOnArchitectureEvolution}.
@@ -261,17 +261,17 @@ The client-side rendering is performed in the browser using JavaScript containin
 
 Despite the disadvantages, Single Page Applications are extensively used for the highly interactive web applications with the frequently changing, dynamic content.
 
-\paragraph{Static site generators}
+\paragraph{Static site generators} \label{chapter:client-application-tier-static-site-generators}
 
 For the web pages including mostly static content, which does not change frequently, using the static site generators can be sufficient. Every time when the data changes, the generated content is rebuilt entirely or partially, to release an updated version.
 
 The statically generated websites can be enhanced with the JavaScript code, dynamically loading parts of the content to make the initial page structure available faster, while enabling the dynamic parts when the page is fully loaded. Moreover, it prevents from the large initial load overhead known from the single page applications, by prerendering the static pages ahead of time and making it available based on the request \cite{GoogleRenderingOnTheWeb}.
 
-Such approach gained additional interest and popularity recently, forming the idea of JAMstack, which refers to usage of JavaScript, reusable APIs and content preserved in the Markup files to render the websites. It highlights the performance benefits related with the prerendering of the static content, which can be further enhanced utilising content delivery network (CDN) to serve the assets closer to the users with lower latency. The maintainability and ease of the deployment of client architecture are lower due to reduced overhead limited only to serving the static content. Pre-rendering the sites is also beneficial for the search engine optimisation \cite{JAMstack}.
+Such approach gained additional interest and popularity recently, forming the idea of JAMstack, which refers to usage of JavaScript, reusable APIs and content preserved in the Markup files to render the websites. It highlights the performance benefits related with the prerendering of the static content, which can be further enhanced utilising Content Delivery Network (CDN) to serve the assets closer to the users with lower latency. The maintainability and ease of the deployment of client architecture are lower due to reduced overhead limited only to serving the static content. Pre-rendering the sites is also beneficial for the search engine optimisation \cite{JAMstack}.
 
 The usage of static site generators may not be feasible, when the set of URLs to be rendered ahead of time is large or it is not known initially.
 
-\paragraph{Server-side rendering}
+\paragraph{Server-side rendering} \label{chapter:client-application-tier-server-side-rendering}
 
 The idea of server-side rendering refers to rendering the web pages on the server side, leveraging the reliable connection and returning the initial content to the client. After the browser renders the page structure, the JavaScript code can be loaded, attaching the event listeners to the HTML elements during the rehydration process. Running the initial logic and rendering the webpage on the server side addresses the problem of the large initial load and reduces the amount of JavaScript code sent to the client, improving the performance and user experience.
 
