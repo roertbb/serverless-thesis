@@ -42,7 +42,7 @@ Simultaneously, the client application architectures evolved, providing more com
 
 The aim of the thesis is to analyse the applicability of the serverless processing and the FaaS model in the field of web application development. Chapter \ref{chapter:serverless-computing} provides the context of the serverless computing, while chapter \ref{chapter:web-apps} describes briefly the topic of web applications and its architectures used nowadays. 
 
-\subsection{Research questions}
+\subsection{Research questions} \label{section:research-questions}
 
 To understand how the serverless architecture and Function as a Service model can be applied in the web application development, the following research questions are defined and are a subject of further research.
 
@@ -56,13 +56,13 @@ To understand how the serverless architecture and Function as a Service model ca
     \item How the serverless architecture affects the communication with web application clients?
 \end{enumerate}
 
-\subsection{Research approach}
+\subsection{Research approach} \label{section:research-approach}
 
 To answer the defined questions, further analysis of the literature, reference architectures and articles provided by various practitioners is conducted.
 Based on the gathered information, the example implementations are provided to reason about different capabilities of the serverless architecture and its applicability in the field of web application development.
 Detailed description of the examples and the proposed solutions can be found in section \ref{chapter:example-implementations}.
 
-The research focus mainly on the services provided by the Amazon Web Services to narrow the scope and provide more in depth analysis of the AWS cloud platform capabilities.
+The research focus mainly on the services provided by the Amazon Web Services to narrow the scope of the thesis and provide more in depth analysis of the Amazon's cloud platform capabilities in terms of the serverless computing.
 The solution has been selected due to high quality of services and development-friendly tooling provided by the cloud vendor along with numerous undergoing innovations in the field of the serverless computing, setting new standards in terms of the platform possibilites.
 Moreover, the detailed documentation along with reference architectures and broad community of practitioners, provide sufficient area to investigate the topic of serverless architecture.
 Nevertheless, the portfolio of other cloud providers, mentioned in section \ref{chapter:serverless-service-providers}, present similar services with comparable capabilities, which should meet the characteristics of the offerings provided by AWS in the near future to maintain the market competitiveness.
@@ -240,7 +240,7 @@ Considering the serverless billing model with granular cost proportional to the 
 
 On the other hand the I/O bound operations, like loading large volumes of the data, inserting large sets of data to the database or heavy network communication, may be less suitable from the cost perspective, because the operations can be relatively slow, extending the function processing time. Moreover, when considering the communication with some external I/O components, each container invocation may require establishing new connections, introducing additional latency \cite{LeveragingServerlessCloudComputingArchitectures}.
 
-Due to that fact some of the dedicated services capable of I/O operations are redesigned for serverless architecture --- the workflow can be transformed into a more event-driven approach. The processing using the third party service is initiated by one of the functions and when the action is performed, the incoming event can trigger another serverless function to process the response, which prevents the lambda from idle waiting. Serverless functions can be configured to poll some of the BaaS storage components and be notified when a particular action is performed, such as data modification or file insertion \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+Due to that fact some of the dedicated services capable of I/O operations are redesigned for serverless architecture --- the workflow can be transformed into a more event-driven approach. The processing using the third party service is initiated by one of the functions and when the action is performed, the incoming event can trigger another serverless function to process the response, which prevents the serverless function from idle waiting. Serverless functions can be configured to poll some of the BaaS storage components and be notified when a particular action is performed, such as data modification or file insertion \cite{EvaluationOfServerlessApplicationProgrammingModel}.
 
 Another operation constraint is related to the implicit failover, provided out of the box by the serverless platform. When the function processing fails due to some error, it is retried up to several times, based on the underlying configuration. Due to that fact of the at least once delivery semantics, the operation performed by the function should be idempotent or additional mechanism needs to be implemented to prevent from subsequent processing of the event \cite{EvaluationOfServerlessApplicationProgrammingModel}.
 
@@ -683,7 +683,7 @@ The research concluded that there is no clear choice and one need to carefully m
 % - research how the larger app is structured, how share code
 % - some legacy soft requires redesigning to fit into the limitations of the serverless
 
-\subsection{Fulfilment of the web application requirements}
+\subsection{Fulfilment of the web application requirements} \label{section:fulfilment-of-the-web-application-requirements}
 
 The discussion on the serverless suitability and further analysis of the example implementations using the serverless architecture for a variety of web based workloads can indicate that the serverless paradigm finds the applicability for web based workloads.
 Some of the thoroughly designed implementations can bring significant benefits in terms of the solution scalability, performance, cost reduction and development agility.
@@ -1109,7 +1109,7 @@ Lastly, the use of the AWS Polly provided another development opportunity, enabl
 
 \section{Server Tier}
 
-\subsection{Lambda function as a compute resource} \label{chapter:lambda-function-as-a-compute-resource}
+\subsection{AWS Lambda as a compute resource} \label{chapter:lambda-function-as-a-compute-resource}
 
 The idea of Function as a Service has been already introduced in section \ref{chapter:serverless-faas}.
 An example of such FaaS offering is AWS Lambda \cite{AWSLambda}, which is described as a compute service that requires no resource management. It provides the autoscaling capabilities, built-in high-availability and pay-per-use billing model, based on the function execution and the processing time with a granularity of milliseconds. 
@@ -1168,6 +1168,9 @@ Its extensions, including the Lambda functions based on the custom container ima
 Moreover, the use of Lambda layers makes it possible to share dependencies easier, across multiple functions as well as introduce external libraries or even custom runtimes, thanks to the Lambda Runtime API.
 Both of the described approaches allow developers to adjust the Lambda runtime to perform numerous non-standard tasks.
 
+The second example implementation, responsible for generating the interactive presentation based on the LaTeX files, covered in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}, uses Lambda layers to enhance the serverless function environment with the LaTeX distribution.
+Moreover, the performance analysis of both approaches for the aforementioned application is covered in more detail in section \ref{chapter:latex-processing-optimisation}.
+
 \subsubsection{Function execution} \label{chapter:lambda-function-execution-model}
 
 The AWS Lambda is executed in an event-driven manner. 
@@ -1188,6 +1191,8 @@ All of the mentioned execution models are present in the example implementation 
     If the processing fails for some reason, the whole batch can be retried based on maximum record age or maximum retry attempts, the malformed data can be extracted from the rest of the shard and retried separately from the correctly processed events. When the retry limit is reached, the shard can be sent to the separate SQS queue or SNS topic.
     In the receipt processing application, the Lambda is polling the DynamoDB stream and based on received records, it is responsible for performing the mutation to push the update to the client.
 \end{itemize}
+
+All of the mentioned execution models are available in the first example implementation, covering the receipt processing applications, discussed in section \ref{chapter:examples-receipt-processing}.
 
 \subsubsection{Function optimisations}
 
@@ -1227,7 +1232,11 @@ In terms of the Lambda function execution, the improvement possibilities can be 
 Despite the fact that the cloud provider takes responsibility for managing the underlying infrastructure and execution of function code, the way how the function is structured and configured have a significant impact on its performance.
 Applying the knowledge of the Lambda design by keeping the function lean and without unneeded dependencies along with architecturing the application logic in an event-driven manner and leveraging the container reuse to execute the function code more effectively, can greatly improve the performance of the serverless solution.
 It is beneficial to keep in mind that the CPU and network bandwidth is allocated proportionally to the configured memory, which can impact how long it takes for the function to execute.
-Moreover, proper functions’ trigger configuration enables them to filter out undesired events.
+Moreover, proper function trigger configuration enables them to filter out undesired events.
+
+Both of the provided example implementations follow the indications covered in section above, limiting the unneeded dependencies, leveraging the container reuse to maintain the connection with the cloud service clients as well as designing the serverless function to serve a single, well-defined purpose.
+The first example, covered in section \ref{chapter:examples-receipt-processing}, includes the asynchronous receipt processing pipeline, which combines the subsequent executions into a workflow, transforming the data each time, instead of making the serverless function wait idle for the results of the image processing task.
+The second example referring to the generation of interactive presentations, discussed in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}, benefits from the altered resource allocation including additionally allocated CPU to allow the function process the presentations more efficiently.
 
 \subsection{Serverless processing model}
 
@@ -2101,7 +2110,7 @@ Lastly, the graph database in the form of Amazon Neptune can be utilised to prov
 However, the serverless paradigm heavily relies on the ephemeral compute in the form of Function as a Service, which leads to some complications when used with the long-lived, TCP-based connection model of traditional databases.
 Moreover, most of the databases do not fulfill the serverless assumption about autoscaling capabilities to meet the demand as well as granular per-per-use billing model, requiring instead to scale and configure databases on a per instance basis, billed accordingly.
 
-\subsection{Issues when integrating traditional databases with serverless}
+\subsection{Issues when integrating traditional databases with serverless solutions}
 
 Most of the traditional relational database management systems are not designed to work effectively with the ephemeral compute represented by Function as a Service.
 Such databases are more suitable to work with long-running compute instances, initialising the TCP-based connection pool and reusing the connections across the operations performed by the application.
@@ -2156,6 +2165,7 @@ Thanks to technology evolution, including faster network and better serializatio
 It contributes to building services, serving a role of interceptors between the databases and its clients.
 Some databases provide such interfaces, which makes them more suitable for the serverless workloads.
 The idea of serverless databases describes the datastores, which can be integrated effectively with other serverless components as well as provide additional desired capabilities, which are fitting the serverless paradigm \cite{ServerlessAuroraWhatItMeansAndWhyItsTheFutureOfData}.
+
 The list of features of the serverless databases is listed below:
 
 \begin{itemize}
@@ -2496,7 +2506,7 @@ Diagram presenting the usage of Lambda@Edge is presented in Figure \ref{fig:patt
 The notion of thin clients refers to the application clients, which serve as a thin presentation layer, communicating with the underlying services, which handles the significant part of the application logic.
 Contrary to that, the richer and more interactive thick clients can incorporate some part of the business logic on the client side, making the backend services a thinner layer, responsible for validating the performed actions as well as communicating with the database to preserve the changes durably.
 
-At the first glance the web application client's architecture should not be significantly affected by the changes of the underlying server and storage architecture to use the serverless architecture.
+At the first glance the architecture of web application clients should not be significantly affected by the changes of the underlying server and storage architecture to use the serverless architecture.
 However, when taking into consideration the possibility of direct communication with cloud-based services and changes in the workflows processing, gearing towards asynchronous pipelines, it makes the application clients include more complex logic, including additional integrations with serverless components to access them securely as well as moving some part of the orchestration logic to the client in terms of handling the communication with the serverless infrastructure.
 
 The initial architecture of the CloudGuru learning platform is an example of such rich and thick client web application client, communicating directly with various third-party services as well as smaller, cloud based services, as described in sections \ref{chapter:serverless-example-application-backend} and \ref{chapter:serverless-suitability-cloudguru}.
