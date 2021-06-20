@@ -1,0 +1,167 @@
+\chapter{Summary}
+
+\section{Summary of the research}
+
+The goal of the thesis was to research the use of serverless processing and the FaaS model in web application development and it has been described thoroughly during the research.
+
+Firstly, the domain of serverless computing has been presented in more detail, including the origins of the paradigm, defining it as well as covering the characteristics of Function as a Service to reason about the model in further research.
+Next, the benefits of serverless computing have been gathered to understand what capabilities makes it an interesting solution for customers along with the challenges, describing the limitations and problems related to the researched approach.
+The leading cloud providers have been identified, presenting the offering of their serverless platforms as well as the example use cases have been mentioned to build the context for further analysis.
+
+Furthermore, the field of web applications has been described, introducing its origins, defining the web application and reasoning about the requirements they need to fulfill.
+The architectural patterns and related problems have been covered in more detail, dividing the discussion into 3 categories considering the server and data layer as well as the web application clients.
+
+The initial description of the serverless computing and web application fields introduced required knowledge for further research of the applicability of the serverless processing and FaaS model in web application development.
+Below there is a summary of the conclusions regarding the research questions, which have been introduced in section \ref{section:research-questions}.
+
+\subsection{Suitability of the serverless paradigm in web application development}
+
+Serverless paradigm is an appealing solution for various companies, due to benefits such as reducing operational and development cost, reducing time to market and removing the need to manage the infrastructure, however the applicability of the serverless paradigm is not fully comprehended and it is a subject of various practical research for numerous practitioners.
+
+The instant autoscaling capabilities of the serverless components along with the proportional cost based on used resources makes it an appealing solution for the services characterized with little of variable traffic.
+The cloud-based, event-driven processing model introduces concerns regarding the performance of the critical workflows of the implemented solution, however cloud vendors actively work on alleviating the inconvenience of resource virtualisation, while architects provide reference architectures mitigating the limitations of the serverless platforms.
+It is essential to be aware of the limitations of the serverless components, especially the Function as a Service components, which are designed to effortlessly scale horizontally, however due to that introduce restrictions in terms of preserving the state and communicating.
+The serverless functions are designed to perform CPU intensive tasks, nevertheless when integrating with other components and designing the workflow in an event-driven manner, the I/O and network bound processing can be also effectively performed.
+Moreover, it is crucial to consider if the close integration with the cloud platform, leading to the vendor-lock in is bearable, otherwise it could be seens as a trade-off, contrasted with the benefits that the serverless paradigm can bring.
+
+When referring to the examples introduced in section \ref{chapter:serverless-suitability-for-web-based-workloads}, various web services implemented in the serverless architecture lead to appealing outcomes.
+Among the other, mentioned benefits include the development opportunities with significant cost reduction, fine-grained infrastructure scaling to meet the unpredictable load with proportional cost, easier evolution of the web application with increased team agility as well as decoupling the processing along with scaling according to the high-throughput processing task.
+When compared with more traditional architectures including monolithic or microservices, the serverless architecture is more agile in terms of scaling, for the larger workloads the performance of the serverless solutions are comparable with aforementioned approaches, additionally standing out with more stable performance characteristics.
+Nevertheless, the cost effectiveness of the serverless solution is still a debatable aspect, requiring thorough cost estimation, covering all used serverless components and additional costs of the processing, at the same time removing the need to maintain the infrastructure and other operational aspects.
+
+\subsubsection{Fulfilment of the web application requirements}
+
+The fulfilment of the web application requirements of the serverless architecture is covered in section \ref{section:fulfilment-of-the-web-application-requirements}.
+
+In terms of performance, the serverless solutions raise various concerns, regarding the ''cold start'' phenomenon and the overhead of communication overhead for workflow composition, however both problems are under constant improvement from the side of cloud providers as well as architects designing the solutions.
+The serverless solutions characterise with almost instant horizontal scaling capabilities according to the workloads, making the overall performance of the serverless system comparable with more traditional architectures, as mentioned before.
+
+When it comes to reliability, the serverless solutions are designed to configure proper error handling and be resilient to the processing failures by retrying the processing, redirecting the errors and running across multiple data centers to provide a failover mechanism.
+Leveraging automation tests with proper monitoring and observability enables developers to ensure that the service is running properly, leveraging the tooling provided by the cloud platform, when utilising a similar approach when maintaining the services running in the microservice architecture.
+
+The cloud providers introduce various guidelines in terms of security aspects, however the field of serverless security is still under ongoing development, researching various vectors of attacks and educating customers to prevent them from the possible misconfiguration of the cloud-based solutions.
+
+In terms of maintainability, the serverless paradigm reduces the need to work on various operational aspects along with new development opportunities, however it introduces a new approach of developing and testing the web applications in the cloud environment.
+The cloud platforms provide various services, helping with maintainability, observability and deployment process as well as introduce numerous services and tooling helping with the serverless solution management aspects. \\
+
+All of the mentioned features makes the serverless architecture an appealing solution in the field of web application development, however serverless technology requires a mindshift in terms of developing and managing the solution.
+Building a performant and efficient serverless solution requires additional domain knowledge about the serverless architecture, significant amount of knowledge and experience with the cloud-based services along with the thorough cost estimation to decide whether the technology will be applicable to solved problems.
+
+\subsection{Application of the serverless computing and FaaS model in processing of the web application workloads}
+
+\subsubsection{Function as a Service model}
+
+The Function as a Service model has been discussed based on AWS Lambda service, which is one of the most popular implementations of the serverless function. AWS Lambda is a serverless, stateless execution environment, scaling based on a number of requests, executed in an event-driven manner and constrained by several limitations in terms of resource allocation, function execution time as well as size of deployment package, invocation payload and temporary disc space.
+Some types of processing may be not suitable for the constrained execution environment of the Lambda function, however AWS introduces various improvements to overcome the limitations, increasing the amount of configurable resource allocation, introducing runtimes based on custom Docker images as well as connecting the function to shared disk space.
+Furthermore, the serverless function runtime can be extended beyond the set of supported programming languages by introducing a possibility to incorporate custom runtimes and share dependencies using Lambda layers, which extends further the capabilities of the AWS Lambda in terms of processing various workloads.
+The knowledge about the function execution models, possible optimisations and configurations can have a significant impact on the performance and other characteristics of the serverless based workloads.
+
+Mentioned capabilities makes the AWS Lambda, representing the FaaS model, a suitable and satisfying execution environment, not only for the web application workloads based on a request-response execution, but also for more complex and non-standard tasks.
+
+\subsubsection{Serverless processing model}
+
+The serverless processing model, heavily relies on asynchronous and event-driven processing, valuing the loose coupling of its components, makes it similar to microservices architecture, however it pushes the limits further by splitting the service implementations into multiple functions and other serverless components.
+The cloud platforms introduce various components, serving as a front door for the application, exposing numerous types of APIs, which can be integrated with other cloud-based services as well as provide additional capabilities to work with user requests and protect the downstream services.
+The internals of the serverless services use the serverless functions to execute the code responsible for the application logic.
+The asynchronous workflows are more suitable for the stateless and short-lived nature of the serverless functions, incorporating various components including publish-subscribe services, queues and event buses to exchange the messages and coordinate the processing between subsequent function execution.
+The aforementioned services can be configured together to provide additional functionalities, covering the throttling and buffering of events, distributing the events reliably to multiple providers, aggregating the stream of data to several consumers and many more, depending on the requirements of the serverless workflows.
+
+The serverless microservices brings similar benefits as the microservices architecture, enabling developers to split the application into a set of decoupled services with independent data stores, technology choices and deployments, adjusting to the organisation structure.
+The asynchronous and reliable communication is enabled thanks to the various serverless intermediaries, utilising the eventual consistency to propagate the changes in such a distributed system.
+Furthermore, leveraging automation, proper monitoring, observability and other microservices patterns can be applied to ensure a satisfying level of confidence that the web application is running properly.
+
+Services such as Amazon SNS, Amazon SQS and Amazon EventBridge find applicability in the choreography of the asynchronous, event-driven workflows, forming a loosely coupled chain of execution of the application logic.
+Nevertheless, some types of processing require more thorough coordination of the processing.
+AWS Step Function is suitable to handle orchestration of more complex workloads, requiring reliable cooperation between various services and capturing the entire business flow, handling more complex branching logic, errors, retry policies and transactional logic across multiple services.
+
+\subsubsection{Example implementations}
+
+The serverless processing model has been analysed with a reference to two example implementations, covering the web application incorporating the receipt processing to get the information about spendings as well as a service responsible for generating interactive presentations based on the LaTeX files, which are covered in section \ref{chapter:example-implementations}.
+Additionally, the detailed analysis of the second example is described in section \ref{chapter:latex-processing-optimisation}, including the development process, introduced optimisations along with the performance and cost analysis, presenting how the serverless paradigm can be applied to processing a non-standard task, related with the web application field.
+
+\subsection{Characteristics of the storage components used in the web applications built in the serverless architecture}
+
+The cloud platforms provide a wide range of available services, serving the role of databases and datastores, which characterise with different capabilities and data models suitable for various problems and requirements that the web applications needs to fulfill.
+Most of the solutions can be effectively incorporated in the web applications built in the serverless paradigm, granting interesting features.
+
+However, most of the traditional databases are working effectively with long-running instances, communicating using the connection pool and reusing them for performed operations.
+The ephemeral nature of the serverless function and its scaling capabilities makes it unsuitable to work effectively with the serverless components.
+To mitigate the issues various techniques can be applied, such as adjusting the function configuration, implementing caching strategies, introducing additional buffering and throttling of requests along with using dedicated proxy services and managing the connections programmatically.
+
+\subsubsection{Serverless databases}
+
+Nevertheless, cloud providers introduce databases, dedicated to work more effectively with the serverless workloads.
+Such services are characterised by communication based on the HTTP protocol, alleviating the need to manage the connections as well as scaling automatically without the need to manage the infrastructure with pricing model based on usage, including data volumes and performed operations.
+Moreover, similarly to other serverless components, the security model is based on the Identity and Access Management, along with the possibility to manage the database infrastructure using the Infrastructure as a Code approach as well as incorporating the stream based activity log makes it suitable to incorporate in the serverless, event-driven workflows.
+
+Amazon DynamoDB is an example of such a serverless database, providing all of the aforementioned, desired capabilities as well as integrating effectively with other serverless components.
+However, the NoSQL data model of DynamoDB may not be suitable for all types of workloads and requires additional effort when modeling or evolving the problem domain to ensure the data will be accessed effectively.
+
+On the other hand, the Amazon Aurora with Aurora Serverless configuration seems to be an interesting alternative, providing a well-known relational data model.
+The service satisfies a significant subset of aforementioned requirements, however there are still some limitations when using it with the serverless workloads.
+Amazon Web Services works actively on the second version of the service, introducing various improvements and additional capabilities, which tends to establish the Aurora Serverless position alongside DynamoDB.
+
+\subsection{Client communication with the web applications utilising the serverless architecture}
+
+\subsubsection{Client-server communication}
+
+Building web applications in the serverless technology introduces a need to use dedicated components, serving a role of public interfaces, handling the communication with clients and redirecting it to the internal services, responsible for performing the application logic.
+Services such as Amazon API Gateway and AWS AppSync are frequently used with the serverless architecture to provide the entrypoint for the application, exposing different types of APIs including REST, WebSocket and GraphQL.
+The services can integrate with Lambda functions or directly with the downstream services hosted in the cloud platform to fulfill user requests. 
+Moreover, the mentioned components can be configured to use additional capabilities, covering authentication and authorization, transforming and validating requests as well as incorporating caching mechanics.
+
+Simple use cases can be effectively implemented using synchronous communication, integrating the API Gateway directly with the services or serverless function to perform the application logic.
+More complex web applications can benefit from using the GraphQL APIs to aggregate the response from multiple services in one response, trigger more complex workflows executed asynchronously as well as receive the updates in real-time thanks to the established subscriptions.
+When working with files, web clients can access the services responsible for storing them directly.
+It is beneficial for the more complex, serverless workflows to execute them in an asynchronous manner.
+Using patterns such as Webhooks or leveraging WebSocket connection can be used to listen for updates once the asynchronous and event-driven processing flow is completed.
+
+% \subsubsection{Hosting web clients}
+
+% Along with building the web application backends, the cloud platforms provide additional services, enabling developers to host the web application clients in form of static assets, serving them from the locations, which are closer to the end users thanks to the Content Delivery Network.
+% Moreover, the Lambda function can be effectively used for the server-side rendering.
+
+\subsubsection{Thicker web clients}
+
+The serverless architecture encourages to build richer and more interactive thick clients, incorporating some part of the application logic on their side by orchestrating some workflows as well as communicating securely with the datastores and other services directly.
+However, the serverless services are still used to process more complex application logic along with providing additional validation of client operations as well as performing the processing which cannot be fully trusted on the client side.
+
+\section{Acquired knowledge and experience}
+
+First of all, the broad literature overview has been conducted to gain more knowledge and deeper understanding of the domain of serverless processing, leading to a comprehensive introduction to the field and building the context for suitability of the serverless paradigm and Function as a Service model.
+Next, the overview of the web application architectures helped with establishing the field of web application development as well as lead to establishing the requirements used in further analysis.
+
+The thorough theoretical introduction contributed to acquiring essential knowledge to conduct further research, including the analysis of scientific research papers, gray literature and conference presentations, including the insight of various practitioners working with the serverless architecture as well as services documentation.
+This, in turn, helped with extending the required knowledge to thoroughly describe the applicability of the serverless architecture and Function as a Service model in the field of web application development.
+
+The acquired knowledge is additionally supported by providing example implementations, analyzed in the course of the thesis, which introduced additional context and familiarised the author with the serverless processing field, contributing to gaining the practical experience of implementing the web applications in the serverless paradigm using the Amazon Web Services platform.
+
+\section{Recommendations and future work}
+
+The landscape of serverless processing is evolving rapidly, introducing new services by various cloud providers or incorporating improvements into the existing services, expanding their capabilities.
+The domain of serverless computing will surely expand, giving a high probability that the cloud providers will continue to mitigate various problems of the applicability of the serverless technology in the web application development field.
+
+The research could be repeated and further extended including the thorough analysis of the second version of Amazon Aurora Serverless, when it would be publicly available as well as covering the comparison of AWS Step Function Express Workflows in the example implementation mentioned in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}, considering the generation of interactive presentations.
+Some general recommendations regarding the problems covered in the thesis are listed below:
+
+\begin{itemize}
+   \item \textbf{Covering other cloud platforms in the research} ---
+   As mentioned in section \ref{section:research-approach}, the research focuses mainly on the services provided by the Amazon Web Services to narrow the scope of the thesis and give a more in depth analysis of the capabilities of the serverless processing.
+   Nevertheless, it would be beneficial to analyse other, largest cloud providers, described in section \ref{chapter:serverless-service-providers}, verifying how their available services can be applied to develop the web applications in the serverless architecture.
+   \item \textbf{Analysis of the production-grade web applications built in the serverless architecture} ---
+   The provided example implementations, covered in section \ref{chapter:example-implementations}, refer to rather simple implementations of the web applications, but sufficient to reason about the suitability of the serverless architecture for developing web applications.
+   The comprehensive analysis of the second example implementation, discussed in section \ref{chapter:latex-processing-optimisation}, gives a valuable insight into the architecture, performance and cost of the developed solution.
+   To further investigate the implications of the serverless architecture, it would be interesting to gather metric from the production-grade application, including the more in depth analysis of the impact of users behaviour, which most frequently is less regular, especially in context of a full day as well as providing detailed report covering the cost of the executed workloads.
+\end{itemize}
+
+Moreover, several aspects of serverless computing have been introduced in the thesis, leaving some topic not fully covered and applicable for further research.
+Some of the areas of future work are listed below:
+
+\begin{itemize}
+   \item \textbf{Data layer in the serverless paradigm} ---
+   The field of serverless data layer can be further developed, providing more hands-on analysis, while investigating the performance, applicability and the limitations, when integrating mentioned databases with the serverless architecture.
+   Amazon DynamoDB characterise with the interesting capabilities, however modeling complex business domains, requires leveraging approaches such as Single Table Design, to provide a model which will satisfy performant operations for all access patterns.
+   \item \textbf{More in depth analysis of the communication with clients in the serverless architecture} ---
+   The communication patterns with the web application clients, including components and their capabilities discussed in the thesis, could be further extended, providing more hands-on implementations along with their in-depth analysis, regarding performance and cost implications.
+\end{itemize}
+
