@@ -317,18 +317,18 @@ Additionally, clients can use subscriptions, which are most commonly implemented
 
 GraphQL enables to perform multiple queries and operations within a single request and retrieve specified properties of the resources as well as resolve the references for nested entities. Most frequently, the GraphQL API is used in conjunction with HTTP and exposed as a single endpoint, accepting the POST requests and transporting the operation payload in the HTTP body. By defining the multiple queries in a request as well as specifying only the data required, GraphQL gives great flexibility and prevents from the data overfetching, by reducing the number of requests and amount of data being sent. Nevertheless, the greater flexibility introduces additional overhead in terms of resolving the queries on the server side and makes the effective data caching significantly more difficult to implement. GraphQL is most frequently used as API for web and mobile applications to optimise the amount of data being sent to the client side \cite{APIDesignInDistributedSystems}.
 
-\paragraph{gRPC}
+% \paragraph{gRPC}
 
-gRPC \cite{gRPC} is an open-source, high performant Remote Procedure Call framework, which allows clients to make a request to a remote network service, in a similar manner as with calling a function or a method on the application level.
-As with many other RPC tools, gRPC enables developers to define the service interface along with the methods that can be called by remote clients, with their types and parameters defined in a language agnostic way.
-gRPC uses Protocol Buffers by default, which is a mechanism developed by Google for serializing structured data in a binary format, to define the service interface and the structure of the messages being serialized.
-Based on this, the stubs code for the client and server can be generated, allowing to serialize and parse the data, and providing accessors to the fields of the defined structures.
+% gRPC \cite{gRPC} is an open-source, high performant Remote Procedure Call framework, which allows clients to make a request to a remote network service, in a similar manner as with calling a function or a method on the application level.
+% As with many other RPC tools, gRPC enables developers to define the service interface along with the methods that can be called by remote clients, with their types and parameters defined in a language agnostic way.
+% gRPC uses Protocol Buffers by default, which is a mechanism developed by Google for serializing structured data in a binary format, to define the service interface and the structure of the messages being serialized.
+% Based on this, the stubs code for the client and server can be generated, allowing to serialize and parse the data, and providing accessors to the fields of the defined structures.
 
-The binary encoding provided by Protocol Buffers allows to achieve better performance compared to other serialisation techniques, which is an appealing feature along with the benefits of HTTP/2 used underneath, enabling bidirectional streaming capabilities and real-time communication between the client and server.
-gRPC allows for four kinds of service methods, the basic one utilise a regular request-response call. It can be enhanced with the streaming capabilities, in which sequence of messages can be sent from the server to the client, the opposite way or in both directions simultaneously.
-The remote procedure execution is not only limited to the synchronous invocation, but can also be invoked asynchronously or terminated after a specified time, when the deadline is defined. Moreover, it supports tracing, load balancing, health-checking and fully pluggable authentication.
+% The binary encoding provided by Protocol Buffers allows to achieve better performance compared to other serialisation techniques, which is an appealing feature along with the benefits of HTTP/2 used underneath, enabling bidirectional streaming capabilities and real-time communication between the client and server.
+% gRPC allows for four kinds of service methods, the basic one utilise a regular request-response call. It can be enhanced with the streaming capabilities, in which sequence of messages can be sent from the server to the client, the opposite way or in both directions simultaneously.
+% The remote procedure execution is not only limited to the synchronous invocation, but can also be invoked asynchronously or terminated after a specified time, when the deadline is defined. Moreover, it supports tracing, load balancing, health-checking and fully pluggable authentication.
 
-Most frequently, the gRPC is used in the microservice architecture for efficient communication between services within the same organisation \cite{DesignDataIntensiveApplications}.
+% Most frequently, the gRPC is used in the microservice architecture for efficient communication between services within the same organisation \cite{DesignDataIntensiveApplications}.
 
 % ---
 % NOTES
