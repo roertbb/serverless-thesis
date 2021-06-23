@@ -60,7 +60,7 @@ The cited definitions contain insightful information about features of serverles
 When considering the serverless architecture, it refers to a range of technologies provided by cloud platforms. Two different areas can be distinguished, defining two distinctive components:
 
 \begin{itemize}
-    \item \textbf{Backend as a Service} refers to third-party services or generic components, capable of replacing some part of a server side application, that was previously developed internally or self-provisioned. It exposes an API which allows for integrating the component with the rest of the application.
+    \item \textbf{Backend as a Service} refers to third party services or generic components, capable of replacing some part of a server side application, that was previously developed internally or self-provisioned. It exposes an API which allows for integrating the component with the rest of the application.
     \item \textbf{Function as a Service} is an event-driven execution environment for running application code within stateless and ephemeral containers with strictly limited execution time.
 \end{itemize}
 
@@ -78,11 +78,11 @@ Even though presented areas serve different roles, they share common features an
 
 The concept of Backend as a Service (BaaS) gathers various domain-generic, repeatable application components capable of replacing some part of application logic or providing some functionalities. They can be accessed and integrated into developed applications through API defined by its provider.
 
-Taking into consideration most popular requirements of various applications, the majority of them need to store and manage the data. Depending on the requirements, the information should be stored in a structural way in databases or can be stored regardless of their shape in file storage service. For teams developing mobile or web applications it~is~convenient to rely on some third-party components to store and access the data directly from the application. Services like Google's Firebase meet such requirements and give access to the database entirely managed by a cloud vendor. Depending on the complexity of developed product, it may be required to incorporate some more advanced components to process required tasks or flows, reflecting the business logic of application. Mechanisms serving as notification services, exposing some publish-subscribe capabilities for defined events, could be applicable in that case. It is essential to notice that such components are replacing previously self-hosted components such as databases or other data stores, message brokers or similar services responsible for processing data streams incoming from various sources.
+Taking into consideration most popular requirements of various applications, the majority of them need to store and manage the data. Depending on the requirements, the information should be stored in a structural way in databases or can be stored regardless of their shape in file storage service. For teams developing mobile or web applications it~is~convenient to rely on some third party components to store and access the data directly from the application. Services like Google's Firebase meet such requirements and give access to the database entirely managed by a cloud vendor. Depending on the complexity of developed product, it may be required to incorporate some more advanced components to process required tasks or flows, reflecting the business logic of application. Mechanisms serving as notification services, exposing some publish-subscribe capabilities for defined events, could be applicable in that case. It is essential to notice that such components are replacing previously self-hosted components such as databases or other data stores, message brokers or similar services responsible for processing data streams incoming from various sources.
 
 Looking closer from the application logic point of view, there are also repeatable functionality implementations that can be extracted and reused across multiple developed applications. Majority of the products will require some features enabling users to manage their identity and associated permissions. Most of the time, the capabilities will be~not only limited to registering and logging users, but it will also include integrations with other services as identity providers. Managing and sending emails can be considered as another functionality that can be extracted into separate component from the code perspective and reused in other applications. Products such as Auth0 (serving as fully featured authorization and user management service) or Mailgun (capable of managing and processing emails) makes it possible to replace entirely the repeatable part of business logic.
 
-Specific components and services that can be classified as Backend as a Services will be~covered in more details in chapter \ref{chapter:serverless-service-providers}, when analysing services provided by leading cloud vendors. All of the mentioned components enable developers to create fully fledged applications and services similar to the solutions built using self-hosted component equivalents. The difference for given components is the fact that they characterise by capabilities of~the~serverless architecture. They are provided by cloud vendors, who take responsibility for managing, provisioning and scaling them depending on the demand. Moreover, the~possibility to replace the repeatable application features by utilising third-party services enables developers to iterate faster and shorten the lead time.
+Specific components and services that can be classified as Backend as a Services will be~covered in more details in chapter \ref{chapter:serverless-service-providers}, when analysing services provided by leading cloud vendors. All of the mentioned components enable developers to create fully fledged applications and services similar to the solutions built using self-hosted component equivalents. The difference for given components is the fact that they characterise by capabilities of~the~serverless architecture. They are provided by cloud vendors, who take responsibility for managing, provisioning and scaling them depending on the demand. Moreover, the~possibility to replace the repeatable application features by utilising third party services enables developers to iterate faster and shorten the lead time.
 
 \subsection{Function as a Service} \label{chapter:serverless-faas}
 
@@ -111,7 +111,7 @@ Before analyzing the execution model in more details, it is important to examine
     \label{fig:function-deployment-and-invocation-process}
 \end{figure}
 
-Furthermore, the serverless platform may provide additional actions related to~the~function management such as executing, publishing, updating and deleting the function or~its~metadata. Also, a particular version of the function can be labeled or aliased, which can come in handy when operating the serverless system on a larger scale. Logs and~statistics are gathered alongside function execution.
+Furthermore, the serverless platform may provide additional actions related to~the~function management such as executing, publishing, updating and deleting the function or~its metadata. Also, a particular version of the function can be labeled or aliased, which can come in handy when operating the serverless system on a larger scale. Logs and~statistics are gathered alongside function execution.
 
 The function is executed in an event-driven model and within strictly limited processing duration. The whole process begins when an event triggering a particular function is~dispatched. It is detected and registered by an underlying serverless platform. The~controller, responsible for managing function executions, looks for functions associated with incoming events, gets their code and configuration and allocates an adequate amount of~resources from the managed resource pool. The~new~execution environment is created inside a lightweight, ephemeral container and language runtime for the function is bootstrapped. When the environment is ready, the triggering event is redirected and processed by~the~application logic included in the function code.
 
@@ -171,7 +171,7 @@ Based on the reports and articles discussing the advantages and drawbacks connec
 
 Serverless is essentially another step in the process of infrastructure management outsourcing, similar to IaaS and PaaS. In this approach, developers instead of requesting resources, provide an artifact including code to be executed and the cloud platform is responsible for provisioning the resources and executing the application logic, based on defined triggers' configuration. The responsibility of managing the servers, databases and application execution is transferred to~the~cloud provider \cite{BerkeleyServerless}. The favourable and competitive prices are available due to economy of scale, in which one vendor is running thousands of~predefined services, effectively sharing the infrastructure among the customers.
 
-The labour cost connected with the serverless architecture is also reduced, because there is less work related to managing the serverless solution, compared to the self-hosted alternative. There is no need to setup and maintain hardware as well as restore it~to~proper condition in case of failures --- new resources can be allocated and be ready to~work with, within a moment from requesting it. The development cost is also reduced due to the frequent usage of BaaS components, replacing the application elements that were previously developed in-house, while now can be incorporated with the application logic. An example of such approach is aforementioned Auth0 providing the authentication capabilities or~Firebase, enabling client applications to directly communicate with server-side databases accordingly, providing proven authentication mechanisms for different types of~users and~removing much of the database administration overhead \cite{MartinFowlerServerless}.
+The labour cost connected with the serverless architecture is also reduced, because there is less work related to managing the serverless solution, compared to the self-hosted alternative. There is no need to setup and maintain hardware as well as restore it~to~proper condition in case of failures --- new resources can be allocated and be ready to~work with, within a moment from requesting it. The development cost is also reduced due to the frequent usage of BaaS components, replacing the application elements that were previously developed in-house, while now can be incorporated with the application logic. An~example of such approach is aforementioned Auth0 providing the authentication capabilities or~Firebase, enabling client applications to directly communicate with server-side databases accordingly, providing proven authentication mechanisms for different types of~users and~removing much of the database administration overhead \cite{MartinFowlerServerless}.
 
 \subsubsection{Autoscaling with proportional cost} \label{chapter:serverless-autoscaling-with-proportional-cost}
 
@@ -280,19 +280,7 @@ Most cloud vendors provide some tooling to monitor the system and there are many
 
 \section{Cloud providers} \label{chapter:serverless-service-providers}
 
-Since the announcement of AWS Lambda in 2014, other companies followed the foodsteps of Amazon Web Services and started offering their solutions for building serverless applications and services. Currently, several major cloud vendors provide large variety of services and functionalities forming complete serverless platforms. Along with the public cloud expansion, couple of open-source projects and platforms emerged as an alternative, enabling to use FaaS on on-premise hardware and in a private or hybrid cloud. The variety of cloud vendors offerings is significant, some of them expose the fully-fledged platforms with numerous BaaS components that can be integrated together, others provide the FaaS along with the possibility to host the applications in containers, virtual machines or incorporate serveless processing, along the statically hosted websites or cloud-managed database products. When selecting the cloud providers it is essential to consider several factors, like industry adoption, maturity and number of services, ease of integration as well as cost of the services. According to the survey conducted in June 2020 by Cloud Native Computing Foundation's (CNCF) \cite{CNCFServerlessSurvey2020} the market share of FaaS platforms is presented in figure \ref{fig:hosted-serverless-platform-share-survey}
-
-% https://github.com/cncf/surveys/tree/master/cloudnative
-% https://www.cncf.io/wp-content/uploads/2020/11/CNCF_Survey_Report_2020.pdf
-
-% AWS Lambda - 55%
-% Google Cloud Function - 27%
-% Azure Function - 24%
-% Alibaba Cloud Function - 5%
-% CloudFlare Workers - 3%
-% IBM Cloud Function - 3%
-% Oracle Function - 2%
-% Netlify Functions - 1%
+Since the announcement of AWS Lambda in 2014, other companies followed the footsteps of Amazon Web Services and started offering their solutions for building serverless applications and services. Currently, several major cloud vendors provide large variety of~services and functionalities forming complete serverless platforms. Along with the public cloud expansion, couple of open-source projects and platforms emerged as an alternative, allowing developers to use FaaS on on-premise hardware and in a private or hybrid cloud. The~variety of cloud vendors offerings is significant, some of them expose the fully-fledged platforms with numerous BaaS components that can be integrated together, others provide the FaaS along with the possibility to host the applications in containers, virtual machines or incorporate serveless processing, along the statically hosted websites or cloud-managed database products. When selecting the cloud providers it is essential to consider several factors, like industry adoption, maturity and number of services, ease of integration as~well as cost of the services. According to the survey conducted in June 2020 by Cloud Native Computing Foundation's (CNCF) \cite{CNCFServerlessSurvey2020} the market share of FaaS platforms is~presented in figure \ref{fig:hosted-serverless-platform-share-survey}
 
 \begin{figure}[h]
     \begin{tikzpicture}
@@ -336,59 +324,40 @@ Since the announcement of AWS Lambda in 2014, other companies followed the foods
 
 \textbf{Amazon Web Services}, \textbf{Microsoft Azure} and \textbf{Google Cloud Platform} are distinguished as three providers with the biggest market share. Their services are classified into categories and described in more details, altogether with other vendors and companies providing their services in the serverless computing field.
 
-% https://hentsu.com/serverless-computing-aws-vs-azure-vs-gcp-cloud-comparison/
-% https://www.datamation.com/cloud/aws-vs-azure-vs-google-2020-cloud-comparison/
-% https://www.gartner.com/doc/reprints?id=1-1ZDZDMTF&ct=200703&st=sb
-
-% Categories
-% \begin{enumerate}
-%     \item Compute
-%     \item Data Store (Storage + Database)
-%     \item Network and Content Delivery (API management + Hosting)
-%     \item Application Integrations (Application Integration + Function Orchestration/Workflow)
-%     \item Analytics
-%     \item Security and Identity
-%     \item Development Tools
-% \end{enumerate}
-
-% TODO: rb - URLs to articles, documentations
-
 \subsection{Amazon Web Services} \label{serverless-amazon-web-services}
 
-As previously mentioned, Amazon was the company that pioneered the field of serverless computing. Over the years it established the dominant market position, leading in the number of available services characterized by high quality and undergoing constant innovation. AWS is an enterprise ready vendor, highly focused on the public cloud sector providing most comprehensive network infrastructure and data centers.
+As previously mentioned, Amazon was the company that pioneered the field of serverless computing. Over the years, it established the dominant market position, leading in the number of available services, characterized by high quality and undergoing constant innovation. AWS is an enterprise ready vendor, highly focused on the public cloud sector, providing most comprehensive network infrastructure and data centers.
 
-Moreover, it comes up with rich collection of advanced tools. CloudFormation and AWS Cloud Development Kit enable developers to manage the infrastracture utilising the Infrastracture as a Code (IaaC) paradigm. Furthermore, the AWS Serverless Application Model (SAM), that efficiently integrate with other AWS services, helps with developing, building and testing the created software. Besides, the essential services necessary to develop serverless applications (described below in more details based on the official documentation \cite{AWSServerlessOffering}), AWS offers a wide range of services oriented towards artificial intelligence and machine learning that allow to train and deploy machine learning models, operates on documents, images or speech. Furthermore, AWS provides services capable of connecting and cooperating with various IoT devices, process multimedia or help with managing business processes.
+Moreover, it comes up with rich collection of advanced tools. CloudFormation and AWS Cloud Development Kit enable developers to manage the infrastracture, utilising the Infrastracture as a Code (IaaC) paradigm. Furthermore, the AWS Serverless Application Model (SAM), that efficiently integrate with other AWS services, helps with developing, building and testing the created software. Besides, the essential services necessary to develop serverless applications (described below in more detail based on the official documentation \cite{AWSServerlessOffering}), AWS offers a wide range of services oriented towards artificial intelligence and machine learning that allow to train and deploy machine learning models, operates on documents, images or speech. Furthermore, AWS provides services capable of connecting and cooperating with various IoT devices, process multimedia or~help with managing business processes.
 
-The AWS pricing model is considered as a major difficulty when it comes to accurately estimate the cost of running the service, but most frequently the variety and maturity of services and tooling counterweight this downside.
-
-% https://aws.amazon.com/serverless/
+The AWS pricing model is considered as a major difficulty when it comes to accurately estimate the cost of running the service, but most frequently the variety and maturity of~services and tooling counterweight this downside.
 
 \begin{enumerate}
    \item Compute
    \begin{itemize}
-       \item AWS Lambda --- First FaaS offering available on the market, that allows to execute the function without provisioning and managing the servers, automatically scaling the solution by running the code in response to an event. AWS Lambda supports natively Node.js, Python, Java, C\#, Go and Ruby as execution environments, with a possibility to incorporate custom runtimes or container based environments, charging for the execution with the millisecond granularity and ensuring consistent performance by enabling Provisioned Concurrency.
+       \item AWS Lambda --- First FaaS offering available on the market, that allows to~execute the function without provisioning and managing the servers, automatically scaling the solution by running the code in a new instance in response to an event. AWS Lambda supports natively Node.js, Python, Java, C\#, Go and Ruby as execution environments, with a possibility to incorporate custom runtimes or container based environments, charging for the execution with the~millisecond granularity and ensuring consistent performance by enabling Provisioned Concurrency.
        \item AWS Fargate --- Serverless compute engine for containers, eliminating the need to manage the servers, choose instances and scale the cluster capacity, providing appropriate level of isolation and security.
-       \item Lambda@Edge --- Enable to run the Lambda code at an AWS location closer to the users of the application, utilising the Amazon CloudFront as content delivery network (CDN) to reduce the latency and improve the performance.
+       \item Lambda@Edge --- Enable to run the Lambda code at an AWS location closer to the users of the application, utilising the Amazon CloudFront as Content Delivery Network (CDN) to reduce the latency and improve the performance.
    \end{itemize}
    \item Data Store
    \begin{itemize}
-       \item Amazon Simple Storage Service (S3) --- Storage service for objects, offering high data availability, scalability and performance. It enables the storage of a wide range of data for different use-cases, such as application data, backups, data lake, websites and other assets, ensuring their durability.
-       \item Amazon DynamoDB --- Flexible, scalable and distributed key-value and document database providing high performance and low-latency data access. Enables data caching, cross-region replication, fault-tolerance and data encryption, being a suitable solution for web and mobile applications.
-       \item Amazon Aurora Serverless --- Autoscalable and fully managed configuration for Amazon Aurora, which is a relational database compatible with MySQL and PostgreSQL, enabling higher performance and availability.
-       \item Amazon RDS Proxy --- Fully managed and highly-available database proxy for Amazon RDS, which is a service that provides hosting and scaling for other relational databases.
-       \item ElastiCache --- In-memory data store, compatible with Redis and Memcached suitable for data intensive applications with high throughput and low-latency data access.
+       \item Amazon Simple Storage Service (S3) --- Storage service for objects, offering high data availability, scalability and performance. It provides the storage of~a~wide range of data for different use-cases, such as application data, backups, data lake, websites and other assets, ensuring their durability.
+       \item Amazon DynamoDB --- Flexible, scalable and distributed key-value and document database, providing high performance and low-latency data access. Enables data caching, cross-region replication, fault-tolerance and data encryption, being a suitable solution for web and mobile applications.
+       \item Amazon Aurora Serverless --- Autoscalable and fully managed configuration for~Amazon Aurora, which is a relational database compatible with MySQL and PostgreSQL, enabling higher performance and availability.
+       \item Amazon RDS Proxy --- Fully managed and highly-available database proxy for~Amazon RDS, which is a service that provides hosting and scaling for other relational databases.
+       \item ElastiCache --- In-memory data store, compatible with Redis and Memcached suitable for data intensive applications with high-throughput and low-latency data access.
    \end{itemize}
    \item Network and Content Delivery
    \begin{itemize}
-       \item Amazon API Gateway --- Managed services enabling to expose an API and connect with other AWS services providing real-time two-way communication via REST or Websocket API, billed accordingly to usage.
-       \item AWS AppSync --- Another fully-managed and scalable service capable of defining and handling the two-way communication using GraphQL API handling the heavy-lifting and communicating with other AWS services to store and sync the data.
-       \item Amazon CloudFront --- Fast, secure and programmable content delivery network (CDN) hosting the data such as videos, images or applications, utilising the AWS edge network location to make the service globally scalable and accessible.
+       \item Amazon API Gateway --- Managed service, enabling to expose APIs and connect with other AWS services, providing real-time two-way communication via~REST or WebSocket API, billed accordingly to usage.
+       \item AWS AppSync --- Another fully-managed and scalable service, capable of defining and handling the two-way communication using GraphQL API as well as the heavy-lifting and communicating with other AWS services to store and sync the data.
+       \item Amazon CloudFront --- Fast, secure and programmable Content Delivery Network (CDN) hosting the data such as videos, images or applications, utilising the AWS edge network location to make the service globally scalable and accessible.
    \end{itemize}
    \item Application Integrations
    \begin{itemize}
        \item Amazon Simple Notification Service (SNS) --- fully managed publish-subscribe service enabling high-throughput, many-to-many messaging for communication between applications, microservices and application-to-person messaging.
-       \item Amazon Simple Queue Service (SQS) --- message queuing service allowing to decouple components of the distributed systems in two types: standard (offering high throughput and best effort ordering) and FIFO (designed for ordered messages delivered exactly once).
-       \item Amazon EventBridge --- Scalable serverless event bus, enabling to integrate the incoming messages from other SaaS offerings in real-time with the AWS infrastructure.
+       \item Amazon Simple Queue Service (SQS) --- message queueing service, allowing to~decouple components of the distributed systems, available in two types: standard (offering high-throughput and best effort ordering) and FIFO (designed for ordered messages delivered exactly once).
+       \item Amazon EventBridge --- Scalable serverless event bus, enabling to integrate the~incoming messages from other SaaS offerings with the AWS infrastructure.
        \item AWS Step Functions --- Serverless function orchestrator, allowing to combine AWS Lambda functions into workflows based on business processes, visualising them and maintaining the application state between execution.
    \end{itemize}
    \item Analytics
@@ -398,61 +367,58 @@ The AWS pricing model is considered as a major difficulty when it comes to accur
    \end{itemize}
    \item Security and Identity
    \begin{itemize}
-       \item AWS Identity and Access Management (IAM) --- Required to manage users and groups and their access to AWS services and resources in a secure way, offered without additional cost.
+       \item AWS Identity and Access Management (IAM) --- Required to manage users, groups and their access to AWS services and resources in a secure way, offered without additional cost.
        \item Amazon Cognito --- Provides authentication service and identity management that can be easily incorporated with various clients solutions on different platforms.
    \end{itemize}
    \item Development Tools
    \begin{itemize}
        \item Amazon CloudWatch --- Service providing application monitoring and observability, gathering logs, metrics and capturing events within the AWS resources. Enables to analyse the environment behaviour, troubleshoot issues and take automate actions based on numerous indicators.
-       \item AWS X-Ray --- Tool allowing to analyze and debug distributed application behaviour across multiple services based on the request tracing, gathering the execution metric to identify the application issues and performance bottlenecks, available for both development and production applications.
-       \item AWS Amplify --- Suite of tools and services helping developers build efficient and scalable applications for web and mobile platforms, providing possibilities to deploy the static sites, easily manage content or configure the application backends with authentication and data storage.
-       \item AWS CodeStar, AWS CodePipeline, AWS CodeBuild, AWS CodeDeploy --- Set of tools helping with the automation, continuous integration and deployment workflows for various applications.
+       \item AWS X-Ray --- Tool that allows to analyze and debug distributed application behaviour across multiple services based on the request tracing, gathering the~execution metric to identify the application issues and performance bottlenecks, available for both development and production applications.
+       \item AWS Amplify --- Suite of tools and services, helping developers build efficient and scalable applications for web and mobile platforms, providing possibilities to deploy the static sites, easily manage content or configure the application backends with authentication and data storage.
+       \item AWS CodeStar, AWS CodePipeline, AWS CodeBuild, AWS CodeDeploy --- Set~of tools helping with the automation, continuous integration and deployment workflows for various applications.
    \end{itemize}
 \end{enumerate}
 
 \subsection{Microsoft Azure}
 
-Microsoft is the second from the biggest three vendors that started offering its serverless computing services in 2017 by integrating them into the Microsoft Azure platform. It also provides a vast number of services, giving a more flexible and configurable runtime engine supporting more programming languages.
+Microsoft is the second from the biggest three vendors that started offering its serverless computing services in 2017, by integrating them into the Microsoft Azure platform. It~also provides a vast number of services, giving a more flexible and configurable runtime engine, supporting more programming languages.
 
-When investing in the serverless field, Microsoft decided to repurpose its existing proprietary software to be available and greatly integrated with the cloud. Microsoft Azure is eager to cooperate with various enterprise companies, especially using their software. Contrary to the AWS, Azure platform can more effectively interoperated with customers' data centers, enabling the gradual migration of on-premise software or operate in a hybrid cloud model. Azure platform also provides some powerful DevOps tooling and numerous services integrating machine learning and artificial intelligence, exposing among the others cognitive services, chatbots and document, images and video analysis and recognition.
+When investing in the serverless field, Microsoft decided to repurpose its existing proprietary software to be available and greatly integrated with the cloud. Microsoft Azure is eager to cooperate with various enterprise companies, especially using their software. Contrary to the AWS, Azure platform can more effectively interoperate with customers' data centers, enabling them to the gradual migration of on-premise software or operate in a hybrid cloud model. Azure platform also provides some powerful DevOps tooling and numerous services, integrating machine learning and artificial intelligence, exposing among the others cognitive services, chatbots and document, images and video analysis and recognition.
 
 Nevertheless, customers frequently are not satisfied with the Microsoft Azure complex pricing model, due to complicated software licensing options that are hard to understand without outside support. Moreover, some of the services are considered less enterprise-ready, due to issues with quality of these services, technical support and lacking documentation or when managing and configuring some of them outside of the Azure platform.
 
-The current serverless offering of Microsoft Azure is presented in more details according to the information available on the vendor website \cite{AzureServerlessOffering}.
-
-% https://azure.microsoft.com/en-us/overview/serverless-computing/
-% https://azure.microsoft.com/en-us/solutions/serverless/#solution-architectures
+The current serverless offering of Microsoft Azure is presented in more detail, according to the information available on the vendor website \cite{AzureServerlessOffering}.
 
 \begin{enumerate}
    \item Compute
    \begin{itemize}
-       \item Azure Functions --- FaaS offering from Microsoft, integrating with other services, execution in an event-driven manner and autoscaling cased on demand. It provides tools for building and debugging functions locally, supporting implementations in .NET Platform (C\#, F\#), Java, Node.js (JavaScript and Typescript), Python and PowerShell, billing the execution on a per second basis.
-       \item Azure App Service --- Fully-managed platform for building, deploying and scaling web applications written in .NET, Node.js, Java, Python and PHP running in Windows or Linux containers integrating with other services from Azure platform.
-       \item Azure Kubernetes Service --- Highly-available and secure managed Kubernetes service automatically provisioning serverless infrastructure based on the traffic, utilising open-source tools like Virtual Kubelet for provisioning nodes and KEDA for event processing from various event sources.
+       \item Azure Functions --- FaaS offering from Microsoft, integrating with other services, executing in an event-driven manner and autoscaling based on demand. It provides tools for building and debugging functions locally, supporting implementations in .NET Platform (C\#, F\#), Java, Node.js (JavaScript and~Typescript), Python and PowerShell, billing the execution on a per second basis.
+       \item Azure App Service --- Fully-managed platform for building, deploying and scaling web applicationsm written in .NET, Node.js, Java, Python and PHP, running in Windows or Linux containers, integrating with other services from Azure platform.
+       \item Azure Kubernetes Service --- Highly-available and secure managed Kubernetes service, automatically provisioning serverless infrastructure based on the traffic, utilising open-source tools like Virtual Kubelet for provisioning nodes and~KEDA for event processing from various event sources.
    \end{itemize}
    \item Data Store
    \begin{itemize}
-       \item Azure Blob Storage --- Scalable, secure and durable object storage capable of storing a large amount of unstructured data objects suitable for cloud-native and mobile apps. Providing high availability and geo-replication generating events pushed to other Azure services upon data changes.
-       \item Azure Cosmos DB --- Fully-managed, globally distributed and multi-modal NoSQL database service, guaranteeing low-latency data access and scalability, exposing APIs for SQL, MongoDB and Cassandra.
-       \item Azure SQL Database --- Family of SQL cloud databases providing optimized performance, data durability, backups capabilities and adapting to requirement changes.
-       \item Azure Cache --- Managed in-memory data store, which can be utilised as caching layer, providing high throughput and low-latency operation time, scaling according to demand with geo-replication and Redis compatibility
+       \item Azure Blob Storage --- Scalable, secure and durable object storage, capable of~storing a large amount of unstructured data objects, suitable for cloud-native and mobile apps. It provides high availability and geo-replication, generating events pushed to other Azure services upon data changes.
+       \item Azure Cosmos DB --- Fully-managed, globally distributed and multi-model NoSQL database service, guaranteeing low-latency data access and scalability, exposing APIs for SQL, MongoDB and Cassandra.
+       \item Azure SQL Database --- Family of SQL cloud databases, providing optimized performance, data durability, backups capabilities and adapting to requirement changes.
+       \item Azure Cache --- Managed in-memory data store, which can be utilised as~caching layer, providing high-throughput and low-latency operation time, scaling according to demand with geo-replication and Redis capabilities.
    \end{itemize}
    \item Network and Content Delivery
    \begin{itemize}
        \item API Management --- Service enabling API management across cloud and on-premise environments with unified management experience, focused on security and observability with fine-grained data exposition rules and integration with other services.
-       \item Azure Content Delivery Network --- Secure and reliable content delivery network (CDN) greatly integrated with different services from Azure platform, ensuring proper security level and analytics features.
+       \item Azure Content Delivery Network --- Secure and reliable Content Delivery Network (CDN), greatly integrated with other services from Azure platform, ensuring proper security level and analytics features.
    \end{itemize}
    \item Application Integrations
    \begin{itemize}
        \item Azure Event Grid --- Service handling the message routing from various event sources, working in a publish-subscribe model, ensuring scalability and high-reliability.
-       \item Azure Event Hub --- Managed, scalable and geo-replicable real-time data streaming service enabling to build dynamic data pipelines, capable of seamless integration with other Azure services.
-       \item Azure Service Bus --- Reliable and scalable messaging services for a cloud enabling to build communication between decoupled application components and on-premise systems, enabling various messaging models and offline delivery.
+       \item Azure Event Hub --- Managed, scalable and geo-replicable real-time data streaming service, enabling to build dynamic data pipelines, capable of seamless integration with other Azure services.
+       \item Azure Service Bus --- Reliable and scalable messaging services for a cloud, enabling to build communication between decoupled application components and~on-premise systems, providing various messaging models and offline delivery.
        \item Logic Apps --- Service enabling developers to build various workflows within containerized environments, integrating external services and enterprise SaaS offerings along with the Azure platform components.
-       \item Azure Durable Functions --- An extension for Azure Functions enabling them to execute stateful computation in a serverless environment by utilising the Orchestrator that defines the state flow between subsequent functions.
+       \item Azure Durable Functions --- An extension for Azure Functions, enabling them to execute stateful computation in a serverless environment by utilising the~Orchestrator that defines the state flow between subsequent functions.
    \end{itemize}
    \item Analytics
    \begin{itemize}
-       \item Azure Stream Analytics --- Serverless real-time analytics enabling to build streaming pipelines with similar SQL-like syntax integrating with other platform services, including artificial intelligence for more sophisticated use-cases.
+       \item Azure Stream Analytics --- Serverless real-time analytics, enabling to build streaming pipelines with similar SQL-like syntax, integrating with other platform services including artificial intelligence for more sophisticated use-cases.
    \end{itemize}
    \item Security and Identity
    \begin{itemize}
@@ -460,51 +426,48 @@ The current serverless offering of Microsoft Azure is presented in more details 
    \end{itemize}
    \item Development Tools
    \begin{itemize}
-       \item Azure Monitor --- Fully managed and scalable monitoring offering integrated with numerous Azure services, providing operational telemetry to analyze the cloud and on-premise services behaviour and performance, allowing to query and visualize the data and trigger alarms based on thresholds or patterns detected by artificial intelligence to proactively notify about anomalies or issues
-       \item Azure DevOps --- Cloud hosted service providing a fully-fledged set of operational tools such as code repository and task management capabilities, enabling configuration of continuous integration and continuous delivery pipelines along with building artifacts and deploying software to multiple platform or on-premise services.
+       \item Azure Monitor --- Fully managed and scalable monitoring offering, integrated with numerous Azure services, providing operational telemetry to analyze the cloud and on-premise services behaviour and performance, allowing to query and visualize the data and trigger alarms based on thresholds or patterns detected by~artificial intelligence to proactively notify about anomalies or issues
+       \item Azure DevOps --- Cloud hosted service, providing a fully-fledged set of operational tools such as code repository and task management capabilities, enabling configuration of continuous integration and continuous delivery pipelines along with building artifacts and deploying software to multiple platform or on-premise services.
    \end{itemize}
 \end{enumerate}
 
 \subsection{Google Cloud Platform}
 
-Google introduced its serverless products from their cloud offering in 2018 into general availability after a long period in beta. It is noticeable that the Google Cloud Platform offering is not as rich and varied and the services are not as mature and configurable as those offered in the AWS or Azure catalog.
+Google introduced its serverless products from their cloud offering in 2018 into general availability, after a long period in beta. It is noticeable that the Google Cloud Platform offering is not as rich and varied, and the services are not as mature and configurable, as~those offered in the AWS or Azure catalog.
 
-The vendor is looking to cooperate closely with companies trying to scale quickly and startups rather than large enterprises. Besides, the serverless platform, the provider is highly focused on containerization and microservices architecture with the leading in the Kubernetes services along with strong open-source commitments and DevOps-friendly approach. Google Cloud Platform is a leader in fields of artificial intelligence, machine learning and big data offering numerous services and capabilities based on the open-source frameworks and libraries maintained by Google.
+The vendor is looking to cooperate closely with companies trying to scale quickly and startups, rather than large enterprises. Besides the serverless platform, the provider is~highly focused on containerization and microservice architecture, with the leading in~the Kubernetes services along with strong open-source commitments and DevOps-friendly approach. Google Cloud Platform is a leader in fields of artificial intelligence, machine learning and big data, offering numerous services and capabilities based on the open-source frameworks and libraries maintained by Google.
 
-The provider gives a better impression to its customers in terms of the ease of setup and user-friendliness of the platform. The pricing model is aimed to be more customer friendly, offering exceptionally flexible contracts appealing to customers interested in using the cloud.
+The provider gives a better impression to its customers in terms of the ease of setup and user-friendliness of the platform. The pricing model is aimed to be more customer friendly, offering exceptionally flexible contracts, appealing to customers interested in using the cloud.
 
 Google Cloud Platform services, based on the available offer \cite{GCPServerlessOffering}, are presented below:
-
-% https://cloud.google.com/serverless
-% https://www.youtube.com/watch?v=4D3X6Xl5c_Y&list=PLIivdWyY5sqKh1gDR0WpP9iIOY00IE0xL&ab_channel=GoogleCloudTech
 
 \begin{enumerate}
    \item Compute
    \begin{itemize}
-       \item Cloud Function --- FaaS platform from Google enabling to run the code without server management, scalable with the size of workload. Currently it supports Node.js, Python, Go, Java, .Net and Ruby runtimes, priced based on number of invocation and execution duration with granularity to 100ms.
-       \item Cloud Run --- Scalable and fully-managed container-based execution environment built on top of the Knative open-source project triggered based on various platform events, automatically replicated across multiple regions and billed according to actual usage.
+       \item Cloud Function --- FaaS platform from Google, enabling to run the code without server management, scalable with the size of workload. Currently it supports Node.js, Python, Go, Java, .Net and Ruby runtimes. It is priced based on~number of invocation and execution duration with granularity to 100ms.
+       \item Cloud Run --- Scalable and fully-managed container-based execution environment built on top of the Knative open-source project, triggered based on various platform events, automatically replicated across multiple regions and billed according to actual usage.
        \item App Engine --- Hosting platform for mostly web applications written in Node.js, Java, Ruby, C\#, Go, Python, or PHP, responsible for managing the infrastructure and scaling the solution
    \end{itemize}
    \item Data Store
    \begin{itemize}
-       \item Cloud Storage --- Object storage ensuring security, durability, low latency data access and geo-redundancy enabling to store data across different storage classes characterised with different parameters and cost.
-       \item Cloud SQL --- Managed and cloud-based relational database service for MySQL, PostgreSQL and SQL Server ensuring reliability and automate database provisioning and storage management.
+       \item Cloud Storage --- Object storage ensuring security, durability, data access with low latency and geo-redundancy, enabling to store data across different storage classes characterised with different parameters and cost.
+       \item Cloud SQL --- Managed and cloud-based relational database service for MySQL, PostgreSQL and SQL Server, ensuring reliability, automate database provisioning and storage management.
        \item Cloud Spanner --- Database with relational semantics and strong consistency with unlimited scaling, delivering high-performance transactions across regions, automatically handling scaling and sharding
-       \item Firestore --- Serverless NoSQL document database scaling with the demand with no maintenance overhead, with built-in live synchronization, ACID transactions and offline support. Designed to be used with mobile, web and IoT applications with direct connecting clients, integrating with other Google Cloud Platform services.
-       \item Cloud BigTable --- Fully-managed and scalable NoSQL database service designed for machine learning and big data services, seamlessly scaling to the storage needs, capable of processing high-throughput data with low latency
-       \item Memorystore --- Low latency, scalable and secure in-memory service compatible with Redis and Memcached enabling high-availability, automatic failover, patching and monitoring.
+       \item Firestore --- Serverless NoSQL document database, scaling with the demand with no maintenance overhead, with built-in live synchronization, ACID transactions and offline support. Designed to be used with mobile, web and IoT applications with direct connection to the clients, integrating with other Google Cloud Platform services.
+       \item Cloud BigTable --- Fully-managed and scalable NoSQL database service, designed for machine learning and big data services, seamlessly scaling to the storage needs, capable of processing high-throughput data with low latency
+       \item Memorystore --- Low latency, scalable and secure in-memory service, compatible with Redis and Memcached, enabling high-availability, automatic failover, patching and monitoring.
    \end{itemize}
    \item Network and Content Delivery
    \begin{itemize}
        \item Cloud Endpoints --- Development, deployment and management tool for APIs, providing logging, monitoring, access control and integrations with third party services as identity providers.
-       \item Cloud CDN --- Globally distributed and reliable content delivery network (CDN) for images, videos, webpages integrating with other services and supporting hybrid and multi-cloud architectures.
+       \item Cloud CDN --- Globally distributed and reliable Content Delivery Network (CDN) for images, videos, webpages integrating with other services and supporting hybrid and multi-cloud architectures.
    \end{itemize}
    \item Application Integrations
    \begin{itemize}
-       \item Cloud Pub/Sub --- Messaging event-driven system and streaming analytics, auto-scalable, with no provisioning and cross-zone message replication, enabling in-order messaging with push and pull models
-       \item Cloud Tasks --- Fully managed service that allows to manage and distribute vast number of distributed tasks asynchronously to build more decoupled applications in microservices architecture that can be scaled independently
-       \item Cloud Scheduler --- Managed cron job service suitable for batch and big data jobs as well as cloud infrastructure operations, automating management tasks and handling retries in case of failures.
-       \item Workflows --- Workflow orchestration services across multiple Google Cloud Platform components, focusing on modeling workflow logic, executing them in a reliable way, passing the execution state between particular steps.
+       \item Cloud Pub/Sub --- Event-driven messaging system and analytics stream, auto-scalable, with no provisioning and cross-zone message replication, enabling in-order messaging with push and pull models
+       \item Cloud Tasks --- Fully managed service that allows to handle and distribute vast number of distributed tasks asynchronously, building more decoupled applications in microservice architecture that can be scaled independently
+       \item Cloud Scheduler --- Managed cron job service suitable for batch and big data jobs as well as cloud infrastructure operations, automating tasks management and handling retries in case of failures.
+       \item Workflows --- Workflow orchestration service, integrated with multiple Google Cloud Platform components, focusing on modeling workflow logic, executing it~in~a~reliable way, passing the execution state between particular steps.
    \end{itemize}
    \item Analytics
    \begin{itemize}
@@ -513,110 +476,67 @@ Google Cloud Platform services, based on the available offer \cite{GCPServerless
    \item Security and Identity
    \begin{itemize}
        \item Identity and Access Management (IAM) --- Service provides management capabilities for fine-grained access control for Google Cloud Platform resources along with monitoring and auditing them.
-       \item Cloud Identity --- Service providing unified identity and access management for applications and endpoints, enforce strong security and access control and enable access to thousands of applications via single sign-on
+       \item Cloud Identity --- Service providing unified Identity and Access Management for~applications and endpoints, enforce strong security and access control, enabling access to thousands of applications via single sign-on
    \end{itemize}
    \item Development Tools
    \begin{itemize}
-       \item Cloud Build --- Servers as a serverless service for building, testing and deploying artifacts and applications utilising integration and continuous delivery pipelines
-       \item Cloud Logging --- Real-time log management and analysis services, capable of extracting data from logs and analyzing them in real-time.
-       \item Cloud Monitoring --- Service enabling to collect metrics from various sources, visualising them, monitor application and services behaviour and integrate with other third party solutions to provide better visibility and observability of the system.
+       \item Cloud Build --- Serves as a serverless service for building, testing and deploying artifacts and applications, utilising integration and continuous delivery pipelines
+       \item Cloud Logging --- Real-time log management and analysis services, capable of~extracting data from logs and analyzing them in real-time.
+       \item Cloud Monitoring --- Service for collecting metrics from various sources, visualising them. It monitors applications and services behaviour, and integrate with other third party solutions to provide better visibility and observability of the system.
        \item Cloud Trace, Cloud Debugger, Cloud Profiler --- Set of tools helping developers with tracing events in the distributed system and collecting numerous metrics, debugging the production application to get more insight into their behavior and profiling the application performance and resource utilisation.
    \end{itemize}
 \end{enumerate}
 
-In addition to the Google Cloud Platform services, Firebase \cite{Firebase} is another and independent service backed by Google and based on their cloud platform, providing BaaS components that can be directly integrated with web and mobile clients. All of the services are auto-scalable and with the infrastructure managed on the provider side. The core feature is a real-time document database utilising Firestore underneath, integrating with Cloud Functions, Cloud Storage and providing authentication capabilities. Moreover, the offering includes other components that allow developers to monitor the performance and stability of applications and also analyse the customers behaviour, enable A/B testing and boost their engagement by in-app and cloud messaging.
+In addition to the Google Cloud Platform services, Firebase \cite{Firebase} is another and independent service, backed by Google and based on their cloud platform, providing BaaS components that can be directly integrated with web and mobile clients. All of the services are auto-scalable and with the infrastructure managed on the provider side. The core feature is a real-time document database utilising Firestore underneath, integrating with Cloud Functions, Cloud Storage and providing authentication capabilities. Moreover, the offering includes other components that allow developers to monitor the performance and stability of applications as well as analyse the customers behaviour using A/B testing, boosting their engagement by in-app and cloud messaging.
 
 \subsection{Other cloud providers and services}
 
 \subsubsection{IBM}
-IBM Cloud focuses on helping enterprises migrate to the cloud, extend their capabilities and transform their workloads to be more agile utilising cloud infrastructure. Over the years the company invested in industry-focused cloud services and hybrid cloud market, supporting diverse workloads including SAP, Oracle ERP and newer technologies including machine learning capabilities. Company promotes the open-source initiatives to produce the results and portable components that can be used among multiple cloud providers \cite{Gartner}.
+IBM Cloud focuses on helping enterprises migrate to the cloud, extend their capabilities and transform their workloads to be more agile utilising cloud infrastructure. Over the years the company invested in industry-focused cloud services and hybrid cloud market, supporting diverse workloads including SAP, Oracle ERP and newer technologies including machine learning capabilities. Company promotes the open-source initiatives to~produce the results, along with portable components that can be used among multiple cloud providers \cite{Gartner}.
 
 In terms of serverless components, IBM Cloud Functions is based on open-sourced Apache OpenWhisk platform, which manages the infrastructure and scaling using Docker containers and can be deployed independently on top of popular container frameworks like Kubernetes, Mesos or OpenShift. The platform supports a programming model in which functions (called Actions) are dynamically provisioned in response to associated events (called Trigger) coming from numerous external sources or HTTP requests. Currently, OpenWhisk supports a large number of environments, such as Node.js, Go, Java, Scala, PHP, Python, Ruby, Swift or any executable running inside the Docker container \cite{ApacheOpenWhisk}.
 
 \subsubsection{Alibaba Cloud}
 
-Alibaba Cloud is a cloud provider having strong ties with Chinese public sector as well as cooperation with numerous companies operating in the China and Southeast Asia region. The cloud vendor supports its clients with cloud migration and helps traditional enterprises to build their presence in the digital platforms. Most of its clients reported satisfaction with the platform solutions, but the limitations can be noticed in a meagrer international offerings compared to the services available in China region. Moreover, the discrepancies in documentation and functionalities availability \cite{Gartner} occur.
+Alibaba Cloud is a cloud provider that have a strong ties with Chinese public sector as~well as cooperates with numerous companies operating in the China and Southeast Asia region. The cloud vendor supports its clients with cloud migration and helps traditional enterprises to build their presence in the digital platforms. Most of its clients reported satisfaction with the platform solutions, but the limitations can be noticed in a modest international offerings compared to the services available in China region. Moreover, the~discrepancies in documentation and functionalities availability \cite{Gartner} occur.
 
-The Function Compute is a serverless FaaS offering with a pay-as-you-go model, managed and scaled by the cloud provider in response to events incoming from various data sources. It supports mainly Node.js, Python, Java, PHP, C\# and custom runtimes in containers. The cloud platform provides two function instances --- the flexible functions, and instances with the higher specifications for better performance, additionally vendors offer reserved instances that are always on and reduce the cold start \cite{AlibabaFunctionCompute}.
+The Function Compute is a serverless FaaS offering with a pay-as-you-go model, managed and scaled by~the cloud provider in response to events incoming from various data sources. It supports mainly Node.js, Python, Java, PHP, C\# and custom runtimes in~containers. The cloud platform provides two function instances --- the flexible functions, and~instances with the higher specifications for better performance. Additionally, vendor offers reserved instances that are always on, reducing the ''cold start'' \cite{AlibabaFunctionCompute}.
 
 \subsubsection{Cloudflare}
 
-Cloudflare is a company providing services in areas of web infrastructure and website security such as content delivery network, domain name server services and internet security field serving as reverse proxy for websites. It also provides numerous analytics that gives insight into transfer speed, incoming traffic from unique users and their geographic location.
+Cloudflare is a company providing services in areas of web infrastructure and website security, such as Content Delivery Network, domain name servers and internet security services, serving as reverse proxy for websites. It also provides numerous analytics that gives insight into transfer speed, incoming traffic from unique users and their geographic location.
 
-From serverless offerings, Cloudflare Workers is a FaaS platform based on the edge computing providing high-performance. The solution is also managed, auto-scalable and billed in a pay-per-use model, as other serverless offerings, but the difference is the Cloudflare edge network routes the request to the closest location, where the function is executed limiting the latency and providing high availability. Currently, the platform supports Node.js, Rust, C, and C++ as~an~execution runtimes \cite{CloudflareWorkers}.
+From serverless offerings, Cloudflare Workers are a FaaS platform based on the edge computing, providing high-performance. The solution is also managed, auto-scalable and~billed in a pay-per-use model, similar to other serverless offerings, but the difference is~in~the Cloudflare's edge network, that routes the request to the closest location where the function is executed, limiting the latency and providing high availability. Currently, the platform supports Node.js, Rust, C, and C++ as~an~execution runtimes \cite{CloudflareWorkers}.
 
 \subsubsection{Oracle}
 
-Oracle Cloud is expanding its worldwide presence and their cloud services into numerous regions, developing hyperscale cloud architectures that are competitive with other, more-established cloud providers. The vendor tends to cooperate more closely with enterprises using its business applications and enable to incorporate and integrate them within the cloud platform. All of the cloud offerings are available in multiple regions with the same capabilities \cite{Gartner}.
+Oracle Cloud is expanding its worldwide presence and their cloud services into numerous regions, developing hyperscale cloud architectures that are competitive with other, more-established cloud providers. The vendor tends to cooperate more closely with enterprises, using its business applications and enable to incorporate and integrate them within the~cloud~platform. All of the cloud offerings are available in multiple regions with the same capabilities \cite{Gartner}.
 
-Oracle Cloud Functions are offered in pay-as-you-go model, managed and scaled by the provider and they are based on the open-source Fn Project and CloudEvents, which is an open-source specification for describing event data. It supports Go, Java, Node.js, Python, Ruby and C\# runtimes and custom runtimes using Docker to execute the functions. The platform is vendor-agnostic and can be also executed in private and hybrid cloud \cite{FnProject}.
+Oracle Cloud Functions are offered in pay-as-you-go model, managed and scaled by~the provider and they are based on the open-source Fn Project and CloudEvents, which is~an~open-source specification for describing event data. It supports Go, Java, Node.js, Python, Ruby and C\# programming languages and custom runtimes using Docker to~execute the functions. The platform is vendor-agnostic and can be also executed in private and hybrid cloud \cite{FnProject}.
 
 \subsubsection{Netlify}
 
-Netlify is offering hosting and serverless backend services for static websites and web applications. The deployment process is easy and convenient for developers, which can connect Git repository with the platform enabling automatic continuous deployment triggered with every code change. Netlify extended their portfolio with other services such as serverless form submission, user identity management, analytics and also their own, headless content management system, which can be utilised by dynamic web applications.
+Netlify is offering hosting and serverless backend services for static websites and web applications. The deployment process is easy and convenient for developers, which can connect Git repositories with the platform, enabling automatic continuous deployment triggered with every code change. Netlify extended its portfolio with other services such as serverless form submission, user identity management, analytics and also their own headless content management system, which can be utilised by dynamic web applications.
 
-Currently, the offer also includes serverless functions powered by AWS Lambda, that can be automatically provisioned when the platform detects the configuration in the linked repository. The Netlify Functions can be triggered based on HTTP request to the defined API or form submission, as well as enabled to run asynchronous processing in Background Functions with longer execution time. Altogether with the whole platform, it allows developers to quickly and easily setup the production environment for the web application or static website without any operational knowledge \cite{NetlifyFunction}.
+Currently, the offer also includes serverless functions powered by AWS Lambda, that can be automatically provisioned when the platform detects the configuration in the linked repository. The Netlify Functions can be triggered based on HTTP request to the defined API endpoint or form submission, as well as enabled to run asynchronous processing in~Background Functions with longer execution time. Altogether with the whole platform, it allows developers to quickly and easily setup the production environment for the web application or static website without any operational knowledge \cite{NetlifyFunction}.
 
 \subsection{Open-source alternatives}
 
-The benefits of serverless architecture, such as cost reduction and eliminating the need of infrastructure management, became an appealing argument to use it. Nevertheless, some companies invested heavily in their hardware infrastructure or are afraid of the vendor lock-in or computation restriction of the public cloud platforms. Open-source frameworks are promising to overcome these limitations and manage the serverless components on self-hosted or hybrid clouds.
+The benefits of serverless architecture, such as cost reduction and eliminating the need of~infrastructure management, became an appealing argument to use the technology. Nevertheless, some companies invested heavily in their hardware infrastructure, are afraid of~the~vendor lock-in or computation restriction of the public cloud platforms. Open-source frameworks are promising to overcome these limitations and manage the serverless components on self-hosted environment or hybrid clouds.
 
-According to the aforementioned survey conducted by CNCF \cite{CNCFServerlessSurvey2020}, the most popular solution in the category of installable software for serverless function execution is newly added Knative (claimed to be used by 27\% of respondents), while OpenFaaS maintains its popularity (used by 10\% of interviewee) with Kubeless (mentioned by 5\% of respondents).
+According to the aforementioned survey conducted by CNCF \cite{CNCFServerlessSurvey2020}, the most popular solution in the category of installable software for serverless function execution is~newly added Knative (claimed to be used by 27\% of respondents), while OpenFaaS maintains its~popularity (used by 10\% of interviewee) with Kubeless (mentioned by 5\% of~respondents).
 
-All of the projects are based on the Kubernetes as a portable and extensible platform enabling declarative configuration and management for containerized environments. Serverless frameworks rely on it to orchestrate and manage the serverless functions inside containers, schedule their executions, provide service discovery and replication. Each of the open-sourced serverless frameworks approach the container orchestration is slightly different. For example, OpenFaas provides its own API Gateway providing access to the function, collecting metrics and scaling the solution, while others like Knative, utilise third-party Ingress Controller for Kubernetes and manage the scaling by Queue-Proxy Container, passing the events to functions inside the pod. Several articles consider the viability and quality of services for the open-source serverless platforms \cite{OpenSourceServelessPerformance}, considering also interesting possibilities of utilising serverless in edge computing \cite{OpenSourceServelessEdge}.
+All of the projects are based on the Kubernetes as a portable and extensible platform, enabling declarative configuration and management for containerized environments. Serverless frameworks rely on it to orchestrate and manage the serverless functions inside containers, schedule their executions, provide service discovery and replication. Each of~the open-sourced serverless frameworks approach the container orchestration is slightly different. For example, OpenFaas provides its own API Gateway, providing access to~the function, collecting metrics and scaling the solution, while others like Knative, utilise third party Ingress Controller for Kubernetes and manage the scaling by Queue-Proxy Container, passing the events to functions inside the pod. Several articles consider the~viability and quality of services for the open-source serverless platforms \cite{OpenSourceServelessPerformance}, considering also interesting possibilities of utilising serverless in edge computing \cite{OpenSourceServelessEdge}.
 
-Nevertheless, utilising open-source platforms raises questions about maturity of these frameworks and introduces another set of challenges, which need to be researched and addressed. Based on the previously mentioned papers some of the serverless platforms show issues with scaling, lack of it predictability and guarantees ensuring good quality of service. Each of the frameworks enable default fault tolerance for containers runtime limited to retrying the execution, which sometimes may be not suitable. Above all public cloud providers tend to supply various tools and services that support developers with log aggregation, monitoring, alerting and distributed tracing across the distributed system, which requires manual integration in the open-source alternatives. Public cloud vendors offer not only the FaaS platforms, but also provide a large variety of BaaS components that can be integrated with serverless functions to build fully-fledged applications and services. This is in contrary to the open-sourced alternatives, which focus solely on the FaaS platforms. While the other components could be also self-hosted, integration with them as well as scaling requires manual management on the customer side, increasing the amount of work that needs to be done to maintain the services quality and going against the idea of serverless.
-
-% TODO:rb
-% \subsection{Comparison of serverless providers}
-
-% Categories in table
-% \begin{enumerate}
-%     % Services
-%     \item Compute
-%     \item Data Store (Storage + Database)
-%     \item Network and Content Delivery (API management + Hosting)
-%     \item Application Integrations (Application Integration + Function Orchestration/Workflow)
-%     \item Analytics
-%     \item Security and Identity
-%     \item Development Tools
-%     % Other
-%     \item Targeted customers / offerings target
-%     \item Cost plan
-% \end{enumerate}
-
-% - comparable offering, but when diving into internals, the differences may be more visible if it comes to maturity of services
-% - different market share? 
-%     - Azure towards enterprise, hybrid, and private clouds
-%     - AWS towards public cloud
-%     - GCP - ok with startups and smaller companies, open source and ML/AI/BigData
-
-% - available services, 
-% - approaches to develop serverless apps, 
-% - can Open-Source replace providers?
-% - table comparison ???
-
-% https://thenewstack.io/serverless-on-public-cloud-the-ultimate-showdown/
-% https://www.datadoghq.com/state-of-serverless/
+Nevertheless, utilising open-source platforms raises questions about maturity of these frameworks and introduces another set of challenges, which need to be researched and~addressed. Based on the previously mentioned papers some of the self-hosted serverless platforms show issues with scaling, lack of predictability and guaranteeing good quality of~service. Each of the frameworks provides default fault tolerance for container runtime, limited to retrying the execution which sometimes may be not suitable. All~of~the public cloud providers mendtioned above tend to supply various tools and services that support developers with log aggregation, monitoring, alerting and distributed tracing across the~serverless components, which requires manual integration in the open-source alternatives. Public cloud vendors offer not only the FaaS platforms, but also provide a~large variety of~BaaS components that can be integrated with serverless functions to build fully-fledged applications and services. This is in contrary to the open-sourced alternatives, which focus solely on the FaaS platforms. While the other components could be~also self-hosted, integration with them as well as scaling requires manual management on the customer side, increasing the amount of work that needs to be done to maintain the services quality and going against the idea of serverless.
 
 \section{Example use cases} \label{chapter:serverless-example-use-cases}
 
-% https://pages.awscloud.com/rs/112-TZM-766/images/Asset2-optimizing-enterprise-economics-serverless-architectures.pdf - examples
-% https://www.simform.com/serverless-aws-lambda-examples/
-% https://dashbird.io/blog/companies-using-serverless-in-production/
-
-% \cite{ServerlessArchitectureOnAWS}
-% - suitable for some types of processing - reference to benefits
-% - serverless is suitable for building whole systems, create isolated components or implement specific and granular tasks - serverless can be applied to small and large tasks
-% - serverless is not only about processing by lambdas, but also 3rd party services, which amke possible to cut down the work
-
 \subsection{Application backend} \label{chapter:serverless-example-application-backend}
-
-% https://livebook.manning.com/book/serverless-architectures-on-aws/chapter-2/36 - CloudGuru
 
 Serverless technologies are an appropriate solution for building scalable application backends for all kinds of web, mobile and desktop applications. They are favorable for this use-case, because the infrastructure management can be effectively automated, ensuring dynamic scaling to meet uneven demand, with proportional and predictable billing. Despite the fact that serverless technologies are a relatively new approach to building services, some of the companies have already used it to power large applications.
 
-To build the application backend, serverless functions are used to transform the data representing the application logic together with other third party services capable of persisting data or exposing some desired functionalities. The API Gateway provides uniform access to various serverless functions using REST API, ensuring mapping between requests and respective serverless functions, enabling integrations with other services responsible for authentication and authorisation. Sending a request to the API can lead to execution of one or more serverless functions containing custom business logic and communicating respectively with other services. It is also possible that the frontend application can communicate directly with external components bypassing the API Gateway. Nevertheless, it is essential to handle the communication in a secure manner for example using the delegation tokens \cite{ServerlessArchitectureOnAWS}.
+To build the application backend, serverless functions are used to transform the data representing the application logic, together with other third party services capable of persisting data or exposing some desired functionalities. The API Gateway provides uniform access to various serverless functions using REST API, preserving mapping between requests and respective serverless functions, enabling integrations with other services, for~example responsible for authentication and authorisation. Sending a request to the API can lead to execution of one or more serverless functions, containing custom business logic and~communicating respectively with other services. It is also possible that the frontend application can communicate directly with external components, bypassing the API Gateway. Nevertheless, it is essential to handle the communication in a secure manner using the~delegation tokens \cite{ServerlessArchitectureOnAWS}.
 
 \begin{figure}[h]
     \centering
@@ -625,16 +545,13 @@ To build the application backend, serverless functions are used to transform the
     \label{fig:cloudguru-architecture-diagram}
 \end{figure}
 
-CloudGuru, which is an online educational platform, dedicated to people interested in learning numerous cloud related topics, is a good example of such a use-case. Core features of the platform include streaming large selection of video courses, interactive quizzes and practice exams, real-time discussion forum and integrations with third party services enabling users to buy access to the courses.
+CloudGuru, which is an online educational platform dedicated to people interested in~learning numerous cloud related topics, is a good example of such an use-case. Core~features of the platform include streaming large selection of video courses, interactive quizzes and practice exams, real-time discussion forum and integrations with third party services, enabling users to buy access to the courses.
 
-The architecture of the e-learning platform utilises services of several cloud providers. Frontend of the web application built as a Single Page Application is hosted on Netlify, which acts as a Content Delivery Network (CDN) for the platform client. Auth0 service is~responsible for registration and authentication functionalities and provides delegation tokens for client application, communicating directly and securely with other services. Firebase is used as a primary database, which is capable of updating clients in real-time using WebSockets to push the data to the client applications. Questions and answers submitted by users to the forum are persisted in the Firebase, with the data being sent to the AWS CloudSearch which is indexing it for searching purpose, enabling users to later find information easier. Instructors can upload video directly to S3 bucket, that triggers the video transcoding pipeline. Users can watch the videos served via CloudFront acting as a CDN, if they call the Lambda function beforehand, which gives them the permission to access the video assets for a limited period of time.
+The architecture of the e-learning platform utilises services of several cloud providers. Frontend of the web application built as a Single Page Application is hosted on Netlify, which acts as a Content Delivery Network (CDN) for the web client. Auth0 service is~responsible for authentication functionalities and provides delegation tokens for client application, communicating directly and securely with other services. Firebase is used as~a~primary database, which is capable of updating clients in real-time using WebSockets to push the data to the client applications. Questions and answers submitted by users to the forum are persisted in the Firebase, with the data being sent further to the AWS CloudSearch, which is indexing it for searching purpose and enabling users to later find information easier. Instructors can upload video directly to S3 bucket, that triggers the~video transcoding pipeline. Users can watch the videos served via CloudFront acting as~a~CDN, if they call the Lambda function beforehand, which gives them the permission to~access the video assets for a limited period of time.
 
 \subsection{Event-driven data processing} \label{chapter:serverless-example-event-drive-processing}
 
-% https://livebook.manning.com/book/serverless-applications-with-node-js/chapter-15/1 -  CodePen, MindMup
-% https://www.doc.ic.ac.uk/~rbc/papers/fse-serverless-17.pdf ~ MindMup in more details
-
-Serverless has also found application in numerous media conversion and transcoding as well as various data processing tasks. When the new file is inserted to the bucket responsible for data storage, it can trigger a serverless function passing the necessary data and file as an event to perform the processing. Such an event-driven approach is suitable for building pipelines for data-processing tasks, billed only for the lambda execution time and other BaaS components usage to transfer, transform or extract some information, if applicable \cite{ServerlessArchitectureOnAWS}.
+Serverless has also found application in numerous media conversion and transcoding as~well as various data processing tasks. When the new file is inserted to the bucket responsible for data storage, it can trigger a serverless function passing the necessary data and file as~an~event to perform the processing. Such an event-driven approach is suitable for~building pipelines for data-processing tasks, billed only for the function execution time and other BaaS components usage to transfer, transform or extract some information \cite{ServerlessArchitectureOnAWS}.
 
 \begin{figure}[h]
     \centering
@@ -643,13 +560,13 @@ Serverless has also found application in numerous media conversion and transcodi
     \label{fig:mindmup-architecture-diagram}
 \end{figure}
 
-An example of such serverless use is MindMup, which is a popular web application mind mapping tool running in the web, developed with just 2 person team. The event-driven data processing is utilised when a user wants to export prepared diagram to some read-only format such as PDF, Word document, presentation or text file. The web application works as interactive user interface. Upon user requests to export the diagram, it calls the Lambda placed behind the API Gateway to generate the presigned URL, which can be used for a short period of time to insert the file directly from the client application to the S3 bucket. It sends an event to the Amazon Simple Notification Service (SNS) triggering the appropriate function responsible for export to a particular file format. Each of the exporters have different requirements, for example CPU and memory usage for PDF exporter is much higher than for others, while Microsoft Office exporters require usage of libraries written in Java. Moreover, some of the extensions such as Markdown are not as frequently selected by users. When the processing is complete, the output of the process is inserted to the S3 bucket, where the users can access it. Additionally, the event is sent to SNS which triggers other services such as DynamoDB, that are listening to that topic to save some information for analytics purpose.
+An example of such serverless utilisation is MindMup, which is a popular web application serving a role of a mind mapping tool, which was initially developed by just 2 developers. The event-driven data processing is utilised when a user wants to export prepared diagram to some read-only format such as PDF, Word document, presentation or text file. The web application works as interactive user interface. Upon user requests to export the~diagram, it calls the Lambda placed behind the API Gateway to generate the presigned URL, which can be used for a short period of time to insert the file directly from the client application to the S3 bucket. It sends an event to the Amazon Simple Notification Service (SNS) triggering the appropriate function responsible for export to~a~particular file format. Each of the exporters have different requirements, for~example CPU and memory usage for PDF exporter is much higher than for others, while Microsoft Office exporters require usage of libraries written in Java. Moreover, some of~the extensions such as Markdown are not as frequently selected by users. When the processing is~complete, the output of~the process is inserted to the S3 bucket, where the users can access it. Additionally, the event is sent to SNS which triggers other services such as DynamoDB, that are listening to that topic to save some information for analytics purpose.
 
-The company admits that initially, the service responsible for exporting was running on the Heroku platform in the containerised environment, but after migration to the AWS Lambda they have noticed significant cost reduction even with the growth of the platform usage by the clients \cite{ServerlessApplicationsWithNodejs}.
+The company admits that initially, the service responsible for exporting was running on the Heroku platform in the containerised environment, but after migration to the AWS Lambda, they have noticed significant cost reduction even with the growth of the platform usage by the clients \cite{ServerlessApplicationsWithNodejs}.
 
 \subsection{Real-time stream processing}
 
-Serverless architecture also found application in the data ingestion tasks from numerous data sources such as logs, system events, transactions or social media feeds that need to be analyzed, aggregated and stored. Utilising BaaS components capable of event stream aggregation over time with the serverless function which can be configured to run when the specific number of records (forming a batch of records) is available. Such a messaging pattern is popular in distributed systems, where it allows to decouple the services and provides reliability, by storing the messages in the queue when the consuming service cannot process more data at the moment, additionally providing retrying mechanism in case of failures \cite{ServerlessArchitectureOnAWS}.
+Serverless architecture also found application in the data ingestion tasks from numerous data sources, such as logs, system events, transactions or social media feeds that need to~be~analyzed, aggregated and stored. Utilising BaaS components capable of event stream aggregation over time with the serverless function which can be configured to run when the specific number of records (forming a batch of records) is available. Such a messaging pattern is popular in distributed systems, where it allows to decouple the services and provides reliability by storing the messages in the queue, when the consuming service cannot process more data at the moment, additionally providing retry mechanism in case of failures \cite{ServerlessArchitectureOnAWS}.
 
 \begin{figure}[h]
     \centering
@@ -658,11 +575,11 @@ Serverless architecture also found application in the data ingestion tasks from 
     \label{fig:temenos-architecture-diagram}
 \end{figure}
 
-Temenos, as one of the largest banking software providers, is using such a pattern along with other serverless technologies in their T24 Transact banking system to achieve a highly elastic solution with low maintenance cost. It supports a large number of interactions and transactions between banking customers worldwide and due to leveraging the platform and managed services, it reports that even the unpredictable workloads due to peaks in the market are handled efficiently. All the requests coming to the systems are getting through the AWS API Gateway, which passes them the AWS Elastic Load Balancer (ELB) responsible for routing the requests to the proper container instance on AWS Fargate. The application running inside the container, performs the business actions based on the request and persists the result in Amazon Relational Database Service (RDS) that is an Online Transactional Processing Database (OLTP) designed to process the transactions effectively. Later, the stream of data and more complex business events is pushed from Amazon RDS to Amazon Kinesis, which aggregates the data and triggers the AWS Lambda responsible for processing it, to build a query-optimized data model that is stored in DynamoDB. When the banking system users want to read the data, they perform a request that goes from API Gateway to AWS Lambda, that queries the read-optimized data model from DynamoDB \cite{ThisIsMyAchitectureTemenos}.
+Temenos, as one of the largest banking software providers, is using such a pattern along with other serverless technologies in their T24 Transact banking system to achieve a highly elastic solution with low maintenance cost. It supports a large number of interactions and transactions between banking customers worldwide. Due to leveraging the platform and managed services, it reports that even the unpredictable workloads due to peaks in the market are handled efficiently. All the requests coming to the systems are getting through the AWS API Gateway. It passes them to the AWS Elastic Load Balancer (ELB), responsible for routing the requests to proper container instance running on AWS Fargate. The application running inside the container, performs the business actions based on the request and persists the result in Amazon Relational Database Service (Amazon RDS) that is an Online Transactional Processing Database (OLTP) designed to process the transactions effectively. Later, the stream of data and more complex business events is~pushed from Amazon RDS to Amazon Kinesis, which aggregates the data and triggers the AWS Lambda responsible for processing it, to build a query-optimized data model which is stored in DynamoDB. When the banking system users want to read the data, they perform a request that goes from API Gateway to AWS Lambda, that queries the read-optimized data model from DynamoDB \cite{ThisIsMyAchitectureTemenos}.
 
 \subsection{IoT applications}
 
-With the growth of smart homes popularity, IoT devices along with other devices that are meant to help people, started incorporating more sophisticated technologies to support people on a daily basis. iRobot is a leading company in terms of designing and building smart robots helping people around their household with the Roomba robotic vacuums as their most popular product. Besides robotics, the company provides iRobot HOME application which enables customers to interact with their smart home devices.
+With the growth of smart homes popularity, IoT devices along with other machines that are meant to help people, started incorporating more sophisticated technologies to support people on a daily basis. iRobot is a leading company in terms of designing and building smart robots, helping people around their household, with the Roomba robotic vacuums as their most popular product. Besides robotics, the company provides iRobot HOME application which enables customers to interact with their smart home devices.
 
 \begin{figure}[h]
     \centering
@@ -671,21 +588,6 @@ With the growth of smart homes popularity, IoT devices along with other devices 
     \label{fig:irobot-architecture-diagram}
 \end{figure}
 
-AWS IoT is an entry point for the Roomba vacuums to connect them with the cloud. For the communication purposes MQTT is used, which is a lightweight publish-subscribe protocol for IoT devices. The AWS IoT Shadow Device enables asynchronous communication mechanism, enabling the robot to work properly without the constant communications with the cloud. When the smart vacuum finishes its job, its data is synchronized with the cloud, which allows users to update the cleaning schedule accordingly to changes made in the iRobot HOME application. Along with the AWS IoT, developers can define additional IoT Rules that allow the device to connect with other services in the cloud, for example to update the device status along with its parameters or informing users that the vacuum tank is full. Moreover, it gathers additional information about usage and home mapping to better plan their tasks and manage the battery power \cite{ServerlessIoTatiRobot}.
+AWS IoT is an entry point for the Roomba vacuums to connect them with the cloud. For the communication purposes MQTT is used, which is a lightweight publish-subscribe protocol for IoT devices. The AWS IoT Shadow Device provides asynchronous communication mechanism, enabling the robot to work properly without the constant communications with the cloud. When the smart vacuum finishes cleaning job, its data is synchronized with the cloud, which allows users to update the cleaning schedule, accordingly to changes made in the iRobot HOME application. Along with the AWS IoT, developers can define additional IoT Rules that configure the device to connect with other services in the cloud, for example to update the device status along with its parameters or informing users that the vacuum tank is full. Moreover, it gathers additional information about usage and home mapping to better plan device's tasks and manage the battery power \cite{ServerlessIoTatiRobot}.
 
-Developers and designers of the robotics solutions observed many benefits related with the utilisation of cloud vendors services and the serverless paradigm, mentioning the scalability of the solution, without the need to manage infrastructure and significant cost reduction, while preserving the proper level of security and data privacy \cite{AWSIRobotIoT}.
-
-% \cite{ServerlessArchitectureOnAWS}
-
-% - bot - app/script running automated tasks for other services
-% - responding to commands, carry out small tasks, send reports and notifications
-
-% https://www.researchgate.net/publication/323314352_Case_Study_Building_a_Serverless_Messenger_Chatbot
-
-% ---
-
-% A Review of Serverless Use Cases and their Characteristics - in depth analysis of several cases using serverless architecture (recommended)
-% https://arxiv.org/pdf/2008.11110.pdf
-
-% Evaluation of Production Serverless Computing Environments - benchmark
-% https://www.researchgate.net/profile/Hyungro-Lee/publication/324362882_Evaluation_of_Production_Serverless_Computing_Environments/links/5b9c1d84a6fdccd3cb579eca/Evaluation-of-Production-Serverless-Computing-Environments.pdf
+Developers and designers of the robotics solutions observed many benefits related to the utilisation of cloud vendor services and the serverless paradigm, mentioning the scalability of the solution without the need to manage infrastructure and significant cost reduction, while preserving the proper level of security and data privacy \cite{AWSIRobotIoT}.
