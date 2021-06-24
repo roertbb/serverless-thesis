@@ -317,21 +317,21 @@ Lastly, the serverless architecture makes it easier to introduce changes and adj
 \section{Example implementations} \label{chapter:example-implementations}
 
 The further research takes up two example web services implemented in the serverless architecture.
-The selected problems consider some of the existing web applications and tasks they perform, which are shortly introduced in the section below, along with the overview of the implemented serverless solutions.
-The provided examples are used to discuss some features of the serverless architecture along the implemented patterns to analyse in a greater detail the implication of the serverless paradigm in the developed solution.
+The selected problems consider some of the existing web applications and~tasks they perform, which are shortly introduced in the section below, along with the overview of~the~implemented serverless solutions.
+The provided examples are used to~discuss some features of the serverless architecture along the implemented patterns to~analyse in~a~greater detail the implication of the serverless paradigm in the developed solution.
 
 \subsection{Receipt processing} \label{chapter:examples-receipt-processing}
 
 \subsubsection{Problem description}
 
-First considers the services similar to PanParagon\footnote{\url{https://panparagon.pl/}}, which is a mobile application that enables users to scan and collect fiscal receipts, which are further analysed to gather some statistics or can be used for the return or complaint of the products, or as a reminder of the return date or warranty periods.
-The application is capable of obtaining the information from the receipt, such as name of the shop, purchase date and amount of money. Based on the retrieved data, the receipt can be further categorised and included in the spending statistics, giving users more insight into their shopping history. Furthermore, the application provides integration with several external services, allowing users to show current offers and promotions or electronically insure their equipment.
+First example considers the service similar to PanParagon\footnote{\url{https://panparagon.pl/}}, which is a mobile application that enables users to scan and collect fiscal receipts, which are further analysed to~gather some statistics or can be used for the return or complaint of the products, or~as~a~reminder of the return date or warranty periods.
+The application is capable of obtaining the information from the receipt, such as name of the shop, purchase date and amount of~money. Based on the retrieved data, the receipt can be further categorised and included in~the~spending statistics, giving users more insight into their shopping history. Furthermore, the application provides integration with several external services, allowing users to~show current offers and promotions or electronically insure their equipment.
 
-The service can be simply reimplemented as the web application, which uses the same backend for the calculations, business logic and integration with external services. The more demanding task would be to implement the receipt processing flow. Taking into consideration the variety of services available in the cloud, some of the components could be incorporated in the application to perform the document and text analysis, or even help with the data classification using the natural languages processing techniques. Moreover, the cloud provider takes responsibility for hosting and scaling the application along with its more demanding tasks, alleviating the need of managing the services and developing them from the ground up.
+The service can be simply reimplemented as the web application, which uses the~same backend for the calculations, business logic and integration with external services. The~more demanding task would be to implement the receipt processing flow. Taking into consideration the variety of services available in the cloud, some of the components could be incorporated in the application to perform the document and text analysis, or~even help with the data classification using the natural languages processing techniques. Moreover, the~cloud provider takes responsibility for hosting and scaling the application along with its~more demanding tasks, alleviating the need of managing the services and developing them from the ground up.
 
 \subsubsection{Designed solution}
 
-\begin{figure}[H]
+\begin{figure}[]
     \centering
     \includegraphics[width=1\textwidth]{assets/04-serverless-for-web-apps/paragoneArchitecture.png}
     \caption{Architecture of receipt processing web application}
@@ -341,67 +341,67 @@ The service can be simply reimplemented as the web application, which uses the s
 Key points of the suggested architecture:
 
 \begin{itemize}
-    \item \textbf{GraphQL as API} --- Presented example shows the basic backend of the web application built using the serverless technology. AWS AppSync is used to expose the GraphQL API, which is configured to trigger the AWS Lambda or communicate directly with some external services, such as DynamoDB. Moreover, the integration with AWS Cognito introduces the authentication and authorization capabilities to the API. Each of the GraphQL operations, such as queries, mutations and subscriptions can be restricted, to ensure that only logged in users have access to their private data. Once the receipt processing is completed and the data is stored in the database, the user is notified in real-time about the results of the asynchronous operation, based on the established GraphQL subscription. The AWS Lambda, that is polling the DynamoDB for the event stream including inserts and updates for a given table, triggers the GraphQL mutation, which in turn pushes the new data to the client.
-    \item \textbf{Secure and direct access to services storing the files} --- The GraphQL API, built on top of the AWS AppSync services, is not designed with intent to handle the operations on the files including downloads and uploads. Instead, the mechanism of presigned URLs is incorporated. It enables the client application to directly communicate with the Amazon S3 in a secure way, to access or store the files with predefined names and within a limited and strictly defined period of time. It alleviates the need of using the AWS Lambda to process and insert the data into the bucket upon the user request, which could be more time consuming operation compared to generating the presigned URL.
-    \item \textbf{Asynchronous receipt processing} --- The receipt processing flow is performed in an asynchronous manner, similarly to many other processing flows, utilising the serverless paradigm. Uploading the receipt to Amazon S3 triggers the AWS Lambda, which is responsible for inserting metadata about the image to the database and sending the receipt to Amazon Textract performing the document analysis task. Once the processing is completed, the Amazon SNS receives the event with the job identifier, which further triggers the AWS Lambda subscribing to the particular topic. The serverless function retrieves the data and based on simple heuristics, analyses the results of the text extraction process and stores the information further in DynamoDB.
-    \item \textbf{Web application hosting} --- The backend of the application, composed from the combination of configured with each other services mentioned earlier, is effectively hosted in the cloud. Similarly, the client application once built, it can be stored in a publicly available Amazon S3 bucket in the form of the static assets. Amazon CloudFront distribution can be additionally integrated to provide the capabilities of Content Delivery Network, delivering the client application to users in a more convenient way.
+    \item \textbf{GraphQL as API} --- Presented example shows the basic backend of the web application built using the serverless technology. AWS AppSync is used to expose the~GraphQL API, which is configured to trigger the AWS~Lambda or communicate directly with some external services, such as DynamoDB. Moreover, the integration with AWS Cognito introduces the authentication and authorization capabilities to~the~API. Each of the GraphQL operations, such as queries, mutations and subscriptions can be restricted, to ensure that only logged in users have access to~their private data. Once the receipt processing is completed and the data is stored in~the~database, the user is notified in real-time about the results of the asynchronous operation, based on the established GraphQL subscription. The AWS~Lambda, that is polling the DynamoDB for the event stream, including inserts and updates for~a~given table, triggers the GraphQL mutation, which in turn pushes the new data to~the~client.
+    \item \textbf{Secure and direct access to services storing the files} --- The GraphQL API, built on top of the AWS AppSync services, is not designed with intent to handle the operations on the files, including downloads and uploads. Instead, the mechanism of~presigned URLs is incorporated. It enables the client application to directly communicate with the Amazon S3 in a secure way, to access or store the files with predefined names and within a limited and strictly defined period of time. It alleviates the need of using the AWS Lambda to process and insert the data into the bucket upon the~user request, which could be more time consuming operation compared to generating the presigned URL.
+    \item \textbf{Asynchronous receipt processing} --- The receipt processing flow is performed in an asynchronous manner, similarly to many other processing flows, utilising the~serverless paradigm. Uploading the receipt to Amazon S3 triggers AWS~Lambda, which is responsible for inserting metadata about the image to the database and~sending the receipt to Amazon Textract performing the document analysis task. Once the~processing is completed, the Amazon SNS receives the event with the job identifier, which further triggers the AWS Lambda, subscribing to the particular topic. The serverless function retrieves the data and based on a simple heuristics, analyses the results of the text extraction process and stores the information further in~DynamoDB.
+    \item \textbf{Web application hosting} --- The backend of the application, composed from the~combination of configured with each other services mentioned earlier, is effectively hosted in the cloud. Similarly, the client application once built, it~can~be~stored in~a~publicly available Amazon S3 bucket, in the form of the static assets. Amazon~CloudFront distribution can be additionally integrated to provide the capabilities of Content Delivery Network, delivering the client application to users in a more convenient way.
 \end{itemize}
 
-Along with the simple heuristics retrieving the information based on the text extraction process, the more sophisticated services could be incorporated in the receipt processing flow, for example to categorise the expenses, or provide more detailed spending statistics. Nevertheless, the other services would also operate in the same, asynchronous manner, extending the presented flow and performing the computation in a form of a distributed system composed of several components hosted in the cloud.
+Along with the simple heuristics retrieving the information based on the text extraction process, the more sophisticated services could be incorporated in the receipt processing flow, for example to categorise the expenses, or provide more detailed spending statistics. Nevertheless, the other services would also operate in the same, asynchronous manner, extending the presented flow and performing the computation in a form of a distributed system, composed of several components hosted in the cloud.
 
 \subsubsection{Discussion}
 
-The proposed solution presents the fully fledged web application built using the serverless architecture, including the serverless backend responsible for processing and storing the data along with the client application hosted in the cloud environment.
-The presented architecture is also a good illustration of different execution models of the AWS Lambda, covered in more details in section \ref{chapter:lambda-function-execution-model}, including synchronous execution to obtain the presigned URL, creating an asynchronous receipt processing flow as well as polling the stream of updates from the DynamoDB.
+The proposed solution presents the fully fledged web application, which is built using the serverless architecture, including the serverless backend responsible for processing and storing the data along with the client application hosted in the cloud environment.
+The~presented architecture is also a good illustration of different execution models of the AWS Lambda, covered in more details in section \ref{chapter:lambda-function-execution-model}, including synchronous execution to obtain the presigned URL, creating an asynchronous receipt processing flow as well as polling the stream of updates from the DynamoDB.
 
-The asynchronous processing choreography, described in more details in section \ref{chapter:serverless-processing-function-composition-and-orchestration}, is a common pattern in the serverless architecture and refers to composition of multiple components, responsible for particular chunks of the processing and forming effectively a distributed system.
+The asynchronous processing choreography, described in more details in section \ref{chapter:serverless-processing-function-composition-and-orchestration}, is a common pattern in the serverless architecture and refers to composition of multiple components, responsible for particular chunks of the processing and forming effectively a~distributed system.
 The AWS Lambda is used to incorporate the business logic of the application, transforming the data when desired and using other services to orchestrate the flow or handle the processing, without waiting idle for the results, but rather being triggered in an event-driven manner.
 
-The use of Amazon Textract brings new development opportunities, allowing to integrate the service in the processing flow with convenient billing per usage and eliminates the need to maintain similar self-hosted service.
+The use of Amazon Textract brings new development opportunities, allowing developers to integrate the service in the processing flow with convenient billing per usage and~eliminating the need to maintain similar self-hosted service.
 
-AWS AppSync serves as a feature-rich gateway of the application backend, triggering Lambda functions or directly communicating with other services to retrieve the data, but also it allows to update the client in real-time using the subscriptions, which is a beneficial feature for the asynchronous processing.
-All of the processing is performed in a secure and compliant way, thanks to the authentication and authorization capabilities introduced by the integrating AWS AppSync with the Amazon Cognito, along with the presigned URL mechanism, enabling application to safely store and retrieve the files from Amazon S3 bucket.
+AWS AppSync serves as a feature-rich gateway of the application backend, triggering Lambda functions or directly communicating with other services to retrieve the data, but~also it allows to update the client in real-time using the subscriptions, which~is~a~beneficial feature for the asynchronous processing.
+All of the processing is performed in~a~secure and compliant way, thanks to the authentication and authorization capabilities, introduced by~the~integrating AWS AppSync with the Amazon Cognito, along with the presigned URL mechanism, enabling application to safely store and retrieve the files from Amazon S3 bucket.
 
 \subsection{Generating interactive slideshow based on LaTeX files} \label{chapter:examples-generating-interactive-slideshow-based-on-latex-files}
 
 \subsubsection{Problem description}
 
 The second example covers an implementation of web application similar to the Pitagoras Korepetytor\footnote{\url{http://pitagoras-korepetytor.pl/}}, which is a service playing a role of the virtual math tutor for high school students.
-It provides a large collection of exercises, which can be further adjusted by the users when changing the values of the exercise parameters.
-Based on the user input, the service generates an interactive slideshow, which is further previewed by the user in the interactive client application.
+It provides a large collection of exercises, which can be further adjusted by~users when changing the values of the exercise parameters.
+Based on the user input, the~service generates an interactive slideshow, which is further previewed by the user in the interactive client application.
 The slides present the following steps required to solve the exercise, with the additional audio commentary, explaining the performed mathematical operations.
 
 \subsubsection{Proposed processing flow} \label{chapter:examples-generating-interactive-slideshow-based-on-latex-files-proposed-processing-flow}
 
-When inspecting the processing results of the original solution, the user is given a set of slides along with the audio files, which are later processed by the presentation player on the client side.
-Due to the large number of the parameters combinations, that can be specified by the user and their value domains, generating the slides and commentary for all possible input values can occupy a lot of memory and be unprofitable.
+When inspecting the processing results of the original solution, the user is given a set of~slides along with the audio files, which are later processed by the presentation player on the client side.
+Due to the large number of the parameters combinations, that can be specified by the user and their value domains, generating the slides and commentary for~all~possible input values can occupy a lot of memory and be unprofitable.
 Moreover, some of the presentations include advanced math equations, graphics visualising more sophisticated geometry problems or even considering some conditional logic based on parameters, upon which the solution for the exercise is generated.
 
-Taking into consideration the problem and its requirements described above, the LaTeX \cite{latex} typesetting language and its processor is one of the possible solutions for the problem, which is well-known and frequently used in the academia community.
-It enables the presentation creator to easily define the mathematical computations, present graphics showing the geometric tasks, which can be also extended based on the defined variables, including even some computations performed by the LaTeX processor or conditional logic.
+Taking into consideration the problem and its requirements described above, the LaTeX \cite{latex} typesetting language and its processor is one of the possible solutions for the~problem, which is well-known and frequently used in the academia community.
+It~enables the presentation creator to easily define the mathematical computations, present graphics showing the geometric tasks, which can be also extended based on the defined variables, including even some computations performed by the LaTeX processor or conditional logic.
 
 Taking into account the selected tool, the processing flow for the user request could take the following:
 
 \begin{enumerate}
-   \item The initial step, taking place before the processing of the file is started, can be used to validate the user input. The entered values can be compared with the constraints of the exercise along with verifying if the user can preview the particular presentation, based on the application logic of the service.
-   \item Once the input is verified and the user is allowed to request the presentation, the exercise variables from the input can be injected into the LaTeX file. 
-   Next, the presentation is generated to the PDF file, which is further split into separate slides in the form of SVG files.
-   \item Along with the slideshow generation, the initial presentation file can include additional directives with the commentary, which are extracted and supplemented with the variables from the user input. The processed text can be transformed further into the human-like audio commentary using the voice synthesis software.
-   \item Additionally, some metadata about the presentation can be retrieved, including the slide durations for the slideshow or the information when to play the audio commentary, which will be sent and used later by the client application.
-   \item The steps 2-4 can be performed in parallel. Once they are completed, the result can be afterwards sent to the client to preview the slideshow with the exercise to the user.
+   \item The initial step, taking place before the processing of the file is started, can~be~used to~validate the user input. The entered values can be compared with the constraints of the exercise, along with verifying if the user can preview the particular presentation, based on the application logic of the service.
+   \item Once the input is verified and the user is allowed to request the presentation, the~exercise variables from the input can be injected into the LaTeX file. 
+   Next, the~presentation is generated to the PDF file, which is further split into separate slides in~the~form of SVG files.
+   \item Along with the slideshow generation, the initial presentation file can include additional directives with the commentary, which are extracted and supplemented with the variables from the user input. The processed text can be transformed further into the human-like audio commentary, using the voice synthesis software.
+   \item Additionally, some metadata about the presentation can be retrieved, including the~slide durations for the slideshow or the information when to play the audio commentary, which will be sent and used later by the client application.
+   \item The steps 2-4 can be performed in parallel. Once they are completed, the result can~be~afterwards sent to the client to preview the slideshow with the exercise to~the~user.
 \end{enumerate}
 
 The described flow presents a rather extraordinary task incorporated in a web application, which plays a significant role in fulfilling the business logic of the proposed services.
-In the traditional architecture, the responsibility of performing the presentation processing could be extracted into a separate service, that triggers one of the worker based on the user requests.
-With the limited traffic, the approach with a separate service communicating with a set of workers would be suitable, but when a larger group of users would submit a request to process a request within a short period of time, the scalability of such a system should require to scale the number of available workers accordingly.
+In the traditional architecture, the responsibility of performing the presentation processing could be extracted into a separate service, that triggers one of the worker based on~the~user requests.
+With the limited traffic, the approach with a separate service communicating with a set of workers would be suitable, but when a larger group of users would submit a request to process a request within a short period of time, the scalability of such a~system should require to scale the number of available workers accordingly.
 The instant scalability of the serverless architecture, with a pay-as-you-go billing model, would be beneficial to meet the variable demand of the presentation processing requests.
 Moreover, the high-quality services hosted in the cloud, that are capable of performing the voice synthesis, could be integrated in the solution.
 However, processing the LaTeX files using the serverless function is a non-standard type of computation task, which requires the function runtime to be properly enhanced to fulfill the task.
 
 \subsubsection{Designed solution}
 
-The designed solution presented in the diagram, covers the presentation processing workflow along with the communication with the client application, responsible for displaying the slideshow based on the generated data.
-The practical research focused on configuring the serverless function, along with the processing optimisations of the described flow, is presented in more detail in section \ref{chapter:latex-processing-optimisation}.
+The designed solution presented in the diagram, covers the presentation processing workflow and communication with the client application, responsible for displaying the slideshow based on the generated data.
+The practical research focused on configuring the serverless function, along with the processing optimisations of the described flow, is presented in~more~detail in section \ref{chapter:latex-processing-optimisation}.
 
 \begin{figure}[H]
    \centering
@@ -413,18 +413,18 @@ The practical research focused on configuring the serverless function, along wit
 Key points of the suggested architecture:
 
 \begin{itemize}
-   \item \textbf{Function orchestration using the AWS Step Function} --- The presentation processing flow is built on top of several AWS Lambda instances with the AWS Step Function orchestrating the entire process.
-   AWS Lambda performs the initial task by retrieving the exercise details, validating the user input against the exercise constraints and defining the tasks for subsequent serverless function invocations, if the provided input satisfies the limitations.
+   \item \textbf{Function orchestration using the AWS Step Function} --- The presentation processing flow is built on top of several AWS Lambda instances, with AWS~Step~Function orchestrating the entire process.
+   AWS~Lambda performs the initial task by~retrieving the exercise details, validating the user input against the exercise constraints and defining the tasks for subsequent serverless function invocations, if~the~provided input satisfies the limitations.
    Based on the output of the first task, the further processing is executed or the user is notified about the invalid request.
-   The presentation processing task is further separated into two chunks. 
-   The first one generates the slideshow for several initial slides, which is pushed to the client as soon as possible once the processing is completed and starts previewing it to the user. While the second part, including the remaining chunk of the presentation, is delivered to the client later, when the user is busy watching the initial portion of the slideshow.
-   For each of the chunks, three AWS Lambda instances are executed concurrently. They are responsible for processing the LaTeX file and extracting the slides in form of the SVG files that are later uploaded to the Amazon S3, generating the voice commentary using the Amazon Polly which are further stored in Amazon S3 as well as extracting some metadata about the generated slideshow.
-   Once all three tasks for a given chunk are completed, the output of the functions is formated and another serverless function is invoked to push the results of the processing to the client using the WebSocket API
+   The~presentation processing task is further separated into two chunks. 
+   The first one generates the slideshow for several initial slides, which is pushed to the client as soon as possible once the processing is completed and starts previewing it to the user. While the~second~part, including the remaining chunk of the presentation, is delivered to~the~client later, when the user is busy watching the initial portion of the slideshow.
+   For~each of~the~chunks, three AWS Lambda instances are executed concurrently. They~are~responsible for processing the LaTeX file and extracting the slides in form of the SVG files that are later uploaded to the Amazon S3, generating the voice commentary using the Amazon Polly, which are further stored in Amazon S3 as well as extracting some metadata about the generated slideshow.
+   Once all three tasks for~a~given chunk are completed, the output of the functions is formated and another serverless function is invoked to push the results of the processing to the client using the~WebSocket API
    \item \textbf{Pushing the update to the client} --- AWS Step Function orchestrates the processing in an asynchronous manner, which makes it necessary to notify the client once the processing is finished.
    Instead of using the polling techniques to periodically check whether the presentation is generated, the push based approach is used.
    Initially, the client application invokes the AWS Step Function and gets its execution ID.
-   Next, it connects to the WebSocket API and sends a message with the obtained identifier, invoking the AWS Lambda that stores the execution ID along with the associated connection ID in the DynamoDB.
-   When the chunk of the presentation is generated, the serverless function retrieves the data based on the execution ID and sends the message with the processing results to the associated client application.
+   Next, it connects to the WebSocket API and sends a message with the~obtained identifier, invoking the AWS Lambda that stores the execution ID along with the~associated connection ID in the DynamoDB.
+   When the chunk of the presentation is~generated, the serverless function retrieves the data based on the execution ID and sends the message with the processing results to the associated client application.
    Finally, the slides and audio files, stored in the Amazon S3 bucket under predefined path, are retrieved.
 \end{itemize}
 
@@ -434,19 +434,19 @@ The proposed solution describes an interesting and non-standard use case of the 
 The predefined slideshows are requested by the user, making the desired outcome of the processing similar to the MindMup’s exporters service, mentioned in section \ref{chapter:serverless-suitability-mindmup}.
 
 The serverless architecture is an appealing technology for the file processing tasks that are scheduled in an event-driven manner.
-The resource allocation based on demand along the autoscaling capabilities with proportional billing and scaling down to zero in absence of requests, makes the serverless technology an applicable and cost efficient solution to use.
-However, the processing flow for the described example is more sophisticated and consists of several steps, which requires thoughtful coordination.
-It has been re-architectured across several subsequent iterations to leverage the benefits of the serverless architecture and make the slideshow processing more efficient.
+The resource allocation based on demand, along the autoscaling capabilities with proportional billing and scaling down to zero in absence of requests, makes the serverless technology an applicable and cost efficient solution to use.
+However, the processing flow for the described example is more sophisticated and consists of several steps, which require thoughtful coordination.
+During the research, It was re-architectured across several subsequent iterations to leverage the benefits of the serverless architecture and make the slideshow processing more efficient.
 The design process along with the performance comparison and cost calculation is presented in more detail in section \ref{chapter:latex-processing-optimisation}.
 
 The proposed solution relies on the orchestration of the processing, that consists of the serverless function invocations, performing various tasks on different steps of the processing.
-AWS Step Function enables the processing to preserve state between the function execution along with orchestrating the flow, which can include some branching, tasks executed in parallel, mapping over a list of subtasks and gathering the results of the group of tasks.
+AWS Step Function enables the processing to preserve state between the functions execution along with orchestrating the flow, which can include some branching, tasks executed in parallel, mapping over a list of subtasks and gathering the results of the group of~tasks.
 The solution brings quite some elasticity when defining the processing schema and provides visualisation of the workflow, giving better insight into the executed processing.
-However, the size of accumulated state in the AWS Step Function is strictly limited, which is insufficient to store the results of LaTeX files processing there, and requires the use of Amazon S3 to preserve the processed files from different stages of the computation to make them later available to the user.
+However, the size of accumulated state in the AWS Step Function is strictly limited, which is insufficient to store the results of LaTeX files processing there, and requires the~use~of~Amazon S3 to preserve the processed files from different stages of~the~computation to make them later available to the user.
 
-Similarly to the previous example, the processing is performed in an asynchronous manner and requires some additional solution to update the client once the results are ready. The proposed solution invokes the AWS Step Function using the REST API and later connects via the WebSocket API to receive notification when the slideshow is available.
+Similarly to the previous example, the processing is performed in an asynchronous manner and requires some additional solution to update the client once the results are~ready. The proposed solution invokes the AWS Step Function using the REST API and later connects via the WebSocket API to receive notification when the slideshow is available.
 
-Another challenge with the proposed processing flow is related with the LaTeX files processing. The use of Lambda layer, including the additional dependencies, makes it possible to perform such custom tasks and enhance the Lambda runtime with additional capabilities.
+Another challenge with the proposed processing flow is related with the LaTeX files processing. The use of Lambda layer, including the additional dependencies, makes it~possible to perform such custom tasks and enhance the Lambda runtime with additional capabilities.
 
 Lastly, the use of the AWS Polly provided another development opportunity, enabling to easily enhance the slideshow with the audio commentary, without the need to host similar service or incorporate some other third party service, running outside of the cloud platform.
 
