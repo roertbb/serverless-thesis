@@ -528,7 +528,7 @@ The developers could focus on the migration process without worrying about provi
 
 \paragraph{Temenos} \label{chapter:serverless-suitability-temenos}
 
-The banking system developed by Temenos effectively utilises the event-driven architecture, implementing to some degree the event sourcing approach along the command query responsibility segregation, mentioned in section \ref{chapter:event-driven-architecture}.
+The banking system developed by Temenos effectively utilises the event-driven architecture, implementing to some degree the Event Sourcing approach along the Command Query Responsibility Segregation, mentioned in section \ref{chapter:event-driven-architecture}.
 The first part of the processing pipeline is responsible for the Online Transactions Processing (OLTP), accepting the transactions data and serving the role of command operations. It consists of the API Gateway, AWS Elastic Load Balancer, AWS Fargate running containers with the application including the business logic and saving the transactions in the database hosted by AWS Relational Database Service.
 Later, the AWS RDS is streaming the data to Amazon Kinesis, which aggregates the records and triggers the AWS Lambda to process them, and store the data in the DynamoDB in the form of a read-optimized model, which is a subject of performing query operations.
 
