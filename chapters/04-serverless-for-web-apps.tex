@@ -581,25 +581,25 @@ The second example, which refers to the generation of interactive presentations,
 
 \subsection{Serverless processing model}
 
-Having described the AWS Lambda as an example implementation of the Function as a Service model, it is essential to consider how the serverless function can be incorporated in the application logic.
+Having described the AWS Lambda as an example implementation of the Function~as~a~Service model, it is essential to consider how the serverless function can be incorporated in~the~application logic.
 The event-driven architecture requires some components to trigger the serverless function and as a result receive the response or invoke other components, based on the configuration and code of the function.
 Moreover, the stateless and ephemeral nature of the serverless function requires it to communicate with external services to preserve its state.
 The serverless architecture relies on various services provided by the cloud platform, which along with the serverless function, make up the application logic \cite{EvaluationOfServerlessApplicationProgrammingModel}.
-The simpler application can be composed from the handful of components configured to work together. 
-However when the complexity of the system grows, the application architecture composed from numerous independent components, communicating with each in an event-driven manner, creates a more complex distributed system, that can benefit from adhering to microservice architecture patterns, discussed in section \ref{section:web-apps-microservices}.
+The simpler application can be composed from the handful of components configured to~work together. 
+However, when the complexity of the system grows, the application architecture composed from numerous independent components, communicating with each in an event-driven manner, creates a more complex distributed system, that can benefit from adhering to microservice architecture patterns, discussed in section \ref{section:web-apps-microservices}.
 
 \subsubsection{Serverless microservices}
 
-The architecture of the web based services built with the serverless architecture can be divided into 2 distinctive categories based on their purpose \cite{AWSReinventBuildingMicroservicesWithAWSLambda}:
+The architecture of the web based services built with the serverless architecture can be divided into two distinctive categories based on their purpose \cite{AWSReinventBuildingMicroservicesWithAWSLambda}:
 
 \begin{itemize}
-   \item \textbf{Public interface} --- Responsible for exposing rich and flexible APIs, most frequently using HTTP protocol to communicate directly with the web based clients. It is using the API Gateway component or other services responsible for load balancing the requests, executing the serverless function, most frequently in a synchronous manner, and returning its results to the client.
+   \item \textbf{Public interface} --- Responsible for exposing rich and flexible APIs, most frequently using HTTP protocol to communicate directly with the web based clients. It is using the API Gateway component or other services responsible for load balancing the requests, executing the serverless function, most frequently in a synchronous manner and returning its results to the client.
    \item \textbf{Internal services} --- Supporting the public interfaces by providing various application capabilities. Moreover, the underlying architecture can utilise the asynchronous processing, passing events with more opinionated structure, leveraging other serverless components with simpler interfaces to decouple the internal services and exchange messages using intermediaries.
 \end{itemize}
 
 \paragraph{Public interface} \label{chapter:public-interfaces}
 
-The simpler web services can effectively be based on a handful of components to provide the basic functionalities. Services such as API Gateway can trigger the Lambda function, which in turn communicates with the downstream service, responsible for storing the data, performing certain operations and returning back with the response, as presented in the Figure \ref{fig:simple-web-service-diagram}.
+The simpler web services can effectively be based on a handful of components to provide the basic functionalities. Services such as API Gateway can trigger the Lambda function, which in turn communicates with the downstream service, responsible for storing the data, performing certain operations and returning back with the response, as presented in~the~Figure \ref{fig:simple-web-service-diagram}.
 
 \begin{figure}[H]
    \centering
@@ -608,15 +608,15 @@ The simpler web services can effectively be based on a handful of components to 
    \label{fig:simple-web-service-diagram}
 \end{figure}
 
-There are several components provided by the AWS, which can serve a role of the public, client-faced interface of the web application, and integrate with Lambda and other hosted services directly \cite{AWSReinventBuildingMicroservicesWithAWSLambda}. The services and their capabilities are listed below:
+There are several components provided by the AWS, which can serve a role of~the~public, client-faced interface of the web application, integrating with Lambda and other hosted services directly \cite{AWSReinventBuildingMicroservicesWithAWSLambda}. The components and their capabilities are listed below:
 
 \begin{itemize}
    \item Amazon API Gateway ---
    Fully managed service enabling developers to define APIs, serving as a front door to the application, integrating with various services hosted in the cloud platform.
-   The service distinguished several types of the API including REST API (providing variety of additional features such as API caching, additional transformation and validation of requests, tighter integration with other services), WebSocket API as well as HTTP API (simpler and cheaper compared to REST APIs, providing only basic additional features).
-   Moreover, The API Gateway can also provide additional capabilities such as caching, request throttling, different usage tiers for specified clients, security control as well as integration with other services incorporating authentication and authorisation capabilities.
+   The service distinguished several types of the API, including REST API (providing variety of additional features such as API caching, additional transformation and validation of requests, tighter integration with other services), WebSocket API as well as HTTP API (simpler and cheaper compared to REST APIs, providing only basic additional features).
+   Moreover, The API Gateway can~also provide additional capabilities such as caching, request throttling, different usage tiers for specified clients, security control as well as integration with other services incorporating authentication and authorisation capabilities.
    \item Application Load Balancer ---
-   Belongs to the family of the load balancer offerings and it is supporting the HTTP traffic, regardless of the transmission protocol used on top of it.
+   Belongs to the family of the load balancer offering and it is supporting the HTTP traffic, regardless of the transmission protocol used on~top~of~it.
    The requests are forwarded, based on the URL and HTTP method, to the Lambda or other services according to the configuration.
    Using Application Load Balancer can be cost effective when the service is experiencing high throughput and the requests can be passed directly to the associated services.
    \item AWS AppSync ---
@@ -625,21 +625,21 @@ There are several components provided by the AWS, which can serve a role of the 
 \end{itemize}
 
 All of the mentioned components provide the capabilities of exposing an API, which serves as an entrypoint for the application logic.
-Besides accepting the user requests and redirecting them to specified components, some of the services enable additional capabilities such as caching, traffic management, request filtering and transformation, authentication and authorization as well as throttling the requests to protect the backend services.
+Besides accepting the user requests and~redirecting them to specified components, some of the services enable additional capabilities such as caching, traffic management, request filtering and transformation, authentication and authorization as well as throttling the requests to protect the backend services.
 The definition of an API can be generated along with the documentation, when using tools like Swagger \cite{ImplementingMicroservicesOnAWS}.
 The additional capabilities of mentioned components are covered in more detail in section \ref{chapter:serverless-client-communication-patterns-for-serverless-architecture}.
 
-Another frequently considered topic, when using the services like API Gateway, is where to perform the routing of the request.
+Another frequently considered topic, when using the services like API Gateway, is~where to perform the routing of the request.
 The Lambda code can effectively use one of the frameworks to provide some additional routing inside the handler logic, granting better portability.
-However, such approach introduces several challenges, which include applying the security constructs and performance configuration to the whole monolithic function as well as making the proper logging, monitoring and debugging more difficult to implement \cite{AWSReinventBuildingMicroservicesWithAWSLambda}.
+However, such approach introduces several challenges, which include applying the security constructs and performance configuration to the whole monolithic function as~well~as making the proper logging, monitoring and debugging more difficult to implement \cite{AWSReinventBuildingMicroservicesWithAWSLambda}.
 
 \paragraph{Internal services} \label{chapter:interal-services}
 
 The synchronous model of the public interface can work effectively with simpler services, communicating with other serverless components and returning the response back to the client.
-However, when the communication is more complex and it includes several services, passing messages to each other, there are several places when the errors can occur, making some of the components waiting for response \cite{AWSReinventBuildingMicroservicesWithAWSLambda}.
+However, when the communication is more complex and it includes various services, passing messages to each other, there are several places when the errors can occur, making some of the components waiting for response \cite{AWSReinventBuildingMicroservicesWithAWSLambda}.
 When the application is experiencing heavier load, the services communicating in a synchronous manner and leveraging the serverless technologies can observe timeouts and throttling as well as increased cost related with the Lambda functions executing longer and waiting for responses from the polled services.
 The API Gateway is configured with maximum integration timeout for synchronous function invocation equal to 29 seconds, after which it returns an error to the client.
-Moreover, the function execution time limited to 15 minutes along with its rapid scalability, can be more challenging when communicating with some external or legacy services, that are not capable to scale accordingly, which requires to manage the number of active connections \cite{ServerlessAtScaleDesignPatternsAndOptimizations}.
+Moreover, the function execution time is limited to 15 minutes, which along with its rapid scalability can be more challenging when communicating with some external or legacy services, that are not capable to scale accordingly, requiring to manage the number of active connections \cite{ServerlessAtScaleDesignPatternsAndOptimizations}.
 
 One of the solutions for the mentioned problem, is to rethink how the communication between components works and redesign it to incorporate asynchronous workflows.
 It introduces a similar approach as with microservice architecture, making the components decoupled by using some intermediaries like message brokers to exchange and preserve the events occuring in the system in a reliable way.
@@ -697,16 +697,17 @@ Some of the patterns including described components and leveraging their capabil
        \caption{Architecture diagram of service using Kinesis Data Streams to throttle and buffer the incoming data}
        \label{fig:throttling-and-buffering-diagram}
    \end{figure}
-
-   \item \textbf{Fan-Out} --- When the payload does not require additional processing, the event can be sent directly to SNS, which pushes the message to subscribers based on the configured filtering. SQS can be configured to subscribe for the events published by SNS, batch the incoming data and share it further with connected Lambda functions or other services.
-   Alternatively, for the traffic characterized with high, consistent throughput and large payloads, Kinesis Data Stream can be a more cost efficient solution \cite{ServerlessArchitecturalPatternsAndBestPractices}.
-
-   \begin{figure}[H]
+   
+   \begin{figure}[]
        \centering
        \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/fanout.png}
        \caption{Architecture diagram of the Fanout pattern including SNS and SQS to reliably send out events}
        \label{fig:fanout-diagram}
    \end{figure}
+
+   \item \textbf{Fan-Out} --- When the payload does not require additional processing, the event can be sent directly to SNS, which pushes the message to subscribers based on the configured filtering. SQS can be configured to subscribe for the events published by SNS, batch the incoming data and share it further with connected Lambda functions or other services.
+   Alternatively, for the traffic characterized with high, consistent throughput and large payloads, Kinesis Data Stream can be a more cost efficient solution \cite{ServerlessArchitecturalPatternsAndBestPractices}.
+   
    \item \textbf{Streaming} --- The data coming from various data sources can be effectively processed and stored for further analytical purposes. SNS can be used to discard unwanted events, filter the incoming events based on the different business areas and pass the data to Kinesis Firehose to preserve the data, for example in S3 \cite{ServerlessArchitecturalPatternsAndBestPractices}.
    % https://aws.amazon.com/blogs/compute/introducing-message-archiving-and-analytics-for-amazon-sns/
   
