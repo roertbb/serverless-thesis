@@ -1365,8 +1365,6 @@ Takeaways of the cost summary of designed solutions:
     \label{table:case-study-service-spendings-summary}
 \end{table}
 
-% The usage of the services for both implementations and their cost is summarised in~Table~\ref{table:case-study-service-parallel-spending-summary}~and~\ref{table:case-study-service-initial-batch-spending-summary}. 
-
 \begin{table}[]
     \centering
     \scalebox{0.9}{
@@ -1434,18 +1432,6 @@ Takeaways of the cost summary of designed solutions:
     \caption{Cost summary for the approach delivering the updates to the client in separate batches}
     \label{table:case-study-service-initial-batch-spending-summary}
 \end{table}
-
-% Takeaways of the cost summary of designed solutions:
-
-% \begin{itemize}
-%   \item \textbf{AWS Lambda processing is a small fraction of overall cost} --- Cost summaries for both of the presented solutions indicate that the text-to-voice transcoding service takes a significant amount of the overall cost.
-%   The usage of the AWS Lambda processing is greater for the solution using parallel processing.
-%   Even though some part of the presentation processing is repeated in the serverless functions executed in~parallel, the overall cost of the AWS Lambda related services barely exceeds 0.001\$ for the analysed example per single workflow execution.
-%   Moreover, it~is~crucial to~consider the cost of other services incorporated in the processing as~well~as the~data transfer.
-%   For example, the summary of the second configuration indicates that the~cost of uploading results to Amazon S3 and transferring them to the client exceeded the cost of the processing of the AWS Lambda.
-%   \item \textbf{Serverless pay-per-use billing model} --- Considering the Exercise 2, which is~a~more demanding task in terms of the processing and the summaries listed above, the overall cost of the processing for a single presentation could be estimated as not exceeding 0.01\$ per execution.
-%   Moreover, when taking into account the benefits of~the~serverless architecture, such as autoscaling with granular billing model based on usage and without paying for idle as well as the fact that the infrastructure management is handled by the cloud provider, the serverless solution with pay-per-use pricing can be an appealing alternative to more traditional architectures.
-% \end{itemize}
 
 \section{Data Tier} \label{chapter:serverless-datastores}
 
