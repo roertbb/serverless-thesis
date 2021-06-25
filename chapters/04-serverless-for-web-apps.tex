@@ -15,13 +15,15 @@ It led to developing numerous production grade implementations, covering a vast 
 The second of the discussed fields, describes the evolution of web applications over the years, introducing various architectural and development patterns to meet the requirements put on them.
 The idea of web application is difficult to clearly present due to~numerous purposes they may serve and various architectures they implement, as mentioned in \ref{chapter:web-apps-definition}. However, the overall view can be summarised and cover any client-server application using the HTTP protocol, with the client running in the web browser environment, while the server can be any complex system by itself.
 
-Despite the diversity in the perspective of the web applications, some of the defined requirements can be shared by the majority of them, with applicability extent based on the use case, as noticed in section \ref{chapter:web-apps-requirements}.
+Despite the diversity in the perspective of the web applications, some of the defined requirements can be shared by the majority of them, with applicability extent based on~the~use case, as noticed in section \ref{chapter:web-apps-requirements}.
 It is desired for the web application to scale according to~the workload demands, without noticeable performance degradation, preserving availability and characterising with resiliency and fault-tolerance, because failures are inevitable in more complex systems. Moreover, with the increase in the data volumes processed, along with the growth of their importance and confidentiality, the system should remain safe and compliant with various regulations. Last but not least, the maintainability of the web application is important, covering the monitoring, observability and~deployment processes from the operational point of view, along with the ease of development by removing complexity, inconsistencies and preserving good modularity to ensure a satisfying agility level when developing new features.
 
 To fulfill the specified requirements, various approaches and architectural patterns have been introduced, as covered briefly in section \ref{section:web-apps-modern-web-application-architecture}.
 With the server applications becoming more complex, they started to be split into several smaller and decoupled services, communicating with each other, leveraging microservice architecture and using event-driven approaches to model the problems and process them more effectively.
 It introduced the~need for various message intermediaries, such as message brokers and message buses, along with the new models of the database management systems to meet the requirements of~the large volumes of data being stored and characterise with performance, availability and~reliability, leading to further trade-offs in other areas.
 Simultaneously, the~client application architectures evolved, providing more complex and interactive clients, communicating with the server application using the benefits of various communication protocols to fulfill the~requirements and exchange information effectively.
+
+\newpage
 
 \section{Research}
 
@@ -42,12 +44,14 @@ To understand how the serverless architecture and Function as a Service model ca
 
 To answer the defined questions, further analysis of the literature, reference architectures and articles provided by various practitioners is conducted.
 Based on the gathered information, the example implementations are provided to reason about different capabilities of the serverless architecture and its applicability in the field of web application development.
-Detailed description of the examples and the proposed solutions can be found in section \ref{chapter:example-implementations}.
+Detailed description of the examples and the proposed solutions can be found in~section \ref{chapter:example-implementations}.
 
-The research focus mainly on the services provided by the Amazon Web Services to narrow the scope of the thesis and provide more in depth analysis of the Amazon's cloud platform capabilities in terms of the serverless computing.
+The research focus mainly on the services provided by the Amazon Web Services to~narrow the scope of the thesis and provide more in depth analysis of the Amazon's cloud platform capabilities in terms of the serverless computing.
 The solution has been selected due to high quality of services and development-friendly tooling provided by the cloud vendor along with numerous undergoing innovations in the field of the serverless computing, setting new standards in terms of the platform possibilities.
 Moreover, the detailed documentation along with reference architectures and broad community of practitioners, provide a sufficient area to investigate the topic of serverless architecture.
 Nevertheless, the portfolio of other cloud providers, mentioned in section \ref{chapter:serverless-service-providers}, present similar services with comparable capabilities, which should meet the characteristics of the offerings provided by AWS in the near future to maintain the market competitiveness.
+
+\newpage
 
 \section{Serverless suitability for web applications} \label{chapter:serverless-suitability}
 
@@ -105,14 +109,14 @@ Moreover, developers do not have control over the container execution and their 
 Mentioned limitations can make the serverless paradigm not suitable for some problems, which require fine-grained data sharing or significant amount of coordination and~communication, due to overall messaging overhead or the cost of external intermediary services.
 Nevertheless, various practitioners and architects analyse numerous problems and~provide ideas for limitation workarounds or redesign some of the solution architectures to~fit the~serverless paradigm or utilise it within hybrid solution \cite{BerkeleyServerless}.
 
-When it comes to various cloud providers, the runtime restrictions can differ and it is~crucial to consider if the problem characteristics fit within the constraints of the vendor services \cite{LeveragingServerlessCloudComputingArchitectures}.
+When it comes to various cloud providers, the runtime restrictions can differ and it~is~crucial to consider if the problem characteristics fit within the constraints of the vendor services \cite{LeveragingServerlessCloudComputingArchitectures}.
 
 AWS Lambda \cite{AWSLambdaQuotas} as one of the most developed FaaS offerings, allows to configure the memory in range of 128 MB to 10GB, with proportionally allocated CPU up to 6~vCPU cores for multithread processing \cite{AWSLambdaRAMandCPU}.
 The serverless function execution time is limited to 900 seconds, with invocation payload up to 6 MB for synchronous invocation and 256~KB for asynchronous.
-The temporal, local disk storage available for the container is~limited to~512~MB.
-The deployment package of the function in the form of zip archive is~restricted up to 50 MB when compressed. When uncompressed the limit is set to 250~MB, including up to 5 layers, which are a solution to share some common code across multiple functions \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+The temporal, local disk storage available for the~container is~limited to~512~MB.
+The deployment package of the function in the form of~zip archive is~restricted up to 50 MB when compressed. When uncompressed the limit is set to 250~MB, including up to 5 layers, which are a solution to share some common code across multiple functions \cite{EvaluationOfServerlessApplicationProgrammingModel}.
 
-Lastly, major cloud providers introduced various solutions for running custom execution runtimes using container images, which may be a solution to overcome some of~the mentioned limitations, but feasibility of such solution was not entirely researched yet \cite{AWSLambdaContainerImageSupport}.
+Lastly, major cloud providers introduced various solutions for running custom execution runtimes using container images, which may be a solution to overcome some of~the~mentioned limitations, but feasibility of such solution was not entirely researched yet \cite{AWSLambdaContainerImageSupport}.
 
 \paragraph{Operation types} \label{chapter:serverless-suitability-operation-types}
 
@@ -122,7 +126,7 @@ On the other hand, the I/O bound operations, like loading large volumes of the d
 
 Due to that fact, some of the dedicated services capable of I/O operations are redesigned for serverless architecture --- the workflow can be transformed into a more event-driven approach. The processing using the third party service is initiated by one of the functions and when the action is performed, the incoming event can trigger another serverless function to process the response, which prevents the serverless function from idle waiting. Serverless functions can be configured to poll some of the BaaS storage components and be notified when a particular action is performed, such as data modification or file insertion \cite{EvaluationOfServerlessApplicationProgrammingModel}.
 
-Another operation constraint is related to the implicit failover, provided out of the box by the serverless platform. When the function processing fails due to some error, it is retried up to several times, based on the underlying configuration. Due to the at least once delivery semantics, the operation performed by the function should be idempotent or additional mechanism needs to be implemented to prevent from subsequent processing of the event \cite{EvaluationOfServerlessApplicationProgrammingModel}.
+Another operation constraint is related to the implicit failover, provided out of the box by the serverless platform. When the function processing fails due to some error, it~is~retried up to several times, based on the underlying configuration. Due to the at least once delivery semantics, the operation performed by the function should be idempotent or additional mechanism needs to be implemented to prevent from subsequent processing of the event \cite{EvaluationOfServerlessApplicationProgrammingModel}.
 
 \subsubsection{Vendor dependence} \label{chapter:serverless-suitability-vendor-dependence}
 
@@ -139,24 +143,24 @@ Moreover, the tooling related to the deployment, monitoring, logging and configu
 The cloud provider is responsible for maintaining, updating and protecting the underlying architecture and generally can ensure sufficient level of services, because of the~knowledge, experience and qualified staff it has. However, incidents happen due to some unpredictable events or human errors, causing unexpected outages and connection disruption, even in the largest data centers \cite{EvaluationOfServerlessApplicationProgrammingModel}.
 
 When deciding on the service architecture, it is essential to consider if such vendor dependence is bearable \cite{LeveragingServerlessCloudComputingArchitectures}.
-The vendor lock-in in the serverless architecture can be seen as a trade-off rather than limitation, when considering whether the benefits one can obtain are sufficient to sacrifice the elasticity compared to other architectures.
+The vendor lock-in in the serverless architecture can be seen as a trade-off rather than limitation, when considering whether the benefits one can~obtain are sufficient to sacrifice the elasticity compared to other architectures.
 
 \subsection{Serverless applicability for web based services}
 
 \subsubsection{Suitability for web based workloads} \label{chapter:serverless-suitability-for-web-based-workloads}
 
 The idea of web application has been introduced and discussed in more detail in chapter \ref{chapter:web-apps}. Modern web applications can take a variety of forms and implement numerous architectures to fulfill the requirements put in front of them.
-It is difficult to generalise and unambiguously answer the question whether the serverless architecture is suitable for the web applications, because the number of variables deciding on the applicability is significant.
+It is difficult to generalise and unambiguously answer the question whether the serverless architecture is suitable for the web applications, because the number of variables deciding on the applicability is~significant.
 
 It is considered that the serverless paradigm can be utilised successfully for building entire systems or incorporate isolated components, implementing granular or larger tasks, into the existing system \cite{ServerlessArchitectureOnAWS}.
 
-The examples provided in section \ref{chapter:serverless-example-use-cases} cover a significant amount of use cases, showing how the services were designed to utilise the serverless architecture and its benefits in the production grade services. The section below discusses in more detail the applicability of serverless architecture, covering the examples and their capabilities as well as providing additional information to claim the serverless suitability for described workloads.
+The examples provided in section \ref{chapter:serverless-example-use-cases} cover a significant amount of use cases, showing how the services were designed to utilise the serverless architecture and its benefits in the production grade services. The section below discusses in more detail the applicability of~serverless architecture, covering the examples and their capabilities as well as providing additional information to claim the serverless suitability for described workloads.
 
 \paragraph{MindMup} \label{chapter:serverless-suitability-mindmup}
 
 Mindmup, serving the role of online collaboration tool for mind mapping, described in~section \ref{chapter:serverless-example-event-drive-processing}, is one of the early adopters of the serverless paradigm, which has undergone an~architectural migration from the traditional architecture running on Heroku, experiencing significant operational cost reduction \cite{ServerlessComputingEconomicAndArchitecturalImpact}.
 The redesign of the exporters' services enabled developers to reduce the boilerplate code responsible for managing, logging and monitoring of the processing as well as focusing only on the converter's logic running in~the serverless functions.
-Due to the fact that some of the file formats were used less frequently, all the processing logic was initially bundled into single service for cost optimisation. The~negative aspect of such coupling has been observed by exhausting all of the available resources, along with bugs propagation impacting several exporters.
+Due to the fact that some of the file formats were used less frequently, all the processing logic was initially bundled into single service for cost optimisation. The~negative aspect of such coupling has been observed by exhausting all of~the~available resources, along with bugs propagation impacting several exporters.
 The~re-architecturing of the flow to event-driven approach, with the logic orchestration pushed to the client as~well~as the further migration of the application backend, contributed to~the~cost reduction by 50\% even with the increase in number of active users --- resulting in the overall cost savings estimated to 66\%.
 The MindMup example of exporters processing benefits from utilising the serverless architecture for the high-throughput task, utilising fine-grained serverless function scaling.
 
@@ -221,9 +225,9 @@ They simulate user behaviour with different traffic characteristics and workload
 \paragraph{Serverless is more agile in terms of scalability and with more stable performance characteristics}
 
 During the initial phase of load testing, it was noticeable that the serverless implementation suffered from the ''cold start'' impacting the response time.
-After the period of 2 minutes, the performance has stabilized and the response time remained almost constant until the~tests completion.
+After the period of~2~minutes, the performance has stabilized and the response time remained almost constant until the~tests completion.
 The implementation utilising serverless technology characterise with instant scaling, matching the increase in workloads.
-The higher number of requests or~unexpected spikes are handled automatically, with small impact on the response time and slight performance degradation observed \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}.
+The higher number of requests or~unexpected spikes are handled automatically, with small impact on the response time and~slight performance degradation observed \cite{ServerlessComputingAnInvestigationOfDeploymentEnvironmentsForWebAPIs}.
 
 Which is in contrast to the solution implemented using the microservice architecture, which starts to scale after reaching preconfigured utilisation criteria.
 Moreover, for some types of the traffic increase, the delay of responsiveness to re-balance the current workloads was greater, which lead to notable increase in the response time \cite{MicroservicesvsServerlessAPerformanceComparisonOnCloudNativeWebApplication}.
@@ -258,7 +262,7 @@ The section covers in~more detail how the serverless paradigm is applicable for 
 
 \subsubsection{Performance and scalability} \label{chapter:serverless-suitability-performance-and-scalability}
 
-The stateless and short-lived design of the serverless function makes it convenient for horizontal scaling, however the performance from the point of view of the single request is~still debatable, considering the ''cold start'' phenomenon, as described in sections  \ref{chapter:serverless-startup-latency-and-platform-improvements} and \ref{chapter:serverless-suitability-processing-time}.
+The stateless and short-lived design of the serverless function makes it convenient for~horizontal scaling, however the performance from the point of view of the single request is~still debatable, considering the ''cold start'' phenomenon, as described in sections  \ref{chapter:serverless-startup-latency-and-platform-improvements} and~\ref{chapter:serverless-suitability-processing-time}.
 Moreover, the ephemeral nature of the processing and lack of addressability requires to use external components to preserve the state and communicate with other services, as noticed in section \ref{chapter:serverless-challenges-related-to-the-nature-of-serverless-architecture}.
 The time required to allocate the resources and~bootstrap the runtime of the function, along with the communication overhead between the~components that make up the workload processing, can significantly impact the overall processing time.
 However, the architects and developers with the thoroughly designed application architecture can partially alleviate the undesired latency to make it~acceptable for the developed web application.
@@ -302,7 +306,7 @@ Most of the problems with the security of the serverless solutions results from 
 
 \subsubsection{Maintainability} \label{chapter:serverless-suitability-maintainability}
 
-As described in the definition in section \ref{section:serverless-definition}, the serverless paradigm transfers the need to~maintain, provision and manage resources and execute applications to the cloud platform. It significantly reduces the operational costs of running the applications as well as the~labour cost related with the operational aspects, as noticed in sections \ref{chapter:serverless-reduced-development-and-operational-cost} and \ref{chapter:serverless-easier-operational-management}. The deployment process is also simplified, in which the developers need to provide the artifact with the proper configuration and the platform is responsible for executing the application.
+As described in the definition in section \ref{section:serverless-definition}, the serverless paradigm transfers the need to~maintain, provision and manage resources and execute applications to the cloud platform. It significantly reduces the operational costs of running the applications as well as the~labour cost related with the operational aspects, as noticed in sections \ref{chapter:serverless-reduced-development-and-operational-cost} and~\ref{chapter:serverless-easier-operational-management}. The deployment process is also simplified, in which the developers need to~provide the artifact with the proper configuration and the platform is responsible for~executing the application.
 
 Section \ref{chapter:serverless-monitoring-and-observability} indicates that the granularity of the components and the distributed nature of the serverless processing requires to setup proper monitoring and ensure appropriate level of observability to make sure the application is working properly.
 Leveraging the tools capable of distributed tracing, along with alarming when some metrics are over the predefined limits, can give more insight into the application behaviour.
@@ -313,6 +317,8 @@ The developers can benefit from multiple BaaS components, introducing new opport
 The development process can be harder initially, because of the greater granularity of the functions compared to traditional architectures and a new approach of running and ~testing the applications in the cloud environment \cite{EvaluationOfServerlessApplicationProgrammingModel}. Nevertheless, the ecosystem of tools evolved over the years along with the knowledge base of the cloud providers and~practitioners, describing reference architectures and good patterns.
 
 Lastly, the serverless architecture makes it easier to introduce changes and adjust the~architectures to the current needs with very little effort. The example of CloudGuru migration, described in section \ref{chapter:serverless-suitability-cloudguru}, shows that serverless makes the evolvability of~the~application easier, along with encouraging to experiment and introduce new features in~a~convenient way.
+
+\newpage
 
 \section{Example implementations} \label{chapter:example-implementations}
 
@@ -401,14 +407,16 @@ However, processing the LaTeX files using the serverless function is a non-stand
 \subsubsection{Designed solution}
 
 The designed solution presented in the diagram, covers the presentation processing workflow and communication with the client application, responsible for displaying the slideshow based on the generated data.
-The practical research focused on configuring the serverless function, along with the processing optimisations of the described flow, is presented in~more~detail in section \ref{chapter:latex-processing-optimisation}.
+The practical research focused on configuring the serverless function, along with the processing optimisations of the described flow, is presented in~more~detail in section \ref{chapter:latex-processing-optimisation}. 
 
 \begin{figure}[H]
    \centering
    \includegraphics[width=1\textwidth]{assets/04-serverless-for-web-apps/euclidArchitecture.png}
    \caption{Architecture of presentation processing}
    \label{fig:euclid-web-app}
-\end{figure}
+\end{figure} 
+
+\newpage
 
 Key points of the suggested architecture:
 
@@ -450,6 +458,8 @@ Another challenge with the proposed processing flow is related with the LaTeX fi
 
 Lastly, the use of the AWS Polly provided another development opportunity, enabling to easily enhance the slideshow with the audio commentary, without the need to host similar service or incorporate some other third party service, running outside of the cloud platform.
 
+\newpage
+
 \section{Server Tier}
 
 \subsection{AWS Lambda as a compute resource} \label{chapter:lambda-function-as-a-compute-resource}
@@ -470,7 +480,7 @@ The list below includes additional limitations along with explanation of their i
    \item \textbf{Concurrent executions} --- 1000 executions --- The serverless paradigm ensures about the infinite scalability of the underlying platform, however the default maximum number of functions that can be invoked simultaneously is limited. It~is~essential to keep that in mind when developing some serverless solution extensively using the Lambda, that there is some threshold above which the function execution will be throttled. The limit can be increased further by the cloud provider.
    \item \textbf{Function memory allocation} --- from 128 MB to 10240 MB --- The function memory allocation can be configured, which translates into the available CPU and network bandwidth. When the memory of the function is set above the 1769 MB threshold, it provides processors with multiple cores capable of multithreading processing. Therefore, further increase for single threaded computation will increase the memory or bandwidth, which will be suitable accordingly for memory-bound or~I/O-bound processing \cite{BecomeAServerlessBlackBelt}.
    \item \textbf{Function timeout} --- 900 seconds (15 minutes) --- The Lambda execution time is strictly limited, which makes it not suitable for processing various long-running tasks.
-   \item \textbf{Deployment package size} --- 50 MB (zipped) and 250 MB (unzipped, including layers) --- The function deployment package, including the function code and its dependencies, is constrained as well. The function execution environment can be additionally extended by the Lambda layers, including additional code, libraries or~dependencies. When the size constraints do not allow to pack all of the required dependencies, the function can be also based on the custom container image, limited up to 10 GB. The topic of Lambda layer and container image is discussed further~in section \ref{chapter:lambda-custom-runtimes}.
+   \item \textbf{Deployment package size} --- 50 MB (zipped) and 250 MB (unzipped, including layers) --- The function deployment package, including the function code and its dependencies, is constrained as well. The function execution environment can be additionally extended by the Lambda layers, including additional code, libraries or~dependencies. When the size constraints do not allow to pack all of the required dependencies, the function can be also based on the custom container image, limited up to 10 GB. The topic of Lambda layer and container image is discussed further in~section \ref{chapter:lambda-custom-runtimes}.
    \item \textbf{Invocation payload} --- 6 MB (synchronous invocation), 256 KB (asynchronous invocation) --- The invocation payload limit is related to the size of an event invoking the Lambda function.
    The synchronous invocation model requires the serverless function to return some value to the service triggering the function, for example the AWS API Gateway invoking the function based on user request, contrary to~the~asynchronous invocation, triggered for example by uploading some file to~Amazon~S3.
    The constraint prevents from passing large amounts of data in the event payload and~requires the function to communicate with external components to retrieve or~save the processing results if required.
@@ -495,7 +505,7 @@ Container images are constrained up to 10 GB in size, contrary to the aforementi
 AWS provides a set of base images for supported runtimes as well as supported Linux base image, however the developers can use any container image if it supports Lambda~Runtime~API, which is a simple HTTP-based protocol, responsible for invoking the function and retrieving its results.
 The custom container images can be built using familiar tooling and later uploaded to Amazon Elastic Container Registry, from which the~image will be retrieved once the function is invoked.
 
-Compared to other services enabling to run container based workloads, the Lambda container image support allows to scale workloads on per request basis and scale to zero with no additional cost if there is no traffic, providing more granular pricing model than other services. Moreover, the Lambda function is integrated with many AWS services, which means that it can be invoked from numerous event sources. 
+Compared to other services enabling to run container based workloads, the Lambda container image support allows to scale workloads on per request basis and scale to~zero with no additional cost if there is no traffic, providing more granular pricing model than other services. Moreover, the Lambda function is integrated with many AWS services, which means that it can be invoked from numerous event sources. 
 Nevertheless, the~Lambda still needs to satisfy the aforementioned limitations, other than the artifact size \cite{RunningContainerImagesInAWSLambda}.
 
 \paragraph{Lambda layer}
@@ -686,46 +696,47 @@ The mentioned services are not mutually exclusive and can be combined together t
 Some of the patterns including described components and leveraging their capabilities are covered below:
 
 \begin{itemize}
-   \item \textbf{Throttling and buffering} --- The autoscaling capabilities of the Lambda function can be a problem for the downstream services, including for example the hosted relational databases, which may not be able to scale accordingly or exhaust the available connections pool.
-   SQS and Kinesis Data Streams can be used to persist and batch the incoming events.
-   Both of the mentioned approaches can limit the concurrency of~incoming traffic, serving a role of buffer, aggregating the incoming requests and~executing the function with a single batch or shard, leading to lower cost per function invocation.
-   DLQ can be configured to store failed records. Alternatively, Lambda Destination can be leveraged to execute another Lambda function with an event including context of the failure \cite{ServerlessArchitecturalPatternsAndBestPractices}.
-  
-   \begin{figure}[H]
+
+    \begin{figure}[]
        \centering
        \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/buffer.png}
        \caption{Architecture diagram of service using Kinesis Data Streams to throttle and buffer the incoming data}
        \label{fig:throttling-and-buffering-diagram}
    \end{figure}
    
-   \begin{figure}[]
+   \item \textbf{Throttling and buffering} --- The autoscaling capabilities of the Lambda function can be a problem for the downstream services, including for example the hosted relational databases, which may not be able to scale accordingly or exhaust the available connections pool.
+   SQS and Kinesis Data Streams can be used to persist and batch the incoming events.
+   Both of the mentioned approaches can limit the concurrency of~incoming traffic, serving a role of buffer, aggregating the incoming requests and~executing the function with a single batch or shard, leading to lower cost per function invocation.
+   DLQ can be configured to store failed records. Alternatively, Lambda Destination can be leveraged to execute another Lambda function with an event including context of the failure \cite{ServerlessArchitecturalPatternsAndBestPractices}.
+   
+   \item \textbf{Fan-Out} --- When the payload does not require additional processing, the event can~be sent directly to SNS, which pushes the message to subscribers based on~the~configured filtering. SQS can be configured to subscribe for the events published by~SNS, batch the incoming data and share it further with connected Lambda functions or other services.
+   Alternatively, for the traffic characterized with high, consistent throughput and large payloads, Kinesis Data Stream can be a more cost efficient solution \cite{ServerlessArchitecturalPatternsAndBestPractices}.
+   
+    \begin{figure}[H]
        \centering
        \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/fanout.png}
        \caption{Architecture diagram of the Fanout pattern including SNS and SQS to reliably send out events}
        \label{fig:fanout-diagram}
    \end{figure}
-
-   \item \textbf{Fan-Out} --- When the payload does not require additional processing, the event can~be sent directly to SNS, which pushes the message to subscribers based on~the~configured filtering. SQS can be configured to subscribe for the events published by~SNS, batch the incoming data and share it further with connected Lambda functions or other services.
-   Alternatively, for the traffic characterized with high, consistent throughput and large payloads, Kinesis Data Stream can be a more cost efficient solution \cite{ServerlessArchitecturalPatternsAndBestPractices}.
    
-   \item \textbf{Streaming} --- The data coming from various data sources can be effectively processed and stored for further analytical purposes. SNS can be used to discard unwanted events, filter the incoming events based on the different business areas and~pass the data to Kinesis Firehose to preserve the data, for example in S3 \cite{ServerlessArchitecturalPatternsAndBestPractices}.
-   % https://aws.amazon.com/blogs/compute/introducing-message-archiving-and-analytics-for-amazon-sns/
-  
-   \begin{figure}[H]
+   \begin{figure}[]
        \centering
        \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/streamer.png}
        \caption{Architecture diagram of SNS and Kinesis Firehose preserving the incoming stream of events in S3 bucket}
        \label{fig:streaming-diagram}
    \end{figure}
+   
+   \item \textbf{Streaming} --- The data coming from various data sources can be effectively processed and stored for further analytical purposes. SNS can be used to discard unwanted events, filter the incoming events based on the different business areas and~pass the data to Kinesis Firehose to preserve the data, for example in S3 \cite{ServerlessArchitecturalPatternsAndBestPractices}.
+  
 \end{itemize}
 
 \paragraph{Serverless microservice principles}
 
-Besides the components serving the role of the entry point to the web application and the internal services, responsible for messaging between application components, there are also other components taking an integral role in the applications built in the serverless paradigm as well as shaping its architecture.
+Besides the components serving the role of the entry point to the web application and~the~internal services, responsible for messaging between application components, there are also other components taking an integral role in the applications built in the serverless paradigm as well as shaping its architecture.
 The databases capable of preserving the data and reacting to its changes by streaming the updates to polling services are described in~more detail in section \ref{chapter:serverless-datastores}.
 Moreover, numerous services hosted in the cloud provide various capabilities, including for example image processing, video transcoding or natural language processing, which can be easily integrated in the developed web applications.
 
-The first of the described examples, presented in section \ref{chapter:examples-receipt-processing}, shows how the S3 and DynamoDB are incorporated in the application logic to preserve the images and results of~the~processing as well as notifying other components about data changes.
+The first of the described examples, presented in section \ref{chapter:examples-receipt-processing}, shows how the S3 and~DynamoDB are incorporated in the application logic to preserve the images and results of~the~processing as well as notifying other components about data changes.
 Textract~is~incorporated in the asynchronous processing flow to analyze the uploaded receipts and later publish the results to SNS, fitting into the asynchronous event-driven processing.
 
 When the serverless solution evolves and grows in complexity, it is beneficial to split the application logic into separate domains with well-defined boundaries based on~the~business capabilities.
@@ -750,8 +761,7 @@ The decentralized data management allows services to preserve their state indepe
 Decoupling components make it easier to develop services independently, however such a distributed system requires some communication mechanisms between its elements.
 Exchanging messages via intermediaries, service contracts as well as designing for failure, are necessary to make the serverless web application work properly.
 Lastly, the automation that is set up properly, providing continuous integration and deployment, is necessary to make the development process manageable.
-Automated end to end testing on the deployed environment is essential to~give enough confidence that the system works properly as well as proper logging, monitoring and observability are required to track the system capabilities and trigger alarms in case of inconsistencies. \newline \newline
-
+Automated end to end testing on the deployed environment is essential to~give enough confidence that the system works properly as well as proper logging, monitoring and observability are required to track the system capabilities and trigger alarms in case of inconsistencies. \newline
 
 Summarising, according to Jeremy Daly in his article describing the various serverless patterns \cite{ServerlessMicroservicePatternsForAWS}, the~serverless microservices benefits from adhering the following principles:
 
@@ -793,7 +803,7 @@ An example architecture diagram of the food ordering workflow, modeled in the ch
 
 \begin{figure}[H]
    \centering
-   \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/choreography.png}
+   \includegraphics[width=0.7\textwidth]{assets/04-serverless-for-web-apps/choreography.png}
    \caption{The food delivery workflow modeled using the choreography approach}
    \label{fig:choreography-diagram}
 \end{figure}
@@ -821,9 +831,9 @@ Moreover, the orchestration approach using the Step Function is suitable for usi
 It can be applied to coordinate some more complex processes including multiple operations, which can fail during the~processing and require orchestrating a series of compensating transactions, reverting the executed operations and cleaning up the state.
 An example of such orchestration workflow is presented in the Figure \ref{fig:saga-orchestration-diagram}, covering the multistep booking process.
 
-\begin{figure}[]
+\begin{figure}[H]
    \centering
-   \includegraphics[width=0.5\textwidth]{assets/04-serverless-for-web-apps/saga.png}
+   \includegraphics[width=0.4\textwidth]{assets/04-serverless-for-web-apps/saga.png}
    \caption{The multistep booking workflow using the distributed saga pattern}
    \label{fig:saga-orchestration-diagram}
 \end{figure}
@@ -872,8 +882,9 @@ Both of the approaches execute the same function code running in the Node.js run
 0.725 0.775 9.469 5.235 10.832 5.210
 }\datasetLayerVsImage
 
-\begin{figure}[]
+\begin{figure}[H]
     \begin{center}
+    \scalebox{0.9}{
     \begin{tikzpicture}
     \begin{axis}[ybar,
         width=.8\textwidth,
@@ -902,6 +913,7 @@ Both of the approaches execute the same function code running in the Node.js run
     \legend{Lambda layer - cold start, Lambda layer - warm start, Container image - cold start, Container image - warm start}
     \end{axis}
     \end{tikzpicture}
+    }
     \caption{Response time comparison of the solutions using custom container image for AWS Lambda and Lambda layers with the LaTeX distribution}
     \label{chart:step-function-lambda-layer-vs-container-image}
     \end{center}
@@ -973,8 +985,9 @@ In the previous section, the task of generating PDF presentations from the LaTeX
 0.725 0.775 10.039 5.731 11.612 5.963
 }\datasetChainVsSingle
 
-\begin{figure}[]
+\begin{figure}[H]
     \begin{center}
+    \scalebox{0.9}{
     \begin{tikzpicture}
     \begin{axis}[ybar,
         width=.8\textwidth,
@@ -1003,7 +1016,8 @@ In the previous section, the task of generating PDF presentations from the LaTeX
     \legend{Single function - cold start, Single function - warm start, Function chain - cold start, Function chain - warm start}
     \end{axis}
     \end{tikzpicture}
-    \caption{Response time comparison of the solutions using single function and function chain to process the presentation}
+    }
+    \caption{Response time comparison of the solutions using single function and~function chain to process the presentation}
     \label{chart:step-function-single-function-vs-function-chain}
     \end{center}
 \end{figure}
@@ -1025,21 +1039,15 @@ However, the LaTeX files processing requires to repeat some initial and common p
 
 The taken approach splits the LaTeX processing into several serverless function executions running in parallel. Each of the functions is assigned to generate the slides for~predefined presentation chunks, containing 5 consecutive slides. Once the processing of all serverless functions is completed, along with the commentary transcription and metadata extraction, the user is notified about the results of the processing. The Step Function processing graph is presented in Figure \ref{fig:step-function-processing-the-presentation-in-parallel}, indicating that the presentation generation is divided into chunks, that are mapped to independent function calls and~executed in~parallel.
 
-\begin{figure}[]
-    \centering
-    \includegraphics[width=0.6\textwidth]{assets/04-serverless-for-web-apps/stepFunctionGraphParallel.png}
-    \caption{Step Function processing graph --- Generating the presentation chunks in parallel}
-    \label{fig:step-function-processing-the-presentation-in-parallel}
-\end{figure}
-
 \pgfplotstableread{
 % xaxis1, xaxis2, Single Cold, Single Warm, Parallel Cold, Parallel Warm
 0.225 0.275 6.242 2.724 4.996 2.136
 0.725 0.775 10.039 5.731 7.477 3.186
 }\datasetSingleVsParallel
 
-\begin{figure}[]
+\begin{figure}[H]
     \begin{center}
+    \scalebox{0.9}{
     \begin{tikzpicture}
     \begin{axis}[ybar,
         width=.9\textwidth,
@@ -1068,9 +1076,17 @@ The taken approach splits the LaTeX processing into several serverless function 
     \legend{Single function - cold start, Single function - warm start, Parallel processing - cold start, Parallel processing - warm start}
     \end{axis}
     \end{tikzpicture}
-    \caption{Response time comparison of the solutions using single function to generate the complete presentation and the parallelised processing of separate chunks}
+    }
+    \caption{Response time comparison of the solutions using single function to~generate the complete presentation and the parallelised processing of separate chunks}
     \label{chart:step-function-single-function-vs-parallel-processing}
     \end{center}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.52\textwidth]{assets/04-serverless-for-web-apps/stepFunctionGraphParallel.png}
+    \caption{Step Function processing graph --- Generating the presentation chunks in parallel}
+    \label{fig:step-function-processing-the-presentation-in-parallel}
 \end{figure}
 
 Key takeaways of the parallel processing compared to the single function execution:
@@ -1095,7 +1111,7 @@ Key takeaways of the parallel processing compared to the single function executi
         & warm start & 4679 & 1313 & 71.94 \\
         \hline
         \end{tabular}
-        \caption{Time reduction of the presentation processing task for the complete presentation and chunks including 5 slides}
+        \caption{Time reduction of the presentation processing task for the complete presentation and~chunks including 5 slides}
         \label{table:overhead-of-the-presentation-processing-task-for-the-whole-presentation-and-chunks-including-5-slides}
     \end{table}
 
@@ -1107,7 +1123,16 @@ Key takeaways of the parallel processing compared to the single function executi
 
 The approach presented in the previous section enables to effectively parallelise the processing and reduce the overall processing time, but it is restricted by the fact that all of~the~presentation chunks needs to be processed to push the update to the client. When~taking into consideration how the presentations are prepared, most frequently the first several slides include the introduction to the exercise that usually takes more than 10 seconds. From the user perspective, only the first batch is required to start presenting the slideshow, while the remaining part of the assets can be delivered later.
 
-The further improvements of the processing flow takes into account the aforementioned assumption and parallelises the presentation processing on the higher level, to deliver the~updates of the processed presentation chunks independently. The Step Function processing graph of suggested approach is presented in Figure \ref{fig:step-function-pushing-updates-to-the-client-with-partially-processed-presentation}. The further measurements reflects the response time for two configurations of the flow, described below:
+The further improvements of the processing flow takes into account the aforementioned assumption and parallelises the presentation processing on the higher level, to deliver the~updates of the processed presentation chunks independently. The Step Function processing graph of suggested approach is presented in Figure \ref{fig:step-function-pushing-updates-to-the-client-with-partially-processed-presentation}. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.52\textwidth]{assets/04-serverless-for-web-apps/stepFunctionGraphInitialBatch.png}
+    \caption{Step Function processing graph --- Delivering updates to the client with independently processed presentation chunks}
+    \label{fig:step-function-pushing-updates-to-the-client-with-partially-processed-presentation}
+\end{figure}
+
+The further measurements reflects the response time for two configurations of the flow, described below:
 
 \begin{itemize}
    \item First batch with 5 initial slides processed and the second batch with the remaining part of the presentation --- the processing is effectively parallelised in two branches.
@@ -1116,21 +1141,16 @@ The further improvements of the processing flow takes into account the aforement
 
 The results of the processing are compared with processing time of the complete presentation by a single serverless function and when the processing is parallelised, as shown in the previous section. The results are presented in the figures \ref{chart:step-function-initial-batch} and \ref{chart:step-function-batches}.
 
-\begin{figure}[]
-    \centering
-    \includegraphics[width=0.6\textwidth]{assets/04-serverless-for-web-apps/stepFunctionGraphInitialBatch.png}
-    \caption{Step Function processing graph --- Delivering updates to the client with independently processed presentation chunks}
-    \label{fig:step-function-pushing-updates-to-the-client-with-partially-processed-presentation}
-\end{figure}
-
 \pgfplotstableread{
 % xaxis, Single Cold, Single Warm, Parallel Cold, Parallel Warm, FirstBatch Cold, RestBatch Cold, FirstBatch Warm, RestBatch Warm
 0.25 6.242 2.724 4.996 2.136 4.315 4.680 1.710 2.718
 0.75 10.039 5.731 7.477 3.186 5.611 9.755 1.803 5.814
 }\datasetUploadInitialBatch
 
-\begin{figure}[]
+
+\begin{figure}[H]
     \begin{center}
+    \scalebox{0.845}{
     \begin{tikzpicture}
     \begin{axis}[ybar,
         width=.9\textwidth,
@@ -1166,7 +1186,8 @@ The results of the processing are compared with processing time of the complete 
     \legend{Single function - cold start, Single function - warm start, Parallel execution - cold start, Parallel execution - warm start, First batch - cold start, Second batch - cold start, First batch - warm start, Second batch - warm start}
     \end{axis}
     \end{tikzpicture}
-    \caption{Response time comparison of the solution delivering the update to the client in the first batch including initial 5 slides and the second batch with remaining data}
+    }
+    \caption{Response time comparison of the solution delivering the update to~the~client in the first batch including initial 5 slides and the second batch with remaining data}
     \label{chart:step-function-initial-batch}
     \end{center}
 \end{figure}
@@ -1177,8 +1198,9 @@ The results of the processing are compared with processing time of the complete 
 0.75 10.039 5.731 7.477 3.186 22.563 22.948 22.209 22.374
 }\datasetUploadBatches
 
-\begin{figure}[]
+\begin{figure}[H]
     \begin{center}
+    \scalebox{0.845}{
     \begin{tikzpicture}
     \begin{axis}[ybar,
         width=.9\textwidth,
@@ -1214,7 +1236,8 @@ The results of the processing are compared with processing time of the complete 
     \legend{Single function - cold start, Single function - warm start, Parallel execution - cold start, Parallel execution - warm start, First batch - cold start, All batches - cold start, First batch - warm start, All batches - warm start}
     \end{axis}
     \end{tikzpicture}
-    \caption{Response time comparison of the solution delivering the update to the client in the separate batches}
+    }
+    \caption{Response time comparison of the solution delivering the update to~the~client in the separate batches}
     \label{chart:step-function-batches}
     \end{center}
 \end{figure}
@@ -1245,7 +1268,7 @@ The figure \ref{chart:step-function-compared-with-traditional-architecture} pres
 0.75 10.039 5.731 7.477 3.186 5.611 9.755 1.803 5.814 6
 }\datasetCompareContainer
 
-\begin{figure}[]
+\begin{figure}[h]
     \begin{center}
     \begin{tikzpicture}
     \begin{axis}[ybar,
@@ -1318,24 +1341,9 @@ The section calculates the cost of a single execution of the entire processing f
 The cost of services used in the implementation is summarised in Table \ref{table:case-study-service-spendings-summary}, based on~the~pricing defined for region Europe (Frankfurt) and excluding the Free Tier provided by the AWS.
 Cost of some of the services, such as Amazon CloudWatch for storing logs, API Gateway for the incoming traffic in form of the user requests or data transfer for DynamoDB is omitted due to negligible use and very small granularity to notice the~difference in the values of cost statement.
 
-The usage of the services for both implementations and their cost is summarised in~Table~\ref{table:case-study-service-parallel-spending-summary}~and~\ref{table:case-study-service-initial-batch-spending-summary}. 
-
-Takeaways of the cost summary of designed solutions:
-
-\begin{itemize}
-   \item \textbf{AWS Lambda processing is a small fraction of overall cost} --- Cost summaries for both of the presented solutions indicate that the text-to-voice transcoding service takes a significant amount of the overall cost.
-   The usage of the AWS Lambda processing is greater for the solution using parallel processing.
-   Even though some part of the presentation processing is repeated in the serverless functions executed in~parallel, the overall cost of the AWS Lambda related services barely exceeds 0.001\$ for the analysed example per single workflow execution.
-   Moreover, it~is~crucial to~consider the cost of other services incorporated in the processing as~well~as the~data transfer.
-   For example, the summary of the second configuration indicates that the~cost of uploading results to Amazon S3 and transferring them to the client exceeded the cost of the processing of the AWS Lambda.
-   \item \textbf{Serverless pay-per-use billing model} --- Considering the Exercise 2, which is~a~more demanding task in terms of the processing and the summaries listed above, the overall cost of the processing for a single presentation could be estimated as not exceeding 0.01\$ per execution.
-   Moreover, when taking into account the benefits of~the~serverless architecture, such as autoscaling with granular billing model based on usage and without paying for idle as well as the fact that the infrastructure management is handled by the cloud provider, the serverless solution with pay-per-use pricing can be an appealing alternative to more traditional architectures.
-\end{itemize}
-
-
-\begin{table}[]
+\begin{table}[h]
     \centering
-    \scalebox{0.85}{
+    \scalebox{0.9}{
     \begin{tabular}{ |c|c|c| } 
     \hline
     Service & Billed service usage & Pricing \\
@@ -1365,9 +1373,11 @@ Takeaways of the cost summary of designed solutions:
     \label{table:case-study-service-spendings-summary}
 \end{table}
 
-\begin{table}[]
+The usage of the services for both implementations and their cost is summarised in~Table~\ref{table:case-study-service-parallel-spending-summary}~and~\ref{table:case-study-service-initial-batch-spending-summary}. 
+
+\begin{table}[h]
     \centering
-    \scalebox{0.9}{
+    \scalebox{1}{
     \begin{tabular}{ |c|c|c| } 
     \hline
     Service usage & Usage & Cost [\$] \\
@@ -1399,9 +1409,9 @@ Takeaways of the cost summary of designed solutions:
     \label{table:case-study-service-parallel-spending-summary}
 \end{table}
 
-\begin{table}[]
+\begin{table}[h]
     \centering
-    \scalebox{0.85}{
+    \scalebox{1}{
     \begin{tabular}{ |c|c|c| } 
     \hline
     Service usage & Usage & Cost [\$] \\
@@ -1432,6 +1442,20 @@ Takeaways of the cost summary of designed solutions:
     \caption{Cost summary for the approach delivering the updates to the client in separate batches}
     \label{table:case-study-service-initial-batch-spending-summary}
 \end{table}
+
+Takeaways of the cost summary of designed solutions:
+
+\begin{itemize}
+   \item \textbf{AWS Lambda processing is a small fraction of overall cost} --- Cost summaries for both of the presented solutions indicate that the text-to-voice transcoding service takes a significant amount of the overall cost.
+   The usage of the AWS Lambda processing is greater for the solution using parallel processing.
+   Even though some part of the presentation processing is repeated in the serverless functions executed in~parallel, the overall cost of the AWS Lambda related services barely exceeds 0.001\$ for the analysed example per single workflow execution.
+   Moreover, it~is~crucial to~consider the cost of other services incorporated in the processing as~well~as the~data transfer.
+   For example, the summary of the second configuration indicates that the~cost of uploading results to Amazon S3 and transferring them to the client exceeded the cost of the processing of the AWS Lambda.
+   \item \textbf{Serverless pay-per-use billing model} --- Considering the Exercise 2, which is~a~more demanding task in terms of the processing and the summaries listed above, the overall cost of the processing for a single presentation could be estimated as not exceeding 0.01\$ per execution.
+   Moreover, when taking into account the benefits of~the~serverless architecture, such as autoscaling with granular billing model based on usage and without paying for idle as well as the fact that the infrastructure management is handled by the cloud provider, the serverless solution with pay-per-use pricing can be an appealing alternative to more traditional architectures.
+\end{itemize}
+
+\newpage
 
 \section{Data Tier} \label{chapter:serverless-datastores}
 
@@ -1479,8 +1503,6 @@ Such databases are more suitable to work with long-running compute instances, in
 The ephemeral nature of serverless functions along its scaling capabilities, makes it not applicable to maintain the connection pool on the application level, because each of the functions is logically and physically separated from others.
 It~leads to~establishing a large number of active connections, because each executed function needs to~connect to the database separately, bringing additional overhead when initially establishing the connection.
 Once the function execution is completed, the connection is~not~closed to make it available when the function container will be reused, but~depending on load it may not be utilised \cite{WhyThePIETheoremIsMoreRelevantThanTheCAPTheorem}.
-
-\newpage
 
 There are several approaches to alleviate the consequences of such unsuitability \cite{BuildingResilientServerlessSystemsWithNonServerlessComponents}, which are listed and discussed briefly below:
 
@@ -1631,6 +1653,8 @@ The Aurora Serverless configuration, including its autoscaling capabilities with
 Moreover, the introduction of Data API alleviates the need to establish and manage connections as well as allows use of the IAM based permission model.
 Currently, Amazon Aurora is under ongoing development, including the second version of the service in~the~preview mode, which includes additional improvements.
 
+\newpage
+
 \section{Client Tier}
 
 Building the web applications using the serverless architecture has a significant impact on~the~architecture of the compute and storage layer.
@@ -1719,36 +1743,36 @@ The section below describes in more detail, some of the use cases of the discuss
 
 \subsubsection{Synchronous requests} \label{chapter:client-synchronous-requests}
 
-\begin{figure}[]
-   \centering
-   \includegraphics[width=0.65\textwidth]{assets/04-serverless-for-web-apps/synchronousRequest.png}
-   \caption{Example of synchronous communication with Lambda function, DynamoDB and AWS Step Function using API Gateway}
-   \label{fig:pattern-synchronous-request}
-\end{figure}
-
 For simple use cases the synchronous communication with the serverless application backend is applicable, as mentioned in section \ref{chapter:public-interfaces}.
 Figure \ref{fig:pattern-synchronous-request} shows, how the API~Gateway can be applied to integrate directly with DynamoDB to retrieve the data along with AWS Step Function to trigger some more advanced workflows in an asynchronous manner, returning with the response to the client to confirm the invocation.
 Similarly, the~API~Gateway can invoke the Lambda function in a synchronous manner, as covered in section \ref{chapter:lambda-function-execution-model}, to process some more complex business logic.
 It is essential to be aware that the more sophisticated workflows may be restricted by the time limits of the components serving a role of the public interfaces.
 In that case, the processing can be redesigned to use the asynchronous processing, while the periodic, synchronous requests can poll for~the~status or results of the processing.
 
+\begin{figure}[h]
+   \centering
+   \includegraphics[width=0.65\textwidth]{assets/04-serverless-for-web-apps/synchronousRequest.png}
+   \caption{Example of synchronous communication with Lambda function, DynamoDB and AWS Step Function using API Gateway}
+   \label{fig:pattern-synchronous-request}
+\end{figure}
+
 In the application covering the receipt processing, covered in section \ref{chapter:examples-receipt-processing}, AWS AppSync resolves the queries by retrieving the data from DynamoDB as well as by triggering the Lambda function to obtain the presigned URL to S3 bucket.
 The second example, described in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}, shows how the API Gateway can be used to trigger the~asynchronous processing of the AWS Step Function, while returning the response with the~invocation details immediately to the client.
 
 \subsubsection{GraphQL APIs} \label{chapter:client-graphql-apis}
-
-\begin{figure}[]
-   \centering
-   \includegraphics[width=0.7\textwidth]{assets/04-serverless-for-web-apps/graphql.png}
-   \caption{Example usage of AWS AppSync for hosting GraphQL API using various services as data sources}
-   \label{fig:pattern-graphql-api}
-\end{figure}
 
 The AWS AppSync, which hosts the GraphQL API, can be effectively used to aggregate the data from multiple data sources in a single response.
 Simpler logic can be handled by~resolvers written using Apache’s Velocity Template Language and communicating directly with the data sources, including for example querying, inserting or modifying items in DynamoDB or communicating with Elasticsearch Service.
 For more complex logic, Lambda function can be configured as a datasource to perform the function code, when requesting a particular field from the GraphQL schema, returning the data back to~the~client.
 The~request including communication with several datasources can be obtained when using pipeline resolvers, performing a chain action, involving a sequence of~calls to multiple services and aggregating the responses.
 However, for more complex mutations, the AWS~Step~Function can be a better choice if it comes to handling errors and retries more effectively, compared to pipeline resolvers \cite{ServerlessArchitecturalPatternsAndBestPractices}.
+
+\begin{figure}[h]
+   \centering
+   \includegraphics[width=0.7\textwidth]{assets/04-serverless-for-web-apps/graphql.png}
+   \caption{Example usage of AWS AppSync for hosting GraphQL API using various services as data sources}
+   \label{fig:pattern-graphql-api}
+\end{figure}
 
 The GraphQL APIs are beneficial when working on larger applications, including several independent services to provide the API layer in one place, calling configured services accordingly.
 The underlying implementation of the services can be changed, as~long~as the~API contract based on the GraphQL schema is maintained, enabling developers to~evolve the application architecture effectively.
@@ -1763,7 +1787,7 @@ The solution for such a constraint is to upload the files directly from the~clie
 To perform this operation securely, having the control over accessing the objects in the bucket, the mechanism of presigned URLs can be used.
 The~Lambda function can be configured to obtain the presigned URL for a given bucket, enabling clients to obtain the particular file or put it into under predefined path, making the URL additionally validated based on credentials or until specified expiration time is not exceeded \cite{ServerlessAtScaleDesignPatternsAndOptimizations}.
 
-\begin{figure}[H]
+\begin{figure}[h]
    \centering
    \includegraphics[width=0.45\textwidth]{assets/04-serverless-for-web-apps/presignedURL.png}
    \caption{Example usage of presigned URL when uploading files to Amazon S3}
@@ -1780,7 +1804,7 @@ Once the Lambda or some other service performs the processing, the~message is~se
 It removes the need for the client to poll for the processing status.
 Additionally, some mechanism can be incorporated to ensure the communication with the client is trusted by verifying API key or performing authentication in a different way \cite{ServerlessAtScaleDesignPatternsAndOptimizations}.
 
-\begin{figure}[H]
+\begin{figure}[h]
    \centering
    \includegraphics[width=0.5\textwidth]{assets/04-serverless-for-web-apps/webhook.png}
    \caption{Example webhook implementation}
@@ -1797,16 +1821,16 @@ Clients use the REST API to invoke the AWS Step Function and obtain in response 
 It is later used to connect to~the~WebSocket~API, calling one of the tasks involved in the orchestration workflow.
 When the~client is~connected as~well~as the processing is finished, the Step Function invokes the last step of~the~processing, responsible for sending the message to the client, notifying that the~asynchronous processing is completed \cite{ServerlessAtScaleDesignPatternsAndOptimizations}.
 
-Similar approach is used in the example of interactive presentation processing, covered in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}.
-The provided implementation uses DynamoDB additionally to store the association between connected client identifier and the function execution identifier, reading the stored value for each of the chunks of parallel execution.
-The opened, bidirectional communication connection can be applied for richer eventing between the backend of~the~application and the web or mobile clients.
-
-\begin{figure}[H]
+\begin{figure}[h]
    \centering
    \includegraphics[width=0.9\textwidth]{assets/04-serverless-for-web-apps/asyncStepFunction.png}
    \caption{Example diagram showing Step Function invocation responding to~client using WebSocket once processing is finished}
    \label{fig:pattern-async-step-function}
 \end{figure}
+
+Similar approach is used in the example of interactive presentation processing, covered in section \ref{chapter:examples-generating-interactive-slideshow-based-on-latex-files}.
+The provided implementation uses DynamoDB additionally to store the association between connected client identifier and the function execution identifier, reading the stored value for each of the chunks of parallel execution.
+The opened, bidirectional communication connection can be applied for richer eventing between the backend of~the~application and the web or mobile clients.
 
 \subsection{Hosting web clients}
 
@@ -1827,7 +1851,7 @@ In terms of statically generated pages, covered in section \ref{chapter:client-a
 
 An example diagram, describing how the Single Page Application can be hosted in~the~cloud environment along with communication with the backend services, is presented in Figure \ref{fig:pattern-client-hosted}.
 
-\begin{figure}[H]
+\begin{figure}[h]
    \centering
    \includegraphics[width=0.8\textwidth]{assets/04-serverless-for-web-apps/hostedClient.png}
    \caption{Example diagram presenting Single Page Application hosted in~the~cloud environment}

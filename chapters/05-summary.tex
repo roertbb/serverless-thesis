@@ -56,8 +56,8 @@ Building a performant and effective serverless solution requires additional doma
 
 The Function as a Service model has been discussed based on AWS Lambda service, which is one of the most popular implementations of the serverless function. 
 AWS Lambda is~a~serverless, stateless execution environment, scaling based on a number of requests, executed in an event-driven manner and constrained by several limitations in terms of~resource allocation, function execution time as well as size of deployment package, invocation payload and temporary disk space.
-Some types of processing may be not suitable for~the~constrained execution environment of the Lambda function, however AWS introduces various improvements to overcome the limitations, increasing the amount of configurable resource allocation and connecting the function to shared disk space.
-Furthermore, the serverless function runtime can be extended beyond the set of supported programming languages, by introducing a possibility to incorporate custom runtimes based on~Docker~images and~share dependencies using Lambda layers, which extends further the~capabilities of the AWS Lambda in terms of processing various workloads.
+Some types of processing may be not suitable for~the~constrained execution environment of the Lambda function, however AWS introduces various improvements to overcome the limitations, increasing the amount of~configurable resource allocation and connecting the function to shared disk space.
+Furthermore, the serverless function runtime can be extended beyond the set of supported programming languages, by~introducing a possibility to incorporate custom runtimes based on~Docker~images and~share dependencies using Lambda layers, which extends further the~capabilities of the AWS Lambda in terms of processing various workloads.
 The knowledge about the~function execution models, possible optimisations and configurations can have a significant impact on the performance and other characteristics of the serverless based workloads.
 
 Mentioned capabilities make the AWS Lambda, which represents the FaaS model, a~suitable and satisfying execution environment, not only for the web application workloads based on a simple request-response execution, but also for more complex and even non-standard tasks.
@@ -104,7 +104,7 @@ However, the NoSQL data model of DynamoDB may not be suitable for~all~types of~w
 
 On the other hand, the Amazon Aurora with Aurora Serverless configuration seems to be an interesting alternative, providing a well-known relational data model.
 The service satisfies a significant subset of aforementioned requirements, however there are still some limitations when using it with the serverless workloads.
-Amazon Web Services works actively on the second version of the service, introducing various improvements and additional capabilities, which tends to establish the Aurora Serverless position alongside DynamoDB.
+Amazon Web Services works actively on the second version of the service, introducing various improvements and additional capabilities, which tends to establish the Aurora Serverless position alongside~DynamoDB.
 
 \subsection{Client communication with the web applications utilising the serverless architecture}
 
